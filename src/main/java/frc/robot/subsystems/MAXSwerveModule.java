@@ -14,6 +14,7 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
 
 import frc.robot.Constants.ModuleConstants;
 
@@ -36,9 +37,19 @@ public class MAXSwerveModule {
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
    */
-  public MAXSwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset) {
-    m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
-    m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
+
+  public static MAXSwerveModule getInstance(int drivingCANId, int turningCANId, double chassisAngularOffset) {
+    CANSparkMax drive = new CANSparkMax(drivingCANId, MotorType.kBrushless);
+    CANSparkMax turn = new CANSparkMax(turningCANId, MotorType.kBrushless);
+    SparkAbsoluteEncoder turnEncoder = turn.getAbsoluteEncoder(Type.kDutyCycle);
+    return new MAXSwerveModule(drive, turn, turnEncoder, chassisAngularOffset);
+  }
+
+  public MAXSwerveModule(CANSparkMax drivingSparkMax, CANSparkMax turningSparkMax, SparkAbsoluteEncoder turningEncoder, double chassisAngularOffset) {
+
+    m_drivingSparkMax = drivingSparkMax;
+    m_turningSparkMax = turningSparkMax;
+    m_turningEncoder = turningEncoder;
 
     // Factory reset, so we get the SPARKS MAX to a known state before configuring
     // them. This is useful in case a SPARK MAX is swapped out.
@@ -47,7 +58,6 @@ public class MAXSwerveModule {
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
-    m_turningEncoder = m_turningSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
     m_drivingPIDController = m_drivingSparkMax.getPIDController();
     m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
