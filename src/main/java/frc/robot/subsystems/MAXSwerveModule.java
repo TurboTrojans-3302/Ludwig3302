@@ -45,6 +45,14 @@ public class MAXSwerveModule {
     return new MAXSwerveModule(drive, turn, turnEncoder, chassisAngularOffset);
   }
 
+  // public static MAXSwerveModule getInstance(int drivingCANId, int turningCANId, int turnCANCoderCANId, double chassisAngularOffset) {
+  //   CANSparkMax drive = new CANSparkMax(drivingCANId, MotorType.kBrushless);
+  //   CANSparkMax turn = new CANSparkMax(turningCANId, MotorType.kBrushless);
+  //   AbsoluteEncoder turnEncoder = new AbsoluteEncoder(turnCANCoderCANId);
+  //   return new MAXSwerveModule(drive, turn, turnEncoder, chassisAngularOffset);
+  // }
+
+
   public MAXSwerveModule(CANSparkMax drivingSparkMax, CANSparkMax turningSparkMax, SparkAbsoluteEncoder turningEncoder, double chassisAngularOffset) {
 
     m_drivingSparkMax = drivingSparkMax;
