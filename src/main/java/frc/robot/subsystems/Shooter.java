@@ -4,19 +4,19 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-  public Shooter() {}
+  public Shooter() {
+    CANSparkMax m_leftMotor = new CANSparkMax(Constants., null)
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
-
-  public void shoot(){ 
-    //TODO finish me
   }
   
   public double getSpeed() {    
@@ -32,13 +32,6 @@ public class Shooter extends SubsystemBase {
     return false; //TODO finish me!!!
   }
 
-  public boolean noteIsLoaded(){
-    return false; //TODO
-  }
-
-  public boolean readyToShoot(){
-    return speedIsReady() && noteIsLoaded();
-  }
 }
 
 
