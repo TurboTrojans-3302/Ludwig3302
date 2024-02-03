@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Harvester extends SubsystemBase {
 
@@ -17,9 +18,14 @@ public class Harvester extends SubsystemBase {
 
   private VictorSPX m_intakeTopSpx;
   private VictorSPX m_intakeBottomSpx;
+  private VictorSPX m_armSpx;
 
   /** Creates a new Harvester. */
-  public Harvester() {}
+  public Harvester() {
+    m_armSpx = new VictorSPX(Constants.harvesterConstants.kIntakeArmLift);
+    m_intakeBottomSpx = new VictorSPX(Constants.harvesterConstants.kIntakeTopCanId);
+    m_intakeTopSpx = new VictorSPX(Constants.harvesterConstants.kIntakeBottomCanId);
+  }
 
   
   @Override
@@ -76,5 +82,9 @@ public class Harvester extends SubsystemBase {
 
   public boolean getArmAtSpeaker() {
     return ANGLE_AT_SPEAKER == getArmAngle();
+  }
+
+  public void setArmSpeed(double speed){
+    m_armSpx.set(VictorSPXControlMode.PercentOutput, speed);
   }
  }

@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Harvester;
 
 
@@ -31,6 +30,9 @@ public class TeleopHarvester extends Command {
   @Override
   public void execute() {
     double harvesterSpeed;
+    double armSpeed;
+
+    //TODO use limit switches here?
      if (m_controller.getRightBumper()) {
       harvesterSpeed = Constants.harvesterConstants.inSpeed;
      }
@@ -41,6 +43,10 @@ public class TeleopHarvester extends Command {
       harvesterSpeed = 0.0;
      }
     m_harvester.setHarvestSpeed(harvesterSpeed);
+
+    //TODO add some soft limits here?
+    armSpeed = m_controller.getRightTriggerAxis() - m_controller.getLeftTriggerAxis();
+    m_harvester.setArmSpeed(armSpeed);
 
   }
 
