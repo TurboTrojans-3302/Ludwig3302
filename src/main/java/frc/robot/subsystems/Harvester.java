@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -25,6 +27,10 @@ public class Harvester extends SubsystemBase {
     m_armSpx = new VictorSPX(Constants.harvesterConstants.kIntakeArmLift);
     m_intakeBottomSpx = new VictorSPX(Constants.harvesterConstants.kIntakeTopCanId);
     m_intakeTopSpx = new VictorSPX(Constants.harvesterConstants.kIntakeBottomCanId);
+
+    m_armSpx.setNeutralMode(NeutralMode.Brake);
+    m_intakeBottomSpx.setNeutralMode(NeutralMode.Brake);
+    m_intakeTopSpx.setNeutralMode(NeutralMode.Brake);
   }
 
   
