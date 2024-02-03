@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Harvester extends SubsystemBase {
@@ -13,9 +15,13 @@ public class Harvester extends SubsystemBase {
   public static final double ANGLE_AT_SPEAKER = 100;
   public static final double ANGLE_AT_DRIVE = 90;
 
+  private VictorSPX m_intakeTopSpx;
+  private VictorSPX m_intakeBottomSpx;
+
   /** Creates a new Harvester. */
   public Harvester() {}
 
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -27,22 +33,23 @@ public class Harvester extends SubsystemBase {
   }
 
   public void setHarvestSpeed(double speed) {
-    //TODO
-    
+    //TODO add some soft limits here?
+    m_intakeBottomSpx.set(VictorSPXControlMode.PercentOutput, speed);
+    m_intakeTopSpx.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
 
-  public double getHarvesterSeed() {
-    //TODO
-    return 0.0;
-  }
-
-  public double getHarvesterAngle() {
+  public double getHarvesterSpeed() {
     //TODO
     return 0.0;
   }
 
-  public void setHarvesterAngle(double angle) {
+  public double getArmAngle() {
+    //TODO
+    return 0.0;
+  }
+
+  public void setArmAngle(double angle) {
     //TODO
 
   }
@@ -52,7 +59,7 @@ public class Harvester extends SubsystemBase {
   }
 
   public boolean getArmAtFloor() {
-    return ANGLE_AT_FLOOR == getHarvesterAngle();
+    return ANGLE_AT_FLOOR == getArmAngle();
   }
 
   public void setArmAtAmp(double angle) {
@@ -60,7 +67,7 @@ public class Harvester extends SubsystemBase {
   }
 
   public boolean getArmAtAmp() {
-    return ANGLE_AT_AMP == getHarvesterAngle();
+    return ANGLE_AT_AMP == getArmAngle();
   }
 
   public void setArmAtSpeaker(double angle) {
@@ -68,6 +75,6 @@ public class Harvester extends SubsystemBase {
   }
 
   public boolean getArmAtSpeaker() {
-    return ANGLE_AT_SPEAKER == getHarvesterAngle();
+    return ANGLE_AT_SPEAKER == getArmAngle();
   }
  }
