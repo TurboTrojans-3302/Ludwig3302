@@ -39,7 +39,7 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_copilotController = new XboxController(OIConstants.kCopilotController);
+  XboxController m_copilotController = new XboxController(OIConstants.kCopilotControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

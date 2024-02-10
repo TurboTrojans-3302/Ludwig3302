@@ -77,7 +77,7 @@ public class Shooter extends SubsystemBase {
     mRightPidController.setOutputRange(kMinOutput, kMaxOutput);
 
     // display PID coefficients on SmartDashboard
-    ShuffleboardTab mShuffleboardTab = Shuffleboard.getTab("Shooter");
+    mShuffleboardTab = Shuffleboard.getTab("Shooter");
     mShuffleboardTab.add("P Gain", kP);
     mShuffleboardTab.add("I Gain", kI);
     mShuffleboardTab.add("D Gain", kD);
