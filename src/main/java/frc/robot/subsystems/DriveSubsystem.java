@@ -12,9 +12,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
@@ -54,6 +58,12 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
+  private ShuffleboardTab m_shuffleboardTab;
+  private GenericEntry m_FLangleEntry;
+  private GenericEntry m_FRangleEntry;
+  private GenericEntry m_BLangleEntry;
+  private GenericEntry m_BRangleEntry;
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
@@ -66,19 +76,20 @@ public class DriveSubsystem extends SubsystemBase {
 
       });
 
-  public void updateSmartDashboard() {
-    double angleFL = m_frontLeft.getPosition().angle.getDegrees();
-    double angleFR = m_frontRight.getPosition().angle.getDegrees();
-    double angleRR = m_rearRight.getPosition().angle.getDegrees();
-    double angleRL = m_rearLeft.getPosition().angle.getDegrees();
-    SmartDashboard.putNumber("FL ", angleFL);
-    SmartDashboard.putNumber("stupidFR", angleFR);
-    SmartDashboard.putNumber("stupidRR", angleRR);
-    SmartDashboard.putNumber("stupidRL", angleRL);
+  public void updateShuffleboard() {
+    m_FLangleEntry.setDouble(m_frontLeft.getPosition().angle.getDegrees());
+    m_FRangleEntry.setDouble(m_frontRight.getPosition().angle.getDegrees());
+    m_BRangleEntry.setDouble(m_rearRight.getPosition().angle.getDegrees());
+    m_BLangleEntry.setDouble(m_rearLeft.getPosition().angle.getDegrees());
   }
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    m_shuffleboardTab = Shuffleboard.getTab("Drive");
+    m_FLangleEntry = m_shuffleboardTab.add("FL angle", 0.0).getEntry();
+    m_FRangleEntry = m_shuffleboardTab.add("FR angle", 0.0).getEntry();
+    m_BLangleEntry = m_shuffleboardTab.add("BL angle", 0.0).getEntry();
+    m_BRangleEntry = m_shuffleboardTab.add("BR angle", 0.0).getEntry();
   }
 
   @Override
@@ -93,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
 
-    updateSmartDashboard();
+    updateShuffleboard();
 
   }
 
