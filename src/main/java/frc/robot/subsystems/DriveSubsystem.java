@@ -12,14 +12,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -47,7 +44,8 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  private final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -63,11 +61,16 @@ public class DriveSubsystem extends SubsystemBase {
   private GenericEntry m_FRangleEntry;
   private GenericEntry m_BLangleEntry;
   private GenericEntry m_BRangleEntry;
+  private GenericEntry m_FLspeedEntry;
+  private GenericEntry m_FRspeedEntry;
+  private GenericEntry m_BLspeedEntry;
+  private GenericEntry m_BRspeedEntry;
+  private GenericEntry m_gyroEntry;
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
+      Rotation2d.fromDegrees(m_gyro.getAngle()),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -81,22 +84,32 @@ public class DriveSubsystem extends SubsystemBase {
     m_FRangleEntry.setDouble(m_frontRight.getPosition().angle.getDegrees());
     m_BRangleEntry.setDouble(m_rearRight.getPosition().angle.getDegrees());
     m_BLangleEntry.setDouble(m_rearLeft.getPosition().angle.getDegrees());
+    m_FLspeedEntry.setDouble(m_frontLeft.getState().speedMetersPerSecond);
+    m_FRspeedEntry.setDouble(m_frontRight.getState().speedMetersPerSecond);
+    m_BRspeedEntry.setDouble(m_rearRight.getState().speedMetersPerSecond);
+    m_BLspeedEntry.setDouble(m_rearLeft.getState().speedMetersPerSecond);
+    m_gyroEntry.setDouble(m_gyro.getAngle());
   }
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     m_shuffleboardTab = Shuffleboard.getTab("Drive");
-    m_FLangleEntry = m_shuffleboardTab.add("FL angle", 0.0).getEntry();
-    m_FRangleEntry = m_shuffleboardTab.add("FR angle", 0.0).getEntry();
-    m_BLangleEntry = m_shuffleboardTab.add("BL angle", 0.0).getEntry();
-    m_BRangleEntry = m_shuffleboardTab.add("BR angle", 0.0).getEntry();
+    m_FLangleEntry = m_shuffleboardTab.add("FLa", 0.0).getEntry();
+    m_FRangleEntry = m_shuffleboardTab.add("FRa", 0.0).getEntry();
+    m_BLangleEntry = m_shuffleboardTab.add("BLa", 0.0).getEntry();
+    m_BRangleEntry = m_shuffleboardTab.add("BRa", 0.0).getEntry();
+    m_FLspeedEntry = m_shuffleboardTab.add("FLs", 0.0).getEntry();
+    m_FRspeedEntry = m_shuffleboardTab.add("FRs", 0.0).getEntry();
+    m_BLspeedEntry = m_shuffleboardTab.add("BLs", 0.0).getEntry();
+    m_BRspeedEntry = m_shuffleboardTab.add("BRs", 0.0).getEntry();
+    m_gyroEntry = m_shuffleboardTab.add("Gyro", 0.0).getEntry();
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
+        Rotation2d.fromDegrees(m_gyro.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -124,7 +137,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
+        Rotation2d.fromDegrees(m_gyro.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -203,7 +216,7 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)))
+                Rotation2d.fromDegrees(m_gyro.getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -223,6 +236,12 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
   }
 
+  public void setAll(double speed, double angle){
+     m_frontLeft.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
+    m_frontRight.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
+      m_rearLeft.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
+     m_rearRight.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
+  }
   /**
    * Sets the swerve ModuleStates.
    *
@@ -256,7 +275,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees();
+    return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
   }
 
   /**
@@ -265,7 +284,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
-    return m_gyro.getRate(IMUAxis.kZ) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
   public MAXSwerveModule getM_frontLeft() {
@@ -282,10 +301,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   public MAXSwerveModule getM_rearRight() {
     return m_rearRight;
-  }
-
-  public ADIS16470_IMU getM_gyro() {
-    return m_gyro;
   }
 
   public double getM_currentRotation() {

@@ -19,7 +19,7 @@ public class TeleopHarvester extends Command {
     m_controller = controller;
     m_harvester = harvester;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements();
+    addRequirements(m_harvester);
   }
 
   // Called when the command is initially scheduled.
