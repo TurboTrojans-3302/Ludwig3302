@@ -51,16 +51,21 @@ public final class Constants {
     public static final double kBackLeftChassisAngularOffset = Math.toRadians(6.1);
     public static final double kBackRightChassisAngularOffset = Math.toRadians(58.0);
 
-    // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 4;
-    public static final int kRearLeftDrivingCanId = 6;
-    public static final int kFrontRightDrivingCanId = 2;
-    public static final int kRearRightDrivingCanId = 8;
+    public static final int kFrontLeftTurningCanId = 2; 
+    public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER = 9; 
+    public static final int kFrontLeftDrivingCanId = 1; 
 
-    public static final int kFrontLeftTurningCanId = 3;
-    public static final int kRearLeftTurningCanId = 5;
-    public static final int kFrontRightTurningCanId = 1;
-    public static final int kRearRightTurningCanId = 7;
+    public static final int kFrontRightTurningCanId = 8; 
+    public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER = 12; 
+    public static final int kFrontRightDrivingCanId = 7; 
+
+    public static final int kRearLeftTurningCanId = 4; 
+    public static final int DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER = 10; 
+    public static final int kRearLeftDrivingCanId = 3; 
+
+    public static final int kRearRightTurningCanId = 6; 
+    public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER = 11; 
+    public static final int kRearRightDrivingCanId = 5; 
 
     public static final boolean kGyroReversed = false;
   }
@@ -89,11 +94,8 @@ public final class Constants {
     public static final double kDrivingEncoderVelocityFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) / 60.0; // meters per second
 
-    public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
-    public static final double kTurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
-
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
-    public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
+    public static final double kTurningEncoderPositionPIDMaxInput = (2 * Math.PI); // radians
 
     public static final double kDrivingP = 0.04;
     public static final double kDrivingI = 0;

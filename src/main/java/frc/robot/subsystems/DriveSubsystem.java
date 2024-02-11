@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,25 +26,29 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
-  private final MAXSwerveModule m_frontLeft = MAXSwerveModule.getInstance(
-      DriveConstants.kFrontLeftDrivingCanId,
-      DriveConstants.kFrontLeftTurningCanId,
+  private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
+      new CANSparkMax(DriveConstants.kFrontLeftDrivingCanId, MotorType.kBrushless),
+      new CANSparkMax(DriveConstants.kFrontLeftTurningCanId, MotorType.kBrushless),
+      new EddieCoder(DriveConstants.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER),
       DriveConstants.kFrontLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_frontRight = MAXSwerveModule.getInstance(
-      DriveConstants.kFrontRightDrivingCanId,
-      DriveConstants.kFrontRightTurningCanId,
-      DriveConstants.kFrontRightChassisAngularOffset);
+  private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
+      new CANSparkMax(DriveConstants.kFrontRightDrivingCanId, MotorType.kBrushless),
+      new CANSparkMax(DriveConstants.kFrontRightTurningCanId, MotorType.kBrushless),
+      new EddieCoder(DriveConstants.DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER),
+      DriveConstants.kFrontLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearLeft = MAXSwerveModule.getInstance(
-      DriveConstants.kRearLeftDrivingCanId,
-      DriveConstants.kRearLeftTurningCanId,
-      DriveConstants.kBackLeftChassisAngularOffset);
+  private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
+      new CANSparkMax(DriveConstants.kRearLeftDrivingCanId, MotorType.kBrushless),
+      new CANSparkMax(DriveConstants.kRearLeftTurningCanId, MotorType.kBrushless),
+      new EddieCoder(DriveConstants.DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER),
+      DriveConstants.kFrontLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearRight = MAXSwerveModule.getInstance(
-      DriveConstants.kRearRightDrivingCanId,
-      DriveConstants.kRearRightTurningCanId,
-      DriveConstants.kBackRightChassisAngularOffset);
+  private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
+      new CANSparkMax(DriveConstants.kRearRightDrivingCanId, MotorType.kBrushless),
+      new CANSparkMax(DriveConstants.kRearRightTurningCanId, MotorType.kBrushless),
+      new EddieCoder(DriveConstants.DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER),
+      DriveConstants.kFrontLeftChassisAngularOffset);
 
   // The gyro sensor
   //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
