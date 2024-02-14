@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import java.util.Map;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.DriveConstants;
@@ -94,14 +96,54 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     m_shuffleboardTab = Shuffleboard.getTab("Drive");
-    m_FLangleEntry = m_shuffleboardTab.add("FLa", 0.0).getEntry();
-    m_FRangleEntry = m_shuffleboardTab.add("FRa", 0.0).getEntry();
-    m_BLangleEntry = m_shuffleboardTab.add("BLa", 0.0).getEntry();
-    m_BRangleEntry = m_shuffleboardTab.add("BRa", 0.0).getEntry();
-    m_FLspeedEntry = m_shuffleboardTab.add("FLs", 0.0).getEntry();
-    m_FRspeedEntry = m_shuffleboardTab.add("FRs", 0.0).getEntry();
-    m_BLspeedEntry = m_shuffleboardTab.add("BLs", 0.0).getEntry();
-    m_BRspeedEntry = m_shuffleboardTab.add("BRs", 0.0).getEntry();
+    m_FLangleEntry = m_shuffleboardTab.add("FLa", 0.0)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("Counter clockwise", true))
+      .withPosition(0, 0).withSize(3, 3)
+      .getEntry();
+    m_FRangleEntry = m_shuffleboardTab.add("FRa", 0.0)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("Counter clockwise", true))
+      .withPosition(4, 0).withSize(3, 3)
+      .getEntry();
+    m_BLangleEntry = m_shuffleboardTab.add("BLa", 0.0)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("Counter clockwise", true))
+      .withPosition(0, 3).withSize(3, 3)
+      .getEntry();
+    m_BRangleEntry = m_shuffleboardTab.add("BRa", 0.0)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("Counter clockwise", true))
+      .withPosition(4, 3).withSize(3, 3)
+      .getEntry();
+    m_FLspeedEntry = m_shuffleboardTab.add("FLs", 0.0)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("orientation", "vertical",
+                             "min", -DriveConstants.kMaxSpeedMetersPerSecond,
+                             "max", DriveConstants.kMaxSpeedMetersPerSecond))
+      .withPosition(3, 0).withSize(1, 3)
+      .getEntry();
+    m_FRspeedEntry = m_shuffleboardTab.add("FRs", 0.0)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("orientation", "vertical",
+                             "min", -DriveConstants.kMaxSpeedMetersPerSecond,
+                             "max", DriveConstants.kMaxSpeedMetersPerSecond))
+      .withPosition(7, 0).withSize(1, 3)
+      .getEntry();
+    m_BLspeedEntry = m_shuffleboardTab.add("BLs", 0.0)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("orientation", "vertical",
+                             "min", -DriveConstants.kMaxSpeedMetersPerSecond,
+                             "max", DriveConstants.kMaxSpeedMetersPerSecond))
+      .withPosition(3, 3).withSize(1, 3)
+      .getEntry();
+    m_BRspeedEntry = m_shuffleboardTab.add("BRs", 0.0)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("orientation", "vertical",
+                             "min", -DriveConstants.kMaxSpeedMetersPerSecond,
+                             "max", DriveConstants.kMaxSpeedMetersPerSecond))
+      .withPosition(3, 0).withSize(1, 3)
+      .getEntry();
     m_gyroEntry = m_shuffleboardTab.add("Gyro", 0.0).getEntry();
   }
 
