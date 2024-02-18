@@ -59,15 +59,10 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   private ShuffleboardTab m_shuffleboardTab;
-  private GenericEntry m_FLangleEntry;
-  private GenericEntry m_FRangleEntry;
-  private GenericEntry m_BLangleEntry;
-  private GenericEntry m_BRangleEntry;
-  private GenericEntry m_FLspeedEntry;
-  private GenericEntry m_FRspeedEntry;
-  private GenericEntry m_BLspeedEntry;
-  private GenericEntry m_BRspeedEntry;
-  private GenericEntry m_gyroEntry;
+  private GenericEntry m_FLangleEntry, m_FRangleEntry, m_BLangleEntry, m_BRangleEntry;
+  private GenericEntry m_FLspeedEntry, m_FRspeedEntry, m_BLspeedEntry, m_BRspeedEntry;
+  private GenericEntry m_gyroEntry, m_driveDirEntry, m_driveMagEntry;
+  private GenericEntry m_BLangleSetptEntry;
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -90,6 +85,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_FRspeedEntry.setDouble(m_frontRight.getState().speedMetersPerSecond);
     m_BRspeedEntry.setDouble(m_rearRight.getState().speedMetersPerSecond);
     m_BLspeedEntry.setDouble(m_rearLeft.getState().speedMetersPerSecond);
+    m_BLangleSetptEntry.setDouble(m_rearLeft.getDesiredAngleDeg());
     m_gyroEntry.setDouble(m_gyro.getAngle());
   }
 
@@ -144,7 +140,21 @@ public class DriveSubsystem extends SubsystemBase {
                              "max", DriveConstants.kMaxSpeedMetersPerSecond))
       .withPosition(3, 0).withSize(1, 3)
       .getEntry();
-    m_gyroEntry = m_shuffleboardTab.add("Gyro", 0.0).getEntry();
+    m_gyroEntry = m_shuffleboardTab.add("Gyro", 0.0)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("Counter clockwise", true))
+      .withPosition(9, 0).withSize(3, 3)
+      .getEntry();
+    m_driveDirEntry = m_shuffleboardTab.add("Drive Dir", 0.0)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("Counter clockwise", true))
+      .withPosition(12, 0).withSize(3, 3)
+      .getEntry();
+    m_BLangleSetptEntry = m_shuffleboardTab.add("BLa set", 0.0)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("Counter clockwise", true))
+      .withPosition(9, 3).withSize(3, 3)
+      .getEntry();
   }
 
   @Override
@@ -204,11 +214,11 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-    if (rateLimit) {
-      // Convert XY to polar for rate limiting
-      double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
-      double inputTranslationMag = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
+    // Convert XY to polar for rate limiting
+    double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
+    double inputTranslationMag = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
 
+    if (rateLimit) {
       // Calculate the direction slew rate based on an estimate of the lateral
       // acceleration
       double directionSlewRate;
@@ -266,6 +276,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+
+    m_driveDirEntry.setDouble(inputTranslationDir);
   }
 
   /**
