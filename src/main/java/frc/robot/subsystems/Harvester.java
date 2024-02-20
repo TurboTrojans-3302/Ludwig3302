@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,8 +18,8 @@ public class Harvester extends SubsystemBase {
 
   private VictorSPX m_intakeSpx;
   private VictorSPX m_armSpx;
-
   private DigitalInput mBackLimitSwitch;
+  private PIDController mPid;
 
   /** Creates a new Harvester. */
   public Harvester() {
@@ -29,12 +30,19 @@ public class Harvester extends SubsystemBase {
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
 
     mBackLimitSwitch = new DigitalInput(Constants.harvesterConstants.kBackLimitSwitchInputID);
+
+    mPid = new PIDController(0.01, 0.0, 0.0);
+    mPid.setTolerance(Constants.harvesterConstants.ANGLE_TOLERANCE);
+
+    mPid.setSetpoint(getArmAngle());
   }
 
   
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    double speed = mPid.calculate(getArmAngle());
+    //TODO implement some rate limiting here
+    setArmSpeed(speed);
   }
 
   public boolean hasNote() {
@@ -56,12 +64,17 @@ public class Harvester extends SubsystemBase {
     return 0.0;
   }
 
-  public void setArmAngle(double angle) {
-    //TODO
-
+  public double getArmSetpoint() {
+    return mPid.getSetpoint();
   }
 
-  public void setArmSpeed(double speed){
+  public void setArmAngle(double angle) {
+    mPid.setSetpoint(MathUtil.clamp(angle, 
+                                    Constants.harvesterConstants.ANGLE_MIN,
+                                    Constants.harvesterConstants.ANGLE_MAX));
+  }
+
+  private void setArmSpeed(double speed){
     m_armSpx.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
