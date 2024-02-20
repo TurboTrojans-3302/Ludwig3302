@@ -29,10 +29,15 @@ public class TeleopDrive extends Command {
   @Override
   public void execute() {
     m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                stick2speed(-m_driverController.getLeftY()),
+                stick2speed(-m_driverController.getLeftX()),
+                stick2speed(-m_driverController.getRightX()),
                 false, true);
+  }
+
+  // applies deadband and scaling to raw stick value
+  private double stick2speed(double stickValue) {
+    return Math.signum(stickValue) * Math.pow(MathUtil.applyDeadband(stickValue, OIConstants.kDriveDeadband), 2);
   }
 
   // Called once the command ends or is interrupted.
