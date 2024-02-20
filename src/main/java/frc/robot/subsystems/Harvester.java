@@ -19,17 +19,14 @@ public class Harvester extends SubsystemBase {
   public static final double ANGLE_AT_DRIVE = 90;
 
   private VictorSPX m_intakeTopSpx;
-  private VictorSPX m_intakeBottomSpx;
   private VictorSPX m_armSpx;
 
   /** Creates a new Harvester. */
   public Harvester() {
     m_armSpx = new VictorSPX(Constants.harvesterConstants.kIntakeArmLift);
-    m_intakeBottomSpx = new VictorSPX(Constants.harvesterConstants.kIntakeTopCanId);
-    m_intakeTopSpx = new VictorSPX(Constants.harvesterConstants.kIntakeBottomCanId);
+    m_intakeTopSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
 
     m_armSpx.setNeutralMode(NeutralMode.Brake);
-    m_intakeBottomSpx.setNeutralMode(NeutralMode.Brake);
     m_intakeTopSpx.setNeutralMode(NeutralMode.Brake);
   }
 
@@ -46,7 +43,6 @@ public class Harvester extends SubsystemBase {
 
   public void setHarvestSpeed(double speed) {
     //TODO add some soft limits here?
-    m_intakeBottomSpx.set(VictorSPXControlMode.PercentOutput, speed);
     m_intakeTopSpx.set(VictorSPXControlMode.PercentOutput, speed);
   }
 

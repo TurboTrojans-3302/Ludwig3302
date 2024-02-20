@@ -144,9 +144,8 @@ public final class Constants {
   }
   
   public static final class harvesterConstants {
-    public static final int kIntakeTopCanId = 9;
-    public static final int kIntakeBottomCanId = 10;
-    public static final int kIntakeArmLift = 11;
+    public static final int kIntakeCanId = 9;
+    public static final int kIntakeArmLift = 10;
 
     public static final double inSpeed = 1.0;
     public static final double outSpeed = -1.0;
