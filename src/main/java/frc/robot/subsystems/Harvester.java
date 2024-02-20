@@ -8,26 +8,27 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Harvester extends SubsystemBase {
 
-  public static final double ANGLE_AT_FLOOR = -5.0;
-  public static final double ANGLE_AT_AMP = 45.0;
-  public static final double ANGLE_AT_SPEAKER = 100;
-  public static final double ANGLE_AT_DRIVE = 90;
-
-  private VictorSPX m_intakeTopSpx;
+  private VictorSPX m_intakeSpx;
   private VictorSPX m_armSpx;
+
+  private DigitalInput mBackLimitSwitch;
 
   /** Creates a new Harvester. */
   public Harvester() {
     m_armSpx = new VictorSPX(Constants.harvesterConstants.kIntakeArmLift);
-    m_intakeTopSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
+    m_intakeSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
 
     m_armSpx.setNeutralMode(NeutralMode.Brake);
-    m_intakeTopSpx.setNeutralMode(NeutralMode.Brake);
+    m_intakeSpx.setNeutralMode(NeutralMode.Brake);
+
+    mBackLimitSwitch = new DigitalInput(Constants.harvesterConstants.kBackLimitSwitchInputID);
   }
 
   
@@ -37,19 +38,17 @@ public class Harvester extends SubsystemBase {
   }
 
   public boolean hasNote() {
-    //TODO
-    return false;
+    return !mBackLimitSwitch.get(); 
   }
 
-  public void setHarvestSpeed(double speed) {
-    //TODO add some soft limits here?
-    m_intakeTopSpx.set(VictorSPXControlMode.PercentOutput, speed);
+  public void setIntakeSpeed(double speed) {
+    double limitedSpeed = MathUtil.clamp(speed, (hasNote() ? 0.0 : -1.0), 1.0);
+    m_intakeSpx.set(VictorSPXControlMode.PercentOutput, limitedSpeed);
   }
 
 
-  public double getHarvesterSpeed() {
-    //TODO
-    return 0.0;
+  public double getIntakeSpeed() {
+    return m_intakeSpx.getMotorOutputPercent();
   }
 
   public double getArmAngle() {
@@ -62,31 +61,11 @@ public class Harvester extends SubsystemBase {
 
   }
 
-  public void setArmAtFloor(double angle) {
-    //TODO
-  }
-
-  public boolean getArmAtFloor() {
-    return ANGLE_AT_FLOOR == getArmAngle();
-  }
-
-  public void setArmAtAmp(double angle) {
-    //TODO
-  }
-
-  public boolean getArmAtAmp() {
-    return ANGLE_AT_AMP == getArmAngle();
-  }
-
-  public void setArmAtSpeaker(double angle) {
-    //TODO
-  }
-
-  public boolean getArmAtSpeaker() {
-    return ANGLE_AT_SPEAKER == getArmAngle();
-  }
-
   public void setArmSpeed(double speed){
     m_armSpx.set(VictorSPXControlMode.PercentOutput, speed);
+  }
+
+  public boolean isArmAtAngle(double angle) {
+    return MathUtil.isNear(angle, getArmAngle(), Constants.harvesterConstants.ANGLE_TOLERANCE);
   }
  }
