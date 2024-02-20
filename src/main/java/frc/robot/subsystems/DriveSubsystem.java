@@ -138,7 +138,7 @@ public class DriveSubsystem extends SubsystemBase {
       .withProperties(Map.of("orientation", "vertical",
                              "min", -DriveConstants.kMaxSpeedMetersPerSecond,
                              "max", DriveConstants.kMaxSpeedMetersPerSecond))
-      .withPosition(3, 0).withSize(1, 3)
+      .withPosition(7, 3).withSize(1, 3)
       .getEntry();
     m_gyroEntry = m_shuffleboardTab.add("Gyro", 0.0)
       .withWidget(BuiltInWidgets.kGyro)
