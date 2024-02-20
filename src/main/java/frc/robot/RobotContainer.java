@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,6 +18,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
+import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Harvester;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,6 +36,8 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  @SuppressWarnings("unused")
+  private final DriveDashboard mDriveDashboard = new DriveDashboard(m_robotDrive);  
   private final Harvester m_harvester = new Harvester();
 
   // The driver's controller
