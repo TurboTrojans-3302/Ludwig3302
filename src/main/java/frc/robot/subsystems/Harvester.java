@@ -7,6 +7,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -17,18 +23,21 @@ import frc.robot.Constants;
 public class Harvester extends SubsystemBase {
 
   private VictorSPX m_intakeSpx;
-  private VictorSPX m_armSpx;
+  private CANSparkMax m_armSpx;
+  private AbsoluteEncoder m_ArmEncoder;
+
   private DigitalInput mBackLimitSwitch;
   private PIDController mPid;
 
   /** Creates a new Harvester. */
   public Harvester() {
-    m_armSpx = new VictorSPX(Constants.harvesterConstants.kIntakeArmLift);
+    m_armSpx = new CANSparkMax(Constants.harvesterConstants.kArmLiftCanId, MotorType.kBrushless);
+    m_armSpx.setIdleMode(IdleMode.kBrake);
+    m_ArmEncoder = m_armSpx.getAbsoluteEncoder(Type.kDutyCycle);
+    m_ArmEncoder.setPositionConversionFactor(360.0);
+    
     m_intakeSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
-
-    m_armSpx.setNeutralMode(NeutralMode.Brake);
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
-
     mBackLimitSwitch = new DigitalInput(Constants.harvesterConstants.kBackLimitSwitchInputID);
 
     mPid = new PIDController(0.01, 0.0, 0.0);
@@ -60,8 +69,7 @@ public class Harvester extends SubsystemBase {
   }
 
   public double getArmAngle() {
-    //TODO
-    return 0.0;
+    return m_ArmEncoder.getPosition();
   }
 
   public double getArmSetpoint() {
@@ -75,7 +83,7 @@ public class Harvester extends SubsystemBase {
   }
 
   private void setArmSpeed(double speed){
-    m_armSpx.set(VictorSPXControlMode.PercentOutput, speed);
+    m_armSpx.set(speed);
   }
 
   public boolean isArmAtAngle(double angle) {
