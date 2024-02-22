@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -66,12 +68,15 @@ public final class Constants {
   }
 
   public static final class ModuleConstants {
-    // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
-    // This changes the drive speed of the module (a pinion gear with more teeth will result in a
+    // The MAXSwerve module can be configured with one of three pinion gears: 12T,
+    // 13T, or 14T.
+    // This changes the drive speed of the module (a pinion gear with more teeth
+    // will result in a
     // robot that drives faster).
     public static final int kDrivingMotorPinionTeeth = 14;
 
-    // Invert the turning encoder, since the output shaft rotates in the opposite direction of
+    // Invert the turning encoder, since the output shaft rotates in the opposite
+    // direction of
     // the steering motor in the MAXSwerve Module.
     public static final boolean kTurningEncoderInverted = true;
 
@@ -79,7 +84,8 @@ public final class Constants {
     public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
-    // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
+    // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
+    // teeth on the bevel pinion
     public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
@@ -132,7 +138,6 @@ public final class Constants {
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
 
-    
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
@@ -142,7 +147,7 @@ public final class Constants {
     public static final int kShooterLeftCanId = 12;
     public static final int kShooterRightCanId = 13;
   }
-  
+
   public static final class harvesterConstants {
     public static final int kIntakeCanId = 9;
     public static final int kArmLiftCanId = 10;
@@ -156,11 +161,17 @@ public final class Constants {
     public static final double ANGLE_AT_SPEAKER = 100;
     public static final double ANGLE_AT_DRIVE = 90;
     public static final double ANGLE_TOLERANCE = 2.0;
-    
+
     public static final double MAX_ARM_SPEED = 45.0 * Robot.kDefaultPeriod;
   }
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+
+  public static final class FieldConstants {
+    public static final Pose2d StartPositionLeft = new Pose2d(0.35, 0.0, new Rotation2d());
+    public static final Pose2d StartPositionCenter = new Pose2d(0.35, 0.0, new Rotation2d());
+    public static final Pose2d StartPositionRight = new Pose2d(0.35, 0.0, new Rotation2d());
   }
 }
