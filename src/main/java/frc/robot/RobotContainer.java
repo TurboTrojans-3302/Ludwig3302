@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
 import frc.robot.commands.TranslateCommand;
+import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Harvester;
@@ -33,6 +35,8 @@ public class RobotContainer {
   @SuppressWarnings("unused")
   private final DriveDashboard mDriveDashboard = new DriveDashboard(m_robotDrive);  
   private final Harvester m_harvester = new Harvester();
+  private final Climbers m_climbers = new Climbers();
+
 
   private final ShuffleboardTab m_shuffleboardTab;
   private final SendableChooser<Command> m_autonomousChooser;
@@ -53,6 +57,8 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(new TeleopDrive(m_robotDrive, m_driverController));
 
     m_harvester.setDefaultCommand(new TeleopHarvester(m_harvester, m_driverController)); 
+
+    m_climbers.setDefaultCommand(new ClimbCommand(m_climbers, m_copilotController));
     
     m_shuffleboardTab = Shuffleboard.getTab("Game");
     
