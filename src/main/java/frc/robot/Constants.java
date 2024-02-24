@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -72,7 +74,8 @@ public final class Constants {
 
   public static final class ModuleConstants {
 
-    // Invert the turning encoder, since the output shaft rotates in the opposite direction of
+    // Invert the turning encoder, since the output shaft rotates in the opposite
+    // direction of
     // the steering motor in the MAXSwerve Module.
     public static final boolean kTurningEncoderInverted = true;
 
@@ -130,7 +133,6 @@ public final class Constants {
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
 
-    
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
@@ -140,18 +142,31 @@ public final class Constants {
     public static final int kShooterLeftCanId = 12;
     public static final int kShooterRightCanId = 13;
   }
-  
+
   public static final class harvesterConstants {
-    public static final int kIntakeTopCanId = 9;
-    public static final int kIntakeBottomCanId = 10;
-    public static final int kIntakeArmLift = 11;
+    public static final int kIntakeCanId = 9;
+    public static final int kArmLiftCanId = 10;
 
     public static final double inSpeed = 1.0;
     public static final double outSpeed = -1.0;
+    public static final int kBackLimitSwitchInputID = 0;
 
+    public static final double ANGLE_AT_FLOOR = -5.0;
+    public static final double ANGLE_AT_AMP = 45.0;
+    public static final double ANGLE_AT_SPEAKER = 100;
+    public static final double ANGLE_AT_DRIVE = 90;
+    public static final double ANGLE_TOLERANCE = 2.0;
+
+    public static final double MAX_ARM_SPEED = 45.0 * Robot.kDefaultPeriod;
   }
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+
+  public static final class FieldConstants {
+    public static final Pose2d StartPositionLeft = new Pose2d(0.35, 0.0, new Rotation2d());
+    public static final Pose2d StartPositionCenter = new Pose2d(0.35, 0.0, new Rotation2d());
+    public static final Pose2d StartPositionRight = new Pose2d(0.35, 0.0, new Rotation2d());
   }
 }

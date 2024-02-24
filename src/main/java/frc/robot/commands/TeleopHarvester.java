@@ -32,7 +32,6 @@ public class TeleopHarvester extends Command {
     double harvesterSpeed;
     double armSpeed;
 
-    //TODO use limit switches here?
      if (m_controller.getRightBumper()) {
       harvesterSpeed = Constants.harvesterConstants.inSpeed;
      }
@@ -42,9 +41,8 @@ public class TeleopHarvester extends Command {
      else {
       harvesterSpeed = 0.0;
      }
-    m_harvester.setHarvestSpeed(harvesterSpeed);
+    m_harvester.setIntakeSpeed(harvesterSpeed);
 
-    //TODO add some soft limits here?
     armSpeed = m_controller.getRightTriggerAxis() - m_controller.getLeftTriggerAxis();
     m_harvester.setArmSpeed(armSpeed);
 

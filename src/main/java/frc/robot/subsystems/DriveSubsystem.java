@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -11,17 +10,14 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -53,7 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kFrontLeftChassisAngularOffset);
 
   // The gyro sensor
-  //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
 
   // Slew rate filter variables for controlling lateral acceleration
@@ -64,12 +60,6 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
-
-  private ShuffleboardTab m_shuffleboardTab;
-  private GenericEntry m_FLangleEntry, m_FRangleEntry, m_BLangleEntry, m_BRangleEntry;
-  private GenericEntry m_FLspeedEntry, m_FRspeedEntry, m_BLspeedEntry, m_BRspeedEntry;
-  private GenericEntry m_gyroEntry, m_driveDirEntry, m_driveMagEntry;
-  private GenericEntry m_BLangleSetptEntry;
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -83,85 +73,8 @@ public class DriveSubsystem extends SubsystemBase {
 
       });
 
-  public void updateShuffleboard() {
-    m_FLangleEntry.setDouble(m_frontLeft.getPosition().angle.getDegrees());
-    m_FRangleEntry.setDouble(m_frontRight.getPosition().angle.getDegrees());
-    m_BRangleEntry.setDouble(m_rearRight.getPosition().angle.getDegrees());
-    m_BLangleEntry.setDouble(m_rearLeft.getPosition().angle.getDegrees());
-    m_FLspeedEntry.setDouble(m_frontLeft.getState().speedMetersPerSecond);
-    m_FRspeedEntry.setDouble(m_frontRight.getState().speedMetersPerSecond);
-    m_BRspeedEntry.setDouble(m_rearRight.getState().speedMetersPerSecond);
-    m_BLspeedEntry.setDouble(m_rearLeft.getState().speedMetersPerSecond);
-    m_BLangleSetptEntry.setDouble(m_rearLeft.getDesiredAngleDeg());
-    m_gyroEntry.setDouble(m_gyro.getAngle());
-  }
-
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    m_shuffleboardTab = Shuffleboard.getTab("Drive");
-    m_FLangleEntry = m_shuffleboardTab.add("FLa", 0.0)
-      .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("Counter clockwise", true))
-      .withPosition(0, 0).withSize(3, 3)
-      .getEntry();
-    m_FRangleEntry = m_shuffleboardTab.add("FRa", 0.0)
-      .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("Counter clockwise", true))
-      .withPosition(4, 0).withSize(3, 3)
-      .getEntry();
-    m_BLangleEntry = m_shuffleboardTab.add("BLa", 0.0)
-      .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("Counter clockwise", true))
-      .withPosition(0, 3).withSize(3, 3)
-      .getEntry();
-    m_BRangleEntry = m_shuffleboardTab.add("BRa", 0.0)
-      .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("Counter clockwise", true))
-      .withPosition(4, 3).withSize(3, 3)
-      .getEntry();
-    m_FLspeedEntry = m_shuffleboardTab.add("FLs", 0.0)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("orientation", "vertical",
-                             "min", -DriveConstants.kMaxSpeedMetersPerSecond,
-                             "max", DriveConstants.kMaxSpeedMetersPerSecond))
-      .withPosition(3, 0).withSize(1, 3)
-      .getEntry();
-    m_FRspeedEntry = m_shuffleboardTab.add("FRs", 0.0)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("orientation", "vertical",
-                             "min", -DriveConstants.kMaxSpeedMetersPerSecond,
-                             "max", DriveConstants.kMaxSpeedMetersPerSecond))
-      .withPosition(7, 0).withSize(1, 3)
-      .getEntry();
-    m_BLspeedEntry = m_shuffleboardTab.add("BLs", 0.0)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("orientation", "vertical",
-                             "min", -DriveConstants.kMaxSpeedMetersPerSecond,
-                             "max", DriveConstants.kMaxSpeedMetersPerSecond))
-      .withPosition(3, 3).withSize(1, 3)
-      .getEntry();
-    m_BRspeedEntry = m_shuffleboardTab.add("BRs", 0.0)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("orientation", "vertical",
-                             "min", -DriveConstants.kMaxSpeedMetersPerSecond,
-                             "max", DriveConstants.kMaxSpeedMetersPerSecond))
-      .withPosition(7, 3).withSize(1, 3)
-      .getEntry();
-    m_gyroEntry = m_shuffleboardTab.add("Gyro", 0.0)
-      .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("Counter clockwise", true))
-      .withPosition(9, 0).withSize(3, 3)
-      .getEntry();
-    m_driveDirEntry = m_shuffleboardTab.add("Drive Dir", 0.0)
-      .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("Counter clockwise", true))
-      .withPosition(12, 0).withSize(3, 3)
-      .getEntry();
-    m_BLangleSetptEntry = m_shuffleboardTab.add("BLa set", 0.0)
-      .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("Counter clockwise", true))
-      .withPosition(9, 3).withSize(3, 3)
-      .getEntry();
   }
 
   @Override
@@ -175,8 +88,6 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-
-    updateShuffleboard();
 
   }
 
@@ -205,6 +116,14 @@ public class DriveSubsystem extends SubsystemBase {
         },
         pose);
   }
+
+  public void drive(Translation2d translation){
+    double x = translation.getX();
+    double y = translation.getY();
+
+    drive(x, y, 0.0, true, true);
+  }
+
 
   /**
    * Method to drive the robot using joystick info.
@@ -283,8 +202,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
-
-    m_driveDirEntry.setDouble(inputTranslationDir);
   }
 
   /**
@@ -297,12 +214,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
   }
 
-  public void setAll(double speed, double angle){
-     m_frontLeft.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
+  public void setAll(double speed, double angle) {
+    m_frontLeft.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
     m_frontRight.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
-      m_rearLeft.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
-     m_rearRight.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
+    m_rearLeft.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
+    m_rearRight.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)));
   }
+
   /**
    * Sets the swerve ModuleStates.
    *
@@ -348,75 +266,13 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  public MAXSwerveModule getM_frontLeft() {
-    return m_frontLeft;
+  public double getSpeed(){
+    ChassisSpeeds chassisSpeeds =  DriveConstants.kDriveKinematics.toChassisSpeeds(
+                                          m_frontLeft.getState(),
+                                          m_frontRight.getState(),
+                                          m_rearLeft.getState(),
+                                          m_rearRight.getState());
+    return Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
   }
 
-  public MAXSwerveModule getM_frontRight() {
-    return m_frontRight;
-  }
-
-  public MAXSwerveModule getM_rearLeft() {
-    return m_rearLeft;
-  }
-
-  public MAXSwerveModule getM_rearRight() {
-    return m_rearRight;
-  }
-
-  public double getM_currentRotation() {
-    return m_currentRotation;
-  }
-
-  public void setM_currentRotation(double m_currentRotation) {
-    this.m_currentRotation = m_currentRotation;
-  }
-
-  public double getM_currentTranslationDir() {
-    return m_currentTranslationDir;
-  }
-
-  public void setM_currentTranslationDir(double m_currentTranslationDir) {
-    this.m_currentTranslationDir = m_currentTranslationDir;
-  }
-
-  public double getM_currentTranslationMag() {
-    return m_currentTranslationMag;
-  }
-
-  public void setM_currentTranslationMag(double m_currentTranslationMag) {
-    this.m_currentTranslationMag = m_currentTranslationMag;
-  }
-
-  public SlewRateLimiter getM_magLimiter() {
-    return m_magLimiter;
-  }
-
-  public void setM_magLimiter(SlewRateLimiter m_magLimiter) {
-    this.m_magLimiter = m_magLimiter;
-  }
-
-  public SlewRateLimiter getM_rotLimiter() {
-    return m_rotLimiter;
-  }
-
-  public void setM_rotLimiter(SlewRateLimiter m_rotLimiter) {
-    this.m_rotLimiter = m_rotLimiter;
-  }
-
-  public double getM_prevTime() {
-    return m_prevTime;
-  }
-
-  public void setM_prevTime(double m_prevTime) {
-    this.m_prevTime = m_prevTime;
-  }
-
-  public SwerveDriveOdometry getM_odometry() {
-    return m_odometry;
-  }
-
-  public void setM_odometry(SwerveDriveOdometry m_odometry) {
-    this.m_odometry = m_odometry;
-  }
 }
