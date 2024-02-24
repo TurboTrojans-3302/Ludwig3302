@@ -30,23 +30,39 @@ public class DriveSubsystem extends SubsystemBase {
       new EddieCoder(DriveConstants.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER),
       DriveConstants.kFrontLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
-      new CANSparkMax(DriveConstants.kFrontRightDrivingCanId, MotorType.kBrushless),
-      new CANSparkMax(DriveConstants.kFrontRightTurningCanId, MotorType.kBrushless),
-      new EddieCoder(DriveConstants.DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER),
-      DriveConstants.kFrontLeftChassisAngularOffset);
+  public MAXSwerveModule getM_frontLeft() {
+    return m_frontLeft;
+  }
 
-  private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
-      new CANSparkMax(DriveConstants.kRearLeftDrivingCanId, MotorType.kBrushless),
-      new CANSparkMax(DriveConstants.kRearLeftTurningCanId, MotorType.kBrushless),
-      new EddieCoder(DriveConstants.DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER),
-      DriveConstants.kFrontLeftChassisAngularOffset);
+  private final MAXSwerveModule m_frontRight = MAXSwerveModule.getInstance(
+      DriveConstants.kFrontRightDrivingCanId,
+      DriveConstants.kFrontRightTurningCanId,
+      DriveConstants.DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER,
+      DriveConstants.kFrontRightChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
-      new CANSparkMax(DriveConstants.kRearRightDrivingCanId, MotorType.kBrushless),
-      new CANSparkMax(DriveConstants.kRearRightTurningCanId, MotorType.kBrushless),
-      new EddieCoder(DriveConstants.DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER),
-      DriveConstants.kFrontLeftChassisAngularOffset);
+  public MAXSwerveModule getM_frontRight() {
+    return m_frontRight;
+  }
+
+  private final MAXSwerveModule m_rearLeft = MAXSwerveModule.getInstance(
+      DriveConstants.kRearLeftDrivingCanId,
+      DriveConstants.kRearLeftTurningCanId,
+      DriveConstants.DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER,
+      DriveConstants.kBackLeftChassisAngularOffset);
+
+  public MAXSwerveModule getM_rearLeft() {
+    return m_rearLeft;
+  }
+
+  private final MAXSwerveModule m_rearRight = MAXSwerveModule.getInstance(
+      DriveConstants.kRearRightDrivingCanId,
+      DriveConstants.kRearRightTurningCanId,
+      DriveConstants.DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER,
+      DriveConstants.kBackRightChassisAngularOffset);
+
+  public MAXSwerveModule getM_rearRight() {
+    return m_rearRight;
+  }
 
   // The gyro sensor
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
@@ -55,7 +71,15 @@ public class DriveSubsystem extends SubsystemBase {
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
+  public double getM_currentTranslationDir() {
+    return m_currentTranslationDir;
+  }
+
   private double m_currentTranslationMag = 0.0;
+
+  public double getM_currentTranslationMag() {
+    return m_currentTranslationMag;
+  }
 
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);

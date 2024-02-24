@@ -138,6 +138,11 @@ public final class Constants {
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
+  public static final class ClimberConstants {
+    public static final int rightClimberCanID = 14;
+    public static final int leftClimberCanID = 15;
+  }
+
   public static final class ShooterConstants {
     public static final int kShooterLeftCanId = 12;
     public static final int kShooterRightCanId = 13;

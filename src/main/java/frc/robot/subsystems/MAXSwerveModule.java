@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.REVLibError;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import java.util.Map;
 
@@ -205,5 +206,13 @@ public class MAXSwerveModule {
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);
+  }
+
+  public static MAXSwerveModule getInstance(int driveCanID, int turnMotorCanID,
+                                            int turnEncoderCanID, double angleoffset) {
+    return new MAXSwerveModule(new CANSparkMax(driveCanID, MotorType.kBrushless),
+                               new CANSparkMax(turnMotorCanID, MotorType.kBrushless),
+                               new EddieCoder(turnEncoderCanID),
+                               angleoffset);
   }
 }
