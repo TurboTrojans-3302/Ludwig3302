@@ -5,8 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -18,12 +20,18 @@ public class TranslateCommand extends Command {
   private Pose2d m_dest;
   private Translation2d m_delta;
   private DriveSubsystem m_drive;
+  private TrapezoidProfile m_trapezoid;
+  private State m_goal;
+  private double m_startTimeMillis;
 
   /** Creates a new Translate. */
   public TranslateCommand(DriveSubsystem drive, Translation2d delta){
     m_drive = drive;
     m_delta = delta;
     addRequirements(m_drive);
+    m_trapezoid = new TrapezoidProfile(new Constraints(Constants.DriveConstants.kMaxSpeedMetersPerSecond,
+                                                       Constants.DriveConstants.kMaxSpeedMetersPerSecond / 2.0 ));
+    m_goal = new State(0.0, 0.0);
   }
 
   public TranslateCommand(DriveSubsystem drive, double x, double y){
@@ -36,6 +44,7 @@ public class TranslateCommand extends Command {
     Pose2d start = m_drive.getPose();
     m_dest = new Pose2d(start.getTranslation().plus(m_delta),
                         start.getRotation());
+    m_startTimeMillis = System.currentTimeMillis();
   }
 
   private Translation2d translation2dest(){
@@ -47,7 +56,8 @@ public class TranslateCommand extends Command {
   }
 
   private double calculateSpeed(){
-    return Constants.DriveConstants.kMaxSpeedMetersPerSecond / 5.0;
+    State currentState = new State(distance(), m_drive.getSpeed());
+    return m_trapezoid.calculate(t(), currentState, m_goal).velocity;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -69,4 +79,6 @@ public class TranslateCommand extends Command {
   public boolean isFinished() {
     return distance() < DISTANCE_TOLERANCE;
   }
+
+  private double t(){ return (System.currentTimeMillis() - m_startTimeMillis) / 1000.0; }
 }

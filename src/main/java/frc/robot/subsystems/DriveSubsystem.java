@@ -4,9 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,45 +21,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
-  private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
-      new CANSparkMax(DriveConstants.kFrontLeftDrivingCanId, MotorType.kBrushless),
-      new CANSparkMax(DriveConstants.kFrontLeftTurningCanId, MotorType.kBrushless),
-      new EddieCoder(DriveConstants.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER),
+  private final MAXSwerveModule m_frontLeft = MAXSwerveModule.getInstance(
+      DriveConstants.kFrontLeftDrivingCanId,
+      DriveConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset);
-
-  public MAXSwerveModule getM_frontLeft() {
-    return m_frontLeft;
-  }
 
   private final MAXSwerveModule m_frontRight = MAXSwerveModule.getInstance(
       DriveConstants.kFrontRightDrivingCanId,
       DriveConstants.kFrontRightTurningCanId,
-      DriveConstants.DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER,
       DriveConstants.kFrontRightChassisAngularOffset);
-
-  public MAXSwerveModule getM_frontRight() {
-    return m_frontRight;
-  }
 
   private final MAXSwerveModule m_rearLeft = MAXSwerveModule.getInstance(
       DriveConstants.kRearLeftDrivingCanId,
       DriveConstants.kRearLeftTurningCanId,
-      DriveConstants.DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER,
       DriveConstants.kBackLeftChassisAngularOffset);
-
-  public MAXSwerveModule getM_rearLeft() {
-    return m_rearLeft;
-  }
 
   private final MAXSwerveModule m_rearRight = MAXSwerveModule.getInstance(
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
-      DriveConstants.DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER,
       DriveConstants.kBackRightChassisAngularOffset);
-
-  public MAXSwerveModule getM_rearRight() {
-    return m_rearRight;
-  }
 
   // The gyro sensor
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
@@ -71,15 +48,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
-  public double getM_currentTranslationDir() {
-    return m_currentTranslationDir;
-  }
-
   private double m_currentTranslationMag = 0.0;
-
-  public double getM_currentTranslationMag() {
-    return m_currentTranslationMag;
-  }
 
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
@@ -290,75 +259,13 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  public MAXSwerveModule getM_frontLeft() {
-    return m_frontLeft;
+  public double getSpeed(){
+    ChassisSpeeds chassisSpeeds =  DriveConstants.kDriveKinematics.toChassisSpeeds(
+                                          m_frontLeft.getState(),
+                                          m_frontRight.getState(),
+                                          m_rearLeft.getState(),
+                                          m_rearRight.getState());
+    return Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
   }
 
-  public MAXSwerveModule getM_frontRight() {
-    return m_frontRight;
-  }
-
-  public MAXSwerveModule getM_rearLeft() {
-    return m_rearLeft;
-  }
-
-  public MAXSwerveModule getM_rearRight() {
-    return m_rearRight;
-  }
-
-  public double getM_currentRotation() {
-    return m_currentRotation;
-  }
-
-  public void setM_currentRotation(double m_currentRotation) {
-    this.m_currentRotation = m_currentRotation;
-  }
-
-  public double getM_currentTranslationDir() {
-    return m_currentTranslationDir;
-  }
-
-  public void setM_currentTranslationDir(double m_currentTranslationDir) {
-    this.m_currentTranslationDir = m_currentTranslationDir;
-  }
-
-  public double getM_currentTranslationMag() {
-    return m_currentTranslationMag;
-  }
-
-  public void setM_currentTranslationMag(double m_currentTranslationMag) {
-    this.m_currentTranslationMag = m_currentTranslationMag;
-  }
-
-  public SlewRateLimiter getM_magLimiter() {
-    return m_magLimiter;
-  }
-
-  public void setM_magLimiter(SlewRateLimiter m_magLimiter) {
-    this.m_magLimiter = m_magLimiter;
-  }
-
-  public SlewRateLimiter getM_rotLimiter() {
-    return m_rotLimiter;
-  }
-
-  public void setM_rotLimiter(SlewRateLimiter m_rotLimiter) {
-    this.m_rotLimiter = m_rotLimiter;
-  }
-
-  public double getM_prevTime() {
-    return m_prevTime;
-  }
-
-  public void setM_prevTime(double m_prevTime) {
-    this.m_prevTime = m_prevTime;
-  }
-
-  public SwerveDriveOdometry getM_odometry() {
-    return m_odometry;
-  }
-
-  public void setM_odometry(SwerveDriveOdometry m_odometry) {
-    this.m_odometry = m_odometry;
-  }
 }
