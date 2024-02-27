@@ -4,18 +4,24 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,6 +33,9 @@ public class Harvester extends SubsystemBase {
 
   private DigitalInput mBackLimitSwitch;
 
+  private final ShuffleboardTab m_shuffleboardTab;
+  private final GenericEntry m_armAngleEntry;
+
   /** Creates a new Harvester. */
   public Harvester() {
     m_armSpx = new CANSparkMax(Constants.harvesterConstants.kArmLiftCanId, MotorType.kBrushless);
@@ -37,12 +46,18 @@ public class Harvester extends SubsystemBase {
     m_intakeSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
     mBackLimitSwitch = new DigitalInput(Constants.harvesterConstants.kBackLimitSwitchInputID);
+
+    m_shuffleboardTab = Shuffleboard.getTab("Harvester");
+    m_armAngleEntry = m_shuffleboardTab.add("Arm Angle", 0.0)
+                                .withWidget(BuiltInWidgets.kGyro)
+                                .withProperties(Map.of("StartingAngle", 90.0))
+                                .getEntry();
   }
 
   
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    m_armAngleEntry.setDouble(getArmAngle());
   }
 
   public boolean hasNote() {

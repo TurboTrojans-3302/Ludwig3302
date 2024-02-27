@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -44,7 +45,7 @@ public class TeleopHarvester extends Command {
     m_harvester.setIntakeSpeed(harvesterSpeed);
 
     armSpeed = m_controller.getRightTriggerAxis() - m_controller.getLeftTriggerAxis();
-    m_harvester.setArmSpeed(armSpeed);
+    m_harvester.setArmSpeed(MathUtil.applyDeadband(armSpeed, 0.1));
 
   }
 
