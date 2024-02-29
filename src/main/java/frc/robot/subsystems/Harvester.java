@@ -18,6 +18,7 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -29,19 +30,21 @@ public class Harvester extends SubsystemBase {
 
   private VictorSPX m_intakeSpx;
   private CANSparkMax m_armSpx;
-  private AbsoluteEncoder m_ArmEncoder;
+  private DutyCycleEncoder m_ArmEncoder;
 
   private DigitalInput mBackLimitSwitch;
 
   private final ShuffleboardTab m_shuffleboardTab;
   private final GenericEntry m_armAngleEntry;
+  private final GenericEntry m_hasNoteEntry;
 
   /** Creates a new Harvester. */
   public Harvester() {
     m_armSpx = new CANSparkMax(Constants.harvesterConstants.kArmLiftCanId, MotorType.kBrushless);
     m_armSpx.setIdleMode(IdleMode.kBrake);
-    m_ArmEncoder = m_armSpx.getAbsoluteEncoder(Type.kDutyCycle);
-    m_ArmEncoder.setPositionConversionFactor(360.0);
+    m_ArmEncoder = new DutyCycleEncoder(Constants.harvesterConstants.kArmEncoderDInput);
+    m_ArmEncoder.setDistancePerRotation(360.0);
+    m_ArmEncoder.setPositionOffset(Constants.harvesterConstants.armEncoderOffset);
     
     m_intakeSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
@@ -52,12 +55,16 @@ public class Harvester extends SubsystemBase {
                                 .withWidget(BuiltInWidgets.kGyro)
                                 .withProperties(Map.of("StartingAngle", 90.0))
                                 .getEntry();
+    m_hasNoteEntry = m_shuffleboardTab.add("Have Note", false)
+                                .withWidget(BuiltInWidgets.kBooleanBox)
+                                .getEntry();
   }
 
   
   @Override
   public void periodic() {
     m_armAngleEntry.setDouble(getArmAngle());
+    m_hasNoteEntry.setBoolean(hasNote());
   }
 
   public boolean hasNote() {
@@ -75,7 +82,7 @@ public class Harvester extends SubsystemBase {
   }
 
   public double getArmAngle() {
-    return m_ArmEncoder.getPosition();
+    return m_ArmEncoder.getDistance();
   }
 
   public void setArmAngle(double angle) {

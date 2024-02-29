@@ -20,6 +20,7 @@ import frc.robot.commands.TranslateCommand;
 import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Harvester;
+import frc.robot.subsystems.Shooter;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -29,14 +30,17 @@ import frc.robot.subsystems.Harvester;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   @SuppressWarnings("unused")
   private final DriveDashboard mDriveDashboard = new DriveDashboard(m_robotDrive);  
-  private final Harvester m_harvester = new Harvester();
+  public final Harvester m_harvester = new Harvester();
+  public final Shooter m_shooter = new Shooter();
 
   private final ShuffleboardTab m_shuffleboardTab;
   private final SendableChooser<Command> m_autonomousChooser;
   private final SendableChooser<Pose2d> m_startPosChooser;
+
+  private final REVBlinkinLED m_BlinkinLED;
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -66,6 +70,8 @@ public class RobotContainer {
     m_startPosChooser.addOption("Center", Constants.FieldConstants.StartPositionCenter);
     m_startPosChooser.addOption("Right", Constants.FieldConstants.StartPositionRight);
     m_shuffleboardTab.add("Start Position", m_startPosChooser);
+
+    m_BlinkinLED = new REVBlinkinLED(Constants.BLINKIN_LED_PWM_CHANNEL);
   }
 
   /**
@@ -103,5 +109,9 @@ public class RobotContainer {
 
   public void setStartPosition() {
     m_robotDrive.resetOdometry(getStartPosition());
+  }
+
+  public void setLED(double value) {
+    m_BlinkinLED.set(value);
   }
 }

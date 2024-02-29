@@ -156,6 +156,8 @@ public final class Constants {
   public static final class harvesterConstants {
     public static final int kIntakeCanId = 9;
     public static final int kArmLiftCanId = 10;
+    public static final int kArmEncoderDInput = 0;
+    public static final double armEncoderOffset = 0.0;
 
     public static final double inSpeed = 1.0;
     public static final double outSpeed = -1.0;
@@ -179,4 +181,6 @@ public final class Constants {
     public static final Pose2d StartPositionCenter = new Pose2d(0.35, 0.0, new Rotation2d());
     public static final Pose2d StartPositionRight = new Pose2d(0.35, 0.0, new Rotation2d());
   }
+
+public static final int BLINKIN_LED_PWM_CHANNEL = 0;
 }

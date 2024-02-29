@@ -4,10 +4,16 @@
 
 package frc.robot;
 
+import java.util.Map;
+import java.util.Optional;
+
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.DriveDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -62,6 +68,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    m_robotContainer.setLED(REVBlinkinLED.Pattern.BREATH_GRAY);
   }
 
   @Override
@@ -74,6 +81,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    setLED(LEDmode.Auton);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     m_robotContainer.setStartPosition();
@@ -91,6 +99,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    setLED(LEDmode.Teleop);
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -103,6 +112,15 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    if(m_robotContainer.m_harvester.hasNote()){
+      if(m_robotContainer.m_shooter.speedIsReady()){
+        setLED(LEDmode.Ready2Shoot);
+      } else {
+        setLED(LEDmode.HaveNote);
+      }
+    } else {
+      setLED(LEDmode.Teleop);
+    }    
   }
 
   @Override
@@ -113,6 +131,36 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
+  public void testPeriodic() {}
+
+  private enum LEDmode {
+    Auton,
+    Teleop,
+    HaveNote,
+    Ready2Shoot
+  }
+
+  Map<Alliance, Map<LEDmode, Double>> ledPatternMap = Map.of(
+    Alliance.Red, Map.of(
+      LEDmode.Auton, REVBlinkinLED.Pattern.COLOR1_LARSON_SCANNER,
+      LEDmode.Teleop, REVBlinkinLED.Pattern.SOLID_RED,
+      LEDmode.HaveNote, REVBlinkinLED.Pattern.COLOR1_HEARTBEAT_MEDIUM,
+      LEDmode.Ready2Shoot, REVBlinkinLED.Pattern.COLOR1_HEARTBEAT_FAST
+    ),
+    Alliance.Blue, Map.of(
+      LEDmode.Auton, REVBlinkinLED.Pattern.COLOR2_LARSON_SCANNER,
+      LEDmode.Teleop, REVBlinkinLED.Pattern.SOLID_BLUE,
+      LEDmode.HaveNote, REVBlinkinLED.Pattern.COLOR2_HEARTBEAT_MEDIUM,
+      LEDmode.Ready2Shoot, REVBlinkinLED.Pattern.COLOR2_HEARTBEAT_FAST
+    )
+  );
+
+  private void setLED(LEDmode mode){
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    if(alliance.isPresent()){
+      m_robotContainer.setLED(ledPatternMap.get(alliance.get()).get(mode));
+    } else {
+      m_robotContainer.setLED(REVBlinkinLED.Pattern.COLOR1_AND_2_TWINKLES_COLOR1_AND_2);
+    }
   }
 }
