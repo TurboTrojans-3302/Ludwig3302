@@ -4,19 +4,26 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -24,17 +31,22 @@ public class Harvester extends SubsystemBase {
 
   private VictorSPX m_intakeSpx;
   private CANSparkMax m_armSpx;
-  private AbsoluteEncoder m_ArmEncoder;
+  private DutyCycleEncoder m_ArmEncoder;
 
   private DigitalInput mBackLimitSwitch;
   private PIDController mPid;
+
+  private final ShuffleboardTab m_shuffleboardTab;
+  private final GenericEntry m_armAngleEntry;
+  private final GenericEntry m_hasNoteEntry;
 
   /** Creates a new Harvester. */
   public Harvester() {
     m_armSpx = new CANSparkMax(Constants.harvesterConstants.kArmLiftCanId, MotorType.kBrushless);
     m_armSpx.setIdleMode(IdleMode.kBrake);
-    m_ArmEncoder = m_armSpx.getAbsoluteEncoder(Type.kDutyCycle);
-    m_ArmEncoder.setPositionConversionFactor(360.0);
+    m_ArmEncoder = new DutyCycleEncoder(Constants.harvesterConstants.kArmEncoderDInput);
+    m_ArmEncoder.setDistancePerRotation(360.0);
+    m_ArmEncoder.setPositionOffset(Constants.harvesterConstants.armEncoderOffset);
     
     m_intakeSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
@@ -44,6 +56,15 @@ public class Harvester extends SubsystemBase {
     mPid.setTolerance(Constants.harvesterConstants.ANGLE_TOLERANCE);
 
     mPid.setSetpoint(getArmAngle());
+
+    m_shuffleboardTab = Shuffleboard.getTab("Harvester");
+    m_armAngleEntry = m_shuffleboardTab.add("Arm Angle", 0.0)
+                                .withWidget(BuiltInWidgets.kGyro)
+                                .withProperties(Map.of("StartingAngle", 90.0))
+                                .getEntry();
+    m_hasNoteEntry = m_shuffleboardTab.add("Have Note", false)
+                                .withWidget(BuiltInWidgets.kBooleanBox)
+                                .getEntry();
   }
 
   
@@ -52,6 +73,9 @@ public class Harvester extends SubsystemBase {
     double speed = mPid.calculate(getArmAngle());
     //TODO implement some rate limiting here
     setArmSpeed(speed);
+
+    m_armAngleEntry.setDouble(getArmAngle());
+    m_hasNoteEntry.setBoolean(hasNote());
   }
 
   public boolean hasNote() {
@@ -69,7 +93,7 @@ public class Harvester extends SubsystemBase {
   }
 
   public double getArmAngle() {
-    return m_ArmEncoder.getPosition();
+    return m_ArmEncoder.getDistance();
   }
 
   public double getArmSetpoint() {
