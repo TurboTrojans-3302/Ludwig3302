@@ -34,7 +34,7 @@ public class RobotContainer {
   @SuppressWarnings("unused")
   private final DriveDashboard mDriveDashboard = new DriveDashboard(m_robotDrive);  
   public final Harvester m_harvester = new Harvester();
-  //public final Shooter m_shooter = new Shooter();
+  public final Shooter m_shooter = new Shooter();
 
   private final ShuffleboardTab m_shuffleboardTab;
   private final SendableChooser<Command> m_autonomousChooser;

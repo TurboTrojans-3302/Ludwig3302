@@ -11,6 +11,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -90,7 +91,7 @@ public class Shooter extends SubsystemBase {
 
     mShuffleboardTab.add("ShooterReady", speedIsReady()).withWidget(BuiltInWidgets.kBooleanBox);
 
-    ShuffleboardLayout rpmLayout = mShuffleboardTab.getLayout("RPM");
+    ShuffleboardLayout rpmLayout = mShuffleboardTab.getLayout("RPM", BuiltInLayouts.kList);
     rpmLayout.add("Setpoint", mSetpoint);
     rpmLayout.add("Err L", mLeftVelocity)
              .withWidget(BuiltInWidgets.kDial)

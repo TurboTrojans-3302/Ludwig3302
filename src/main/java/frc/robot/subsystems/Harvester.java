@@ -53,7 +53,8 @@ public class Harvester extends SubsystemBase {
     m_shuffleboardTab = Shuffleboard.getTab("Harvester");
     m_armAngleEntry = m_shuffleboardTab.add("Arm Angle", 0.0)
                                 .withWidget(BuiltInWidgets.kGyro)
-                                .withProperties(Map.of("StartingAngle", 90.0))
+                                .withProperties(Map.of("StartingAngle", 90.0,
+                                                       "Counter clockwise", true))
                                 .getEntry();
     m_hasNoteEntry = m_shuffleboardTab.add("Have Note", false)
                                 .withWidget(BuiltInWidgets.kBooleanBox)
