@@ -157,15 +157,15 @@ public final class Constants {
     public static final int kIntakeCanId = 9;
     public static final int kArmLiftCanId = 10;
     public static final int kArmEncoderDInput = 0;
-    public static final double armEncoderOffset = 0.0;
+    public static final double armEncoderOffset = 1 - (28.0/360.0);
 
     public static final double inSpeed = 1.0;
     public static final double outSpeed = -1.0;
-    public static final int kBackLimitSwitchInputID = 0;
+    public static final int kBackLimitSwitchInputID = 1;
 
-    public static final double ANGLE_AT_FLOOR = -5.0;
+    public static final double ANGLE_AT_FLOOR = -50.0;
     public static final double ANGLE_AT_AMP = 45.0;
-    public static final double ANGLE_AT_SPEAKER = 100;
+    public static final double ANGLE_AT_SPEAKER = 120;
     public static final double ANGLE_AT_DRIVE = 90;
     public static final double ANGLE_TOLERANCE = 2.0;
 

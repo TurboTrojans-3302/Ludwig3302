@@ -28,7 +28,9 @@ public class Shooter extends SubsystemBase {
   private RelativeEncoder mLeftRelativeEncoder, mRightRelativeEncoder;
   private Double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
   private ShuffleboardTab mShuffleboardTab;
-  private Double mSetpoint, mLeftVelocity, mRightVelocity;
+  private Double mSetpoint = 0.0;
+  private Double mLeftVelocity = 0.0;
+  private Double mRightVelocity = 0.0;
 
   /** Creates a new Shooter. */
   public Shooter() {

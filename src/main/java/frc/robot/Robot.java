@@ -112,15 +112,15 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if(m_robotContainer.m_harvester.hasNote()){
-      if(m_robotContainer.m_shooter.speedIsReady()){
-        setLED(LEDmode.Ready2Shoot);
-      } else {
-        setLED(LEDmode.HaveNote);
-      }
-    } else {
-      setLED(LEDmode.Teleop);
-    }    
+    // if(m_robotContainer.m_harvester.hasNote()){
+    //   if(m_robotContainer.m_shooter.speedIsReady()){
+    //     setLED(LEDmode.Ready2Shoot);
+    //   } else {
+    //     setLED(LEDmode.HaveNote);
+    //   }
+    // } else {
+    //   setLED(LEDmode.Teleop);
+    // }    
   }
 
   @Override

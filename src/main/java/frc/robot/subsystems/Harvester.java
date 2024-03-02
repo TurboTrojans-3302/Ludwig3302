@@ -43,7 +43,7 @@ public class Harvester extends SubsystemBase {
     m_armSpx = new CANSparkMax(Constants.harvesterConstants.kArmLiftCanId, MotorType.kBrushless);
     m_armSpx.setIdleMode(IdleMode.kBrake);
     m_ArmEncoder = new DutyCycleEncoder(Constants.harvesterConstants.kArmEncoderDInput);
-    m_ArmEncoder.setDistancePerRotation(360.0);
+    m_ArmEncoder.setDistancePerRotation(-360.0);
     m_ArmEncoder.setPositionOffset(Constants.harvesterConstants.armEncoderOffset);
     
     m_intakeSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
