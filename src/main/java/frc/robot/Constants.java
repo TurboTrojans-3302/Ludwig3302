@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalSource;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -151,6 +152,9 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int kShooterLeftCanId = 12;
     public static final int kShooterRightCanId = 13;
+    public static final int kLeftTachDIO = 2;
+    public static final int kRightTachDIO = 3;
+    public static final double RPM_TOLERANCE = 20;
   }
 
   public static final class harvesterConstants {
