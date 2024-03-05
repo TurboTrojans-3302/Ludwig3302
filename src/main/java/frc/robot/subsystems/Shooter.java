@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -34,7 +35,8 @@ public class Shooter extends SubsystemBase {
   private Double mSetpoint = 0.0;
   private Double mLeftVelocity = 0.0;
   private Double mRightVelocity = 0.0;
-
+  public double shooterRPM = 0;
+  private double shooterRevsPer100ms = 0;
   /** Creates a new Shooter. */
   public Shooter() {
     m_leftMotor = new VictorSPX(Constants.ShooterConstants.kShooterLeftCanId);
@@ -152,7 +154,32 @@ public class Shooter extends SubsystemBase {
     double errR = Math.abs(errR());
     return (errL < RPM_TOLERANCE) && (errR < RPM_TOLERANCE);
   }
+ 
+  public void increaseRPM(boolean yPressed){
+    //60,000 ms per minute and Velocity is # revolutions per 100 ms.
+    if(shooterRPM <= Constants.ShooterConstants.maxShooterRPM - 100){
+      shooterRPM+=100;
+      shooterRevsPer100ms = shooterRPM/600;
+    m_leftMotor.set(VictorSPXControlMode.Velocity, shooterRevsPer100ms);
+    m_rightMotor.set(VictorSPXControlMode.Velocity, shooterRevsPer100ms);
+    }
+    
 
+
+  }
+
+  public void decreaseRPM(boolean aPressed){
+    //60,000 ms per minute and Velocity is # revolutions per 100 ms.
+    if(shooterRPM >= 100){
+      shooterRPM-=100;
+      shooterRevsPer100ms = shooterRPM/600;
+    m_leftMotor.set(VictorSPXControlMode.Velocity, shooterRevsPer100ms);
+    m_rightMotor.set(VictorSPXControlMode.Velocity, shooterRevsPer100ms);
+    }
+    
+    
+
+  }
 }
 
 
