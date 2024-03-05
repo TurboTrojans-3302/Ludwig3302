@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -24,7 +26,7 @@ public class Shooter extends SubsystemBase {
 
   private final Double RPM_TOLERANCE = 20.0;
 
-  private CANSparkMax m_leftMotor, m_rightMotor;
+  private VictorSPX m_leftMotor, m_rightMotor;
   private SparkPIDController mLeftPidController, mRightPidController;
   private RelativeEncoder mLeftRelativeEncoder, mRightRelativeEncoder;
   private Double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
@@ -35,10 +37,10 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Shooter() {
-    m_leftMotor = new CANSparkMax(Constants.ShooterConstants.kShooterLeftCanId, MotorType.kBrushless);
-    m_rightMotor = new CANSparkMax(Constants.ShooterConstants.kShooterRightCanId, MotorType.kBrushless);
+    m_leftMotor = new VictorSPX(Constants.ShooterConstants.kShooterLeftCanId);
+    m_rightMotor = new VictorSPX(Constants.ShooterConstants.kShooterRightCanId);
 
-    m_leftMotor.restoreFactoryDefaults();
+    m_leftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
     m_rightMotor.restoreFactoryDefaults();
 
     /**
@@ -46,7 +48,7 @@ public class Shooter extends SubsystemBase {
      * is constructed by calling the getPIDController() method on an existing
      * CANSparkMax object
      */
-    mLeftPidController = m_leftMotor.getPIDController();
+    mLeftPidController = m_leftMotor.;
     mRightPidController = m_leftMotor.getPIDController();
 
     // Encoder object created to display position values

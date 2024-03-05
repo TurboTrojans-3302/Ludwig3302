@@ -83,7 +83,12 @@ public class Harvester extends SubsystemBase {
   }
 
   public double getArmAngle() {
-    return m_ArmEncoder.getDistance();
+    double armangle = m_ArmEncoder.getDistance();
+    if (armangle < 180 ){
+      return armangle;
+    } else {
+      return armangle-360;
+    }
   }
 
   public void setArmAngle(double angle) {
