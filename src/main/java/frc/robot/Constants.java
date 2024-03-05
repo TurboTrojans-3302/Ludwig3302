@@ -175,7 +175,8 @@ public final class Constants {
     public static final double ANGLE_MAX = -6.0;
     public static final double ANGLE_MIN = 105;
     
-    public static final double MAX_ARM_SPEED = 45.0 * Robot.kDefaultPeriod;
+    public static final double MAX_ARM_SPEED = 45.0; // deg/sec
+    public static final double MAX_ARM_ACCEL = 90; // deg/sec^2
   }
 
   public static final class NeoMotorConstants {

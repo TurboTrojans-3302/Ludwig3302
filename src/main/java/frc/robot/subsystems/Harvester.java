@@ -20,12 +20,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class Harvester extends SubsystemBase {
 
@@ -39,6 +41,10 @@ public class Harvester extends SubsystemBase {
   private final ShuffleboardTab m_shuffleboardTab;
   private final GenericEntry m_armAngleEntry;
   private final GenericEntry m_hasNoteEntry;
+
+  private double mVelocities[] = {0.0, 0.0, 0.0, 0.0};
+  private double mPreviousAngle;
+  private int velIdx = 0;
 
   /** Creates a new Harvester. */
   public Harvester() {
@@ -56,6 +62,7 @@ public class Harvester extends SubsystemBase {
     mPid.setTolerance(Constants.harvesterConstants.ANGLE_TOLERANCE);
 
     mPid.setSetpoint(getArmAngle());
+    mPreviousAngle = getArmAngle();
 
     m_shuffleboardTab = Shuffleboard.getTab("Harvester");
     m_armAngleEntry = m_shuffleboardTab.add("Arm Angle", 0.0)
@@ -70,11 +77,15 @@ public class Harvester extends SubsystemBase {
   
   @Override
   public void periodic() {
-    double speed = mPid.calculate(getArmAngle());
-    //TODO implement some rate limiting here
-    setArmSpeed(speed);
+    double motorcommand = mPid.calculate(getArmAngle());
+    setArmMotorPctOutput(MathUtil.clamp(motorcommand, -1.0, 1.0));
 
-    m_armAngleEntry.setDouble(getArmAngle());
+    double currentAngle = getArmAngle();
+    mVelocities[velIdx] = (currentAngle - mPreviousAngle) / Robot.kDefaultPeriod;
+    velIdx = (velIdx + 1) % mVelocities.length;
+    mPreviousAngle = currentAngle;
+
+    m_armAngleEntry.setDouble(currentAngle);
     m_hasNoteEntry.setBoolean(hasNote());
   }
 
@@ -96,6 +107,14 @@ public class Harvester extends SubsystemBase {
     return m_ArmEncoder.getDistance();
   }
 
+  public double getArmVelocity(){
+    double sum = 0;
+    for (double value : mVelocities) {
+        sum += value;
+    }
+    return sum / mVelocities.length;  
+  }
+
   public double getArmSetpoint() {
     return mPid.getSetpoint();
   }
@@ -106,7 +125,7 @@ public class Harvester extends SubsystemBase {
                                     Constants.harvesterConstants.ANGLE_MAX));
   }
 
-  private void setArmSpeed(double speed){
+  private void setArmMotorPctOutput(double speed){
     m_armSpx.set(speed);
   }
 
