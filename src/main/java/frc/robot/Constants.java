@@ -151,8 +151,9 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int kShooterLeftCanId = 12;
     public static final int kShooterRightCanId = 13;
-    //What would the max rpm be?
-    public static final double maxShooterRPM = 2000;
+    public static final int kLeftTachDIO = 2;
+    public static final int kRightTachDIO = 3;
+    public static final double RPM_TOLERANCE = 20;
   }
 
   public static final class harvesterConstants {
