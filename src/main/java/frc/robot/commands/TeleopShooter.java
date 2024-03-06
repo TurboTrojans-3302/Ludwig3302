@@ -15,14 +15,14 @@ public class TeleopShooter extends Command {
   XboxController m_CopilotController;
   public TeleopShooter(Shooter shooter, XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
-    shooter = m_shooter;
-    controller = m_CopilotController;
+    m_shooter = shooter;
+    m_CopilotController = controller;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.shooterRPM = 0;
+    m_shooter.setRPM(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,9 +31,9 @@ public class TeleopShooter extends Command {
   public void execute() {
     //should work because execute is called every 20ms.
     if (m_CopilotController.getYButton()){
-      m_shooter.increaseRPM(true);
+      m_shooter.setRPM(m_shooter.getRPM()+100);
     } else if (m_CopilotController.getAButton()){
-      m_shooter.decreaseRPM(true);
+      m_shooter.setRPM(m_shooter.getRPM()-100);
       
     }
   }
@@ -41,7 +41,7 @@ public class TeleopShooter extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.shooterRPM = 0;
+    m_shooter.setRPM(0);
   }
 
   // Returns true when the command should end.
