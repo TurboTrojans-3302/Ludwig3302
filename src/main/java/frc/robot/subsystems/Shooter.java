@@ -118,10 +118,14 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("ShooterReady", speedIsReady());
   }
   
-  public void setSpeed(double speed) {
+  public void setRPM(double speed) {
     mSetpoint = MathUtil.clamp(speed, 0.0, maxRPM);
   }
 
+  public double getRPM(){
+    return mSetpoint;
+  }
+  
   private Double errL() { return mLeftVelocity - mSetpoint; };
   private Double errR() { return mRightVelocity - mSetpoint; };
 
