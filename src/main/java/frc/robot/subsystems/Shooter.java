@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -118,10 +120,14 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("ShooterReady", speedIsReady());
   }
   
-  public void setSpeed(double speed) {
+  public void setRPM(double speed) {
     mSetpoint = MathUtil.clamp(speed, 0.0, maxRPM);
   }
 
+  public double getRPM(){
+    return mSetpoint;
+  }
+  
   private Double errL() { return mLeftVelocity - mSetpoint; };
   private Double errR() { return mRightVelocity - mSetpoint; };
 

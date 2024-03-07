@@ -43,7 +43,7 @@ public class Harvester extends SubsystemBase {
     m_armSpx = new CANSparkMax(Constants.harvesterConstants.kArmLiftCanId, MotorType.kBrushless);
     m_armSpx.setIdleMode(IdleMode.kBrake);
     m_ArmEncoder = new DutyCycleEncoder(Constants.harvesterConstants.kArmEncoderDInput);
-    m_ArmEncoder.setDistancePerRotation(360.0);
+    m_ArmEncoder.setDistancePerRotation(-360.0);
     m_ArmEncoder.setPositionOffset(Constants.harvesterConstants.armEncoderOffset);
     
     m_intakeSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
@@ -53,7 +53,8 @@ public class Harvester extends SubsystemBase {
     m_shuffleboardTab = Shuffleboard.getTab("Harvester");
     m_armAngleEntry = m_shuffleboardTab.add("Arm Angle", 0.0)
                                 .withWidget(BuiltInWidgets.kGyro)
-                                .withProperties(Map.of("StartingAngle", 90.0))
+                                .withProperties(Map.of("StartingAngle", 90.0,
+                                                       "Counter clockwise", true))
                                 .getEntry();
     m_hasNoteEntry = m_shuffleboardTab.add("Have Note", false)
                                 .withWidget(BuiltInWidgets.kBooleanBox)
@@ -82,7 +83,12 @@ public class Harvester extends SubsystemBase {
   }
 
   public double getArmAngle() {
-    return m_ArmEncoder.getDistance();
+    double armangle = m_ArmEncoder.getDistance();
+    if (armangle < 180 ){
+      return armangle;
+    } else {
+      return armangle-360;
+    }
   }
 
   public void setArmAngle(double angle) {
