@@ -16,6 +16,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
+import frc.robot.commands.TeleopShooter;
 import frc.robot.commands.TranslateCommand;
 import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
@@ -59,6 +60,8 @@ public class RobotContainer {
 
     m_harvester.setDefaultCommand(new TeleopHarvester(m_harvester, m_driverController)); 
     
+    m_shooter.setDefaultCommand(new TeleopShooter(m_shooter, m_copilotController));
+
     m_shuffleboardTab = Shuffleboard.getTab("Game");
     
     m_autonomousChooser = new SendableChooser<Command>();

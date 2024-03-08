@@ -17,6 +17,7 @@ public class TeleopShooter extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     m_CopilotController = controller;
+    addRequirements(m_shooter);
   }
 
   // Called when the command is initially scheduled.

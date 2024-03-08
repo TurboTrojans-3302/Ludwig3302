@@ -8,17 +8,12 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.counter.Tachometer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -35,6 +30,7 @@ public class Shooter extends SubsystemBase {
   private Double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
   private ShuffleboardTab mShuffleboardTab;
   private Double mSetpoint, mLeftVelocity, mRightVelocity;
+  private AnalogInput mUltrasonicInput;
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -45,6 +41,9 @@ public class Shooter extends SubsystemBase {
     mRightTachometer = new Tachometer(new DigitalInput(Constants.ShooterConstants.kRightTachDIO));
     mLeftTachometer.setEdgesPerRevolution(2048);
     mRightTachometer.setEdgesPerRevolution(2048);
+
+    mUltrasonicInput = new AnalogInput(Constants.ShooterConstants.kShooterUltrasonicAIO);
+    mUltrasonicInput.setAverageBits(4);
 
     // PID coefficients
     kP = 6e-5; 
@@ -59,7 +58,9 @@ public class Shooter extends SubsystemBase {
     mLeftPidController.setTolerance(Constants.ShooterConstants.RPM_TOLERANCE);
     mRightPidController.setTolerance(Constants.ShooterConstants.RPM_TOLERANCE);
 
-    mSetpoint = 0.0;
+    mSetpoint = 100.0;
+    mLeftVelocity = 0.0;
+    mRightVelocity = 0.0;
 
 
     // display PID coefficients on SmartDashboard
@@ -69,12 +70,12 @@ public class Shooter extends SubsystemBase {
     mShuffleboardTab.add("D Gain", kD);
     mShuffleboardTab.add("I Zone", kIz);
     mShuffleboardTab.add("Feed Forward", kFF);
-    mShuffleboardTab.add("Max Output", kMaxOutput);
-    mShuffleboardTab.add("Min Output", kMinOutput);
+    //mShuffleboardTab.add("Max Output", kMaxOutput);
+    //mShuffleboardTab.add("Min Output", kMinOutput);
 
     mShuffleboardTab.add("ShooterReady", speedIsReady()).withWidget(BuiltInWidgets.kBooleanBox);
 
-    ShuffleboardLayout rpmLayout = mShuffleboardTab.getLayout("RPM");
+    ShuffleboardLayout rpmLayout = mShuffleboardTab.getLayout("RPM", BuiltInLayouts.kList);
     rpmLayout.add("Setpoint", mSetpoint);
     rpmLayout.add("Err L", mLeftVelocity)
              .withWidget(BuiltInWidgets.kDial)
@@ -99,10 +100,14 @@ public class Shooter extends SubsystemBase {
     double iz = SmartDashboard.getNumber("I Zone", 0);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
-    if((p != kP))   { mLeftPidController.setP(p); kP = p; }
-    if((i != kI))   { mLeftPidController.setI(i); kI = i; }
-    if((d != kD))   { mLeftPidController.setD(d); kD = d; }
-    if((iz != kIz)) { mLeftPidController.setIZone(iz); kIz = iz; }
+    if((p != kP))   { mLeftPidController.setP(p); 
+                      mRightPidController.setP(p); kP = p; }
+    if((i != kI))   { mLeftPidController.setI(i);
+                      mRightPidController.setI(i); kI = i; } //todo update right PID too
+    if((d != kD))   { mLeftPidController.setD(d);
+                      mRightPidController.setD(d); kD = d; }
+    if((iz != kIz)) { mLeftPidController.setIZone(iz); 
+                      mRightPidController.setIZone(iz); kIz = iz; }
 
     mLeftVelocity  = mLeftTachometer.getRevolutionsPerMinute();
     mRightVelocity = mRightTachometer.getRevolutionsPerMinute();
@@ -113,9 +118,9 @@ public class Shooter extends SubsystemBase {
     m_leftMotor.set(VictorSPXControlMode.PercentOutput, MathUtil.clamp(leftOutput, -1.0, 1.0));
     m_rightMotor.set(VictorSPXControlMode.PercentOutput, MathUtil.clamp(rightOutput, -1.0, 1.0));
 
-    SmartDashboard.putNumber("Setpoint", mSetpoint);
-    SmartDashboard.putNumber("Err L", errL());
-    SmartDashboard.putNumber("Err R", errR());
+    // mShuffleboardTab.add("Setpoint", mSetpoint);
+    // mShuffleboardTab.add("Err L", errL());
+    // mShuffleboardTab.add("Err R", errR());
   
     SmartDashboard.putBoolean("ShooterReady", speedIsReady());
   }
@@ -135,6 +140,9 @@ public class Shooter extends SubsystemBase {
     return mRightPidController.atSetpoint() && mLeftPidController.atSetpoint();
   }
 
+  public double sensorDistance(){
+    return mUltrasonicInput.getAverageValue();
+  }
 }
 
 

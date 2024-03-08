@@ -155,6 +155,7 @@ public final class Constants {
     public static final int kLeftTachDIO = 2;
     public static final int kRightTachDIO = 3;
     public static final double RPM_TOLERANCE = 20;
+    public static final int kShooterUltrasonicAIO = 0;
   }
 
   public static final class harvesterConstants {
