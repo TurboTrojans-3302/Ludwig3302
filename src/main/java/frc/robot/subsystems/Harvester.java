@@ -36,6 +36,7 @@ public class Harvester extends SubsystemBase {
   private final ShuffleboardTab m_shuffleboardTab;
   private final GenericEntry m_armAngleEntry;
   private final GenericEntry m_hasNoteEntry;
+  private final GenericEntry mArmMotorEntry;
 
   /** Creates a new Harvester. */
   public Harvester() {
@@ -58,6 +59,11 @@ public class Harvester extends SubsystemBase {
     m_hasNoteEntry = m_shuffleboardTab.add("Have Note", false)
                                 .withWidget(BuiltInWidgets.kBooleanBox)
                                 .getEntry();
+    mArmMotorEntry = m_shuffleboardTab.add("Arm Motor", 0.0)
+                                .withWidget(BuiltInWidgets.kNumberBar)
+                                .withProperties(Map.of("max", 1.0, "min", -1.0))
+                                .withPosition(0, 3).withSize(2, 1)
+                                .getEntry();
   }
 
   
@@ -65,6 +71,7 @@ public class Harvester extends SubsystemBase {
   public void periodic() {
     m_armAngleEntry.setDouble(getArmAngle());
     m_hasNoteEntry.setBoolean(hasNote());
+    mArmMotorEntry.setDouble(getArmMotorOutput());
   }
 
   public boolean hasNote() {
@@ -80,6 +87,8 @@ public class Harvester extends SubsystemBase {
   public double getIntakeSpeed() {
     return m_intakeSpx.getMotorOutputPercent();
   }
+
+  public double getArmMotorOutput(){ return m_armSpx.get(); }
 
   public double getArmAngle() {
     double armangle = m_ArmEncoder.getDistance();
