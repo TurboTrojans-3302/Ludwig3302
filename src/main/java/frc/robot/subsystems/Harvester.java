@@ -58,7 +58,7 @@ public class Harvester extends SubsystemBase {
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
     mBackLimitSwitch = new DigitalInput(Constants.harvesterConstants.kBackLimitSwitchInputID);
 
-    mPid = new PIDController(0.01, 0.0, 0.0);
+    mPid = new PIDController(0.001, 0.0, 0.0);
     mPid.setTolerance(Constants.harvesterConstants.ANGLE_TOLERANCE);
 
     mPid.setSetpoint(getArmAngle());
@@ -135,8 +135,8 @@ public class Harvester extends SubsystemBase {
 
   public void setArmAngle(double angle) {
     mPid.setSetpoint(MathUtil.clamp(angle, 
-                                    Constants.harvesterConstants.ANGLE_MIN,
-                                    Constants.harvesterConstants.ANGLE_MAX));
+                                    Constants.harvesterConstants.ANGLE_AT_FLOOR,
+                                    Constants.harvesterConstants.ANGLE_AT_SPEAKER));
   }
 
   private void setArmMotorPctOutput(double speed){
