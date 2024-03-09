@@ -162,11 +162,10 @@ public final class Constants {
     public static final int kIntakeCanId = 9;
     public static final int kArmLiftCanId = 10;
     public static final int kArmEncoderDInput = 0;
-    public static final double armEncoderOffset = 1 - (28.0/360.0);
-    //todo change encoder range to +/- 180
+    public static final double armEncoderOffset = 1.0 - (147.0/360);
 
-    public static final double inSpeed = 0.5;
-    public static final double outSpeed = -1.0;
+    public static final double inSpeed = -0.5;
+    public static final double outSpeed = 1.0;
     public static final int kBackLimitSwitchInputID = 1;
 
     public static final double ANGLE_AT_FLOOR = -50.0;

@@ -55,6 +55,7 @@ public class Harvester extends SubsystemBase {
     m_ArmEncoder.setPositionOffset(Constants.harvesterConstants.armEncoderOffset);
     
     m_intakeSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
+    m_intakeSpx.setInverted(true);
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
     mBackLimitSwitch = new DigitalInput(Constants.harvesterConstants.kBackLimitSwitchInputID);
 
@@ -68,7 +69,8 @@ public class Harvester extends SubsystemBase {
     m_armAngleEntry = m_shuffleboardTab.add("Arm Angle", 0.0)
                                 .withWidget(BuiltInWidgets.kGyro)
                                 .withProperties(Map.of("StartingAngle", 90.0,
-                                                       "Counter clockwise", true))
+                                                       "Counter clockwise", true,
+                                                       "min", -180.0, "max", 180.0))
                                 .getEntry();
     m_hasNoteEntry = m_shuffleboardTab.add("Have Note", false)
                                 .withWidget(BuiltInWidgets.kBooleanBox)
@@ -76,7 +78,7 @@ public class Harvester extends SubsystemBase {
     mArmMotorEntry = m_shuffleboardTab.add("Arm Motor", 0.0)
                                 .withWidget(BuiltInWidgets.kNumberBar)
                                 .withProperties(Map.of("max", 1.0, "min", -1.0))
-                                .withPosition(0, 3).withSize(2, 1)
+                                .withPosition(0, 3).withSize(3, 2)
                                 .getEntry();
   }
 
