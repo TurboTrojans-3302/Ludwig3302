@@ -19,6 +19,7 @@ public class DriveDashboard extends SubsystemBase {
   private GenericEntry m_FLangleEntry, m_FRangleEntry, m_BLangleEntry, m_BRangleEntry;
   private GenericEntry m_FLspeedEntry, m_FRspeedEntry, m_BLspeedEntry, m_BRspeedEntry;
   private GenericEntry m_gyroEntry, m_driveDirEntry, m_driveMagEntry;
+  private GenericEntry m_fieldOrientedEntry;
 
   /** Creates a new DriveDashboard. */
   public DriveDashboard(DriveSubsystem drive) {
@@ -90,6 +91,9 @@ public class DriveDashboard extends SubsystemBase {
             "max", DriveConstants.kMaxSpeedMetersPerSecond))
         .withPosition(15, 0).withSize(1, 3)
         .getEntry();
+    m_fieldOrientedEntry = m_shuffleboardTab.add("Field Oriented", true)
+                                        .withWidget(BuiltInWidgets.kToggleSwitch)
+                                        .getEntry();
   }
 
   @Override
@@ -107,5 +111,9 @@ public class DriveDashboard extends SubsystemBase {
     m_driveMagEntry.setDouble(m_drive.getM_currentTranslationMag());
 
     m_gyroEntry.setDouble(m_drive.getHeading());
+  }
+
+  public boolean getFieldOriented(){
+    return m_fieldOrientedEntry.getBoolean(true);
   }
 }
