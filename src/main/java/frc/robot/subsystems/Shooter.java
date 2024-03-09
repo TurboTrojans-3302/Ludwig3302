@@ -40,17 +40,20 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     m_leftMotor = new VictorSPX(Constants.ShooterConstants.kShooterLeftCanId);
     m_rightMotor = new VictorSPX(Constants.ShooterConstants.kShooterRightCanId);
+    m_leftMotor.setInverted(true);
+    m_rightMotor.setInverted(true);
 
     mLeftTachometer  = new Tachometer(new DigitalInput(Constants.ShooterConstants.kLeftTachDIO));
     mRightTachometer = new Tachometer(new DigitalInput(Constants.ShooterConstants.kRightTachDIO));
     mLeftTachometer.setEdgesPerRevolution(2048);
     mRightTachometer.setEdgesPerRevolution(2048);
+    mLeftTachometer.setSamplesToAverage(10);
 
     mUltrasonicInput = new AnalogInput(Constants.ShooterConstants.kShooterUltrasonicAIO);
     mUltrasonicInput.setAverageBits(4);
 
     // PID coefficients
-    kP = 6e-5; 
+    kP = 0.002; 
     kI = 0.0;
     kD = 0.0; 
     kIz = 0.0; 
@@ -89,19 +92,19 @@ public class Shooter extends SubsystemBase {
                                             .withWidget(BuiltInWidgets.kTextView)
                                             .getEntry();
     mLeftVelEntry = mShuffleboardTab.add("Left Velocity", mLeftTachometer.getRevolutionsPerMinute())
-                                    .withWidget(BuiltInWidgets.kField)
+                                    .withWidget(BuiltInWidgets.kTextView)
                                     .getEntry();
     mRightVelEntry = mShuffleboardTab.add("Right Velocity", mRightTachometer.getRevolutionsPerMinute())
-                                    .withWidget(BuiltInWidgets.kField)
+                                    .withWidget(BuiltInWidgets.kTextView)
                                      .getEntry();
     mLeftOutputEntry = mShuffleboardTab.add("Left Motor Output", m_leftMotor.getMotorOutputPercent())
-                                    .withWidget(BuiltInWidgets.kField)
+                                    .withWidget(BuiltInWidgets.kTextView)
                                      .getEntry();
     mRightOuputEntry = mShuffleboardTab.add("Right Motor Output", m_rightMotor.getMotorOutputPercent())
-                                    .withWidget(BuiltInWidgets.kField)
+                                    .withWidget(BuiltInWidgets.kTextView)
                                      .getEntry();
-    mShuffleboardTab.add("Left PID", mLeftPidController)
-                        .withWidget(BuiltInWidgets.kPIDController);
+    // mShuffleboardTab.add("Left PID", mLeftPidController)
+    //                     .withWidget(BuiltInWidgets.kPIDController);
   }
 
   @Override
@@ -112,6 +115,11 @@ public class Shooter extends SubsystemBase {
 
     double rightOutput = mRightPidController.calculate(mRightVelocity, mSetpoint);
     double leftOutput = mLeftPidController.calculate(mLeftVelocity, mSetpoint);
+
+    if(mSetpoint <= 0){
+      rightOutput = 0.0;
+      leftOutput = 0.0;
+    }
 
     m_leftMotor.set(VictorSPXControlMode.PercentOutput, MathUtil.clamp(leftOutput, -1.0, 1.0));
     m_rightMotor.set(VictorSPXControlMode.PercentOutput, MathUtil.clamp(rightOutput, -1.0, 1.0));
