@@ -47,7 +47,7 @@ public class TeleopHarvester extends Command {
     armSpeed = m_controller.getRightTriggerAxis() - m_controller.getLeftTriggerAxis();
     armSpeed = MathUtil.applyDeadband(armSpeed, 0.1);
     armSpeed = Math.signum(armSpeed) * Math.pow(armSpeed, 2);
-    m_harvester.setArmSpeed( armSpeed * 0.5 );
+    m_harvester.setArmSpeed( armSpeed * 0.4 );
 
   }
 
