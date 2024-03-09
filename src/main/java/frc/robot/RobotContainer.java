@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DoNothing;
+import frc.robot.commands.SetArmAngleCommand;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
 import frc.robot.commands.TeleopShooter;
@@ -75,6 +76,11 @@ public class RobotContainer {
     m_startPosChooser.addOption("Right", Constants.FieldConstants.StartPositionRight);
     m_shuffleboardTab.add("Start Position", m_startPosChooser);
 
+    m_shuffleboardTab.add("Floor", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR));
+    m_shuffleboardTab.add("Amp", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_AMP));
+    m_shuffleboardTab.add("30", new SetArmAngleCommand(m_harvester, 30.0));
+    m_shuffleboardTab.add("Drive", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_DRIVE));
+    m_shuffleboardTab.add("Speaker", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_SPEAKER));
     m_BlinkinLED = new REVBlinkinLED(Constants.BLINKIN_LED_PWM_CHANNEL);
   }
 

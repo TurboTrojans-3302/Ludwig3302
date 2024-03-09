@@ -36,11 +36,14 @@ public class Harvester extends SubsystemBase {
 
   private DigitalInput mBackLimitSwitch;
   private PIDController mPid;
+  private double mArmSetpoint;
 
   private final ShuffleboardTab m_shuffleboardTab;
   private final GenericEntry m_armAngleEntry;
   private final GenericEntry m_hasNoteEntry;
   private final GenericEntry mArmMotorEntry;
+  private final GenericEntry mArmSetpointEntry;
+  private final GenericEntry mArmAtSetpointEntry;
 
   private double mVelocities[] = {0.0, 0.0, 0.0, 0.0};
   private double mPreviousAngle;
@@ -50,6 +53,7 @@ public class Harvester extends SubsystemBase {
   public Harvester() {
     m_armSpx = new CANSparkMax(Constants.harvesterConstants.kArmLiftCanId, MotorType.kBrushless);
     m_armSpx.setIdleMode(IdleMode.kBrake);
+    m_armSpx.setInverted(true);
     m_ArmEncoder = new DutyCycleEncoder(Constants.harvesterConstants.kArmEncoderDInput);
     m_ArmEncoder.setDistancePerRotation(-360.0);
     m_ArmEncoder.setPositionOffset(Constants.harvesterConstants.armEncoderOffset);
@@ -59,10 +63,11 @@ public class Harvester extends SubsystemBase {
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
     mBackLimitSwitch = new DigitalInput(Constants.harvesterConstants.kBackLimitSwitchInputID);
 
-    mPid = new PIDController(0.001, 0.0, 0.0);
+    mPid = new PIDController(0.005, 0.0, 0.0);
     mPid.setTolerance(Constants.harvesterConstants.ANGLE_TOLERANCE);
 
-    mPid.setSetpoint(getArmAngle());
+    mArmSetpoint = getArmAngle();
+    mPid.setSetpoint(mArmSetpoint);
     mPreviousAngle = getArmAngle();
 
     m_shuffleboardTab = Shuffleboard.getTab("Harvester");
@@ -80,12 +85,21 @@ public class Harvester extends SubsystemBase {
                                 .withProperties(Map.of("max", 1.0, "min", -1.0))
                                 .withPosition(0, 3).withSize(3, 2)
                                 .getEntry();
+    mArmSetpointEntry = m_shuffleboardTab.add("setpoint", mArmSetpoint)
+                                .withWidget(BuiltInWidgets.kGyro)
+                                .withProperties(Map.of("StartingAngle", 90.0,
+                                                       "Counter clockwise", true,
+                                                       "min", -180.0, "max", 180.0))
+                                .getEntry();
+    mArmAtSetpointEntry = m_shuffleboardTab.add("Arm at setpoint", false)
+                                .withWidget(BuiltInWidgets.kBooleanBox)
+                                .getEntry();
   }
 
   
   @Override
   public void periodic() {
-    double motorcommand = mPid.calculate(getArmAngle());
+    double motorcommand = mPid.calculate(getArmAngle(), mArmSetpoint);
     setArmMotorPctOutput(MathUtil.clamp(motorcommand, -1.0, 1.0));
 
     double currentAngle = getArmAngle();
@@ -96,6 +110,8 @@ public class Harvester extends SubsystemBase {
     m_armAngleEntry.setDouble(currentAngle);
     m_hasNoteEntry.setBoolean(hasNote());
     mArmMotorEntry.setDouble(getArmMotorOutput());
+    mArmSetpointEntry.setDouble(mArmSetpoint);
+    mArmAtSetpointEntry.setBoolean(isArmAtAngle());
   }
 
   public boolean hasNote() {
@@ -132,20 +148,21 @@ public class Harvester extends SubsystemBase {
   }
 
   public double getArmSetpoint() {
-    return mPid.getSetpoint();
+    return mArmSetpoint;
   }
 
   public void setArmAngle(double angle) {
-    mPid.setSetpoint(MathUtil.clamp(angle, 
+    mArmSetpoint = MathUtil.clamp(angle, 
                                     Constants.harvesterConstants.ANGLE_AT_FLOOR,
-                                    Constants.harvesterConstants.ANGLE_AT_SPEAKER));
+                                    Constants.harvesterConstants.ANGLE_AT_SPEAKER);
+    //System.out.println("mArmSetpoint = " + mArmSetpoint);
   }
 
   private void setArmMotorPctOutput(double speed){
     m_armSpx.set(speed);
   }
 
-  public boolean isArmAtAngle(double angle) {
-    return MathUtil.isNear(angle, getArmAngle(), Constants.harvesterConstants.ANGLE_TOLERANCE);
+  public boolean isArmAtAngle() {
+    return MathUtil.isNear(mArmSetpoint, getArmAngle(), Constants.harvesterConstants.ANGLE_TOLERANCE);
   }
  }

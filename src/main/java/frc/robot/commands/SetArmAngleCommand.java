@@ -28,6 +28,7 @@ public class SetArmAngleCommand extends TrapezoidProfileCommand {
         // Goal state
         () -> new TrapezoidProfile.State(targetAngle, 0.0),
         // Current state
-        () -> new TrapezoidProfile.State(harvester.getArmAngle(), harvester.getArmVelocity()));
+        () -> new TrapezoidProfile.State(harvester.getArmAngle(), harvester.getArmVelocity()),
+        harvester);
   }
 }

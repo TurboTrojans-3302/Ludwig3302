@@ -170,9 +170,9 @@ public final class Constants {
 
     public static final double ANGLE_AT_FLOOR = -50.0;
     public static final double ANGLE_AT_AMP = 45.0;
-    public static final double ANGLE_AT_SPEAKER = 120;
+    public static final double ANGLE_AT_SPEAKER = 140;
     public static final double ANGLE_AT_DRIVE = 90;
-    public static final double ANGLE_TOLERANCE = 2.0;
+    public static final double ANGLE_TOLERANCE = 3.0;
     
     public static final double MAX_ARM_SPEED = 45.0; // deg/sec
     public static final double MAX_ARM_ACCEL = 90; // deg/sec^2
