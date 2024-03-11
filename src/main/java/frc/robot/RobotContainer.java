@@ -99,13 +99,13 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    new JoystickButton(m_driverController, XboxController.Button.kLeftStick.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+    new JoystickButton(m_driverController, XboxController.Button.kRightStick.value)
         .whileTrue(new RunCommand(
-            () -> m_robotDrive.setAll(0.0, 0.0),
+            () -> m_robotDrive.setX(),
             m_robotDrive));
   } //TODO add brake indicator to dashboard
 
