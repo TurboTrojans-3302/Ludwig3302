@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
   private VictorSPX m_leftMotor, m_rightMotor;
   private PIDController mLeftPidController, mRightPidController;
   private Tachometer mLeftTachometer, mRightTachometer;
-  private Double kP, kI, kD, kIz, kFF, maxRPM;
+  private Double kP, kI, kD, maxRPM;
   private Double mSetpoint, mLeftVelocity, mRightVelocity;
   private AnalogInput mUltrasonicInput;
 
@@ -33,7 +33,7 @@ public class Shooter extends SubsystemBase {
   private ShuffleboardTab mShuffleboardTab;
   private GenericEntry mSetpointEntry, mLeftErrEntry, mRightErrEntry,
                        mSpeedReadyEntry, mUltrasonicInputEntry,
-                       mLeftVelEntry, mRightVelEntry, mPIDEntry,
+                       mLeftVelEntry, mRightVelEntry,
                        mLeftOutputEntry, mRightOuputEntry;
   
   /** Creates a new Shooter. */
@@ -56,8 +56,6 @@ public class Shooter extends SubsystemBase {
     kP = 0.002; 
     kI = 0.0;
     kD = 0.0; 
-    kIz = 0.0; 
-    kFF = 0.000015; 
     maxRPM = 5700.0;
 
     mLeftPidController = new PIDController(kP, kI, kD);

@@ -34,7 +34,6 @@ import frc.robot.subsystems.Shooter;
 public class RobotContainer {
   // The robot's subsystems
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  @SuppressWarnings("unused")
   private final DriveDashboard mDriveDashboard = new DriveDashboard(m_robotDrive);  
   public final Harvester m_harvester = new Harvester();
   public final Shooter m_shooter = new Shooter();
@@ -57,7 +56,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    m_robotDrive.setDefaultCommand(new TeleopDrive(m_robotDrive, m_driverController));
+    m_robotDrive.setDefaultCommand(new TeleopDrive(m_robotDrive, m_driverController, mDriveDashboard));
 
     m_harvester.setDefaultCommand(new TeleopHarvester(m_harvester, m_driverController)); 
     
