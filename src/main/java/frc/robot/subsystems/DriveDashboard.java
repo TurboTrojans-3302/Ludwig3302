@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -19,7 +20,7 @@ public class DriveDashboard extends SubsystemBase {
   private GenericEntry m_FLangleEntry, m_FRangleEntry, m_BLangleEntry, m_BRangleEntry;
   private GenericEntry m_FLspeedEntry, m_FRspeedEntry, m_BLspeedEntry, m_BRspeedEntry;
   private GenericEntry m_gyroEntry, m_driveDirEntry, m_driveMagEntry;
-  private GenericEntry m_fieldOrientedEntry;
+  private GenericEntry m_fieldOrientedEntry, m_xPosEntry, m_yPosEntry;
 
   /** Creates a new DriveDashboard. */
   public DriveDashboard(DriveSubsystem drive) {
@@ -94,6 +95,12 @@ public class DriveDashboard extends SubsystemBase {
     m_fieldOrientedEntry = m_shuffleboardTab.add("Field Oriented", true)
                                         .withWidget(BuiltInWidgets.kToggleSwitch)
                                         .getEntry();
+    m_xPosEntry = m_shuffleboardTab.add("x position", 0.0)
+                                    .withWidget(BuiltInWidgets.kTextView)
+                                    .getEntry();
+    m_yPosEntry = m_shuffleboardTab.add("y position", 0.0)
+                                    .withWidget(BuiltInWidgets.kTextView)
+                                    .getEntry();
   }
 
   @Override
@@ -111,6 +118,9 @@ public class DriveDashboard extends SubsystemBase {
     m_driveMagEntry.setDouble(m_drive.getM_currentTranslationMag());
 
     m_gyroEntry.setDouble(m_drive.getHeading());
+    Pose2d pos = m_drive.getPose();
+    m_xPosEntry.setDouble(pos.getX());
+    m_yPosEntry.setDouble(pos.getY());
   }
 
   public boolean getFieldOriented(){
