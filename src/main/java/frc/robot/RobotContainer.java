@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ClimbCommand;
+import frc.robot.commands.Climb2;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.SetArmAngleCommand;
 import frc.robot.commands.TeleopDrive;
@@ -66,7 +66,7 @@ public class RobotContainer {
     
     m_shooter.setDefaultCommand(new TeleopShooter(m_shooter, m_copilotController));
 
-    m_climbers.setDefaultCommand(new ClimbCommand(m_climbers, m_copilotController));
+    m_climbers.setDefaultCommand(new Climb2(m_climbers, m_copilotController));
 
     m_shuffleboardTab = Shuffleboard.getTab("Game");
     
