@@ -8,16 +8,19 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class TeleopDrive extends Command {
   private DriveSubsystem m_robotDrive;
   private XboxController m_driverController;
+  private DriveDashboard m_DriveDashboard;
 
   /** Creates a new TeleopDrive. */
-  public TeleopDrive(DriveSubsystem robotDrive, XboxController driverController) {
+  public TeleopDrive(DriveSubsystem robotDrive, XboxController driverController, DriveDashboard dash) {
     m_driverController = driverController;
     m_robotDrive = robotDrive;
+    m_DriveDashboard = dash;
     addRequirements(m_robotDrive);
   }
 
@@ -32,7 +35,8 @@ public class TeleopDrive extends Command {
                 stick2speed(-m_driverController.getLeftY()),
                 stick2speed(-m_driverController.getLeftX()),
                 stick2speed(-m_driverController.getRightX()),
-                false, true);
+                m_DriveDashboard.getFieldOriented(),
+                true);
   }
 
   // applies deadband and scaling to raw stick value

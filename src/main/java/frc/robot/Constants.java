@@ -151,23 +151,30 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int kShooterLeftCanId = 12;
     public static final int kShooterRightCanId = 13;
+    public static final int kLeftTachDIO = 2;
+    public static final int kRightTachDIO = 3;
+    public static final double RPM_TOLERANCE = 20;
+    public static final int kShooterUltrasonicAIO = 0;
   }
 
   public static final class harvesterConstants {
     public static final int kIntakeCanId = 9;
     public static final int kArmLiftCanId = 10;
+    public static final int kArmEncoderDInput = 0;
+    public static final double armEncoderOffset = 1.0 - (147.0/360);
 
-    public static final double inSpeed = 1.0;
-    public static final double outSpeed = -1.0;
-    public static final int kBackLimitSwitchInputID = 0;
+    public static final double inSpeed = -1.0;
+    public static final double outSpeed = 1.0;
+    public static final int kBackLimitSwitchInputID = 1;
 
-    public static final double ANGLE_AT_FLOOR = -5.0;
-    public static final double ANGLE_AT_AMP = 45.0;
-    public static final double ANGLE_AT_SPEAKER = 100;
+    public static final double ANGLE_AT_FLOOR = -50.0;
+    public static final double ANGLE_AT_AMP = 66.0;
+    public static final double ANGLE_AT_SPEAKER = 140;
     public static final double ANGLE_AT_DRIVE = 90;
-    public static final double ANGLE_TOLERANCE = 2.0;
-
-    public static final double MAX_ARM_SPEED = 45.0 * Robot.kDefaultPeriod;
+    public static final double ANGLE_TOLERANCE = 3.0;
+    
+    public static final double MAX_ARM_SPEED = 45.0; // deg/sec
+    public static final double MAX_ARM_ACCEL = 90; // deg/sec^2
   }
 
   public static final class NeoMotorConstants {
@@ -179,4 +186,6 @@ public final class Constants {
     public static final Pose2d StartPositionCenter = new Pose2d(0.35, 0.0, new Rotation2d());
     public static final Pose2d StartPositionRight = new Pose2d(0.35, 0.0, new Rotation2d());
   }
+
+public static final int BLINKIN_LED_PWM_CHANNEL = 0;
 }
