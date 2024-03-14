@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -34,12 +35,15 @@ public class Harvester extends SubsystemBase {
   private PIDController mPid;
   private double mArmSetpoint;
 
+  private AnalogInput mUltrasonicInput;
+
   private final ShuffleboardTab m_shuffleboardTab;
   private final GenericEntry m_armAngleEntry;
   private final GenericEntry m_hasNoteEntry;
   private final GenericEntry mArmMotorEntry;
   private final GenericEntry mArmSetpointEntry;
   private final GenericEntry mArmAtSetpointEntry;
+  private final GenericEntry mRangeEntry;
 
   private double mVelocities[] = {0.0, 0.0, 0.0, 0.0};
   private double mPreviousAngle;
@@ -66,6 +70,9 @@ public class Harvester extends SubsystemBase {
     mPid.setSetpoint(mArmSetpoint);
     mPreviousAngle = getArmAngle();
 
+    mUltrasonicInput = new AnalogInput(Constants.harvesterConstants.harvesterUltraSonicAIO);
+    mUltrasonicInput.setAverageBits(4);
+
     m_shuffleboardTab = Shuffleboard.getTab("Harvester");
     m_armAngleEntry = m_shuffleboardTab.add("Arm Angle", 0.0)
                                 .withWidget(BuiltInWidgets.kGyro)
@@ -89,6 +96,9 @@ public class Harvester extends SubsystemBase {
                                 .getEntry();
     mArmAtSetpointEntry = m_shuffleboardTab.add("Arm at setpoint", false)
                                 .withWidget(BuiltInWidgets.kBooleanBox)
+                                .getEntry();
+    mRangeEntry = m_shuffleboardTab.add("Ultrasonic Range", 0.0)
+                                .withWidget(BuiltInWidgets.kTextView)
                                 .getEntry();
   }
 
@@ -160,5 +170,9 @@ public class Harvester extends SubsystemBase {
 
   public boolean isArmAtAngle() {
     return MathUtil.isNear(mArmSetpoint, getArmAngle(), Constants.harvesterConstants.ANGLE_TOLERANCE);
+  }
+
+  public double getRange(){
+    return mUltrasonicInput.getValue();
   }
  }

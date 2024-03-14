@@ -175,6 +175,7 @@ public final class Constants {
     
     public static final double MAX_ARM_SPEED = 45.0; // deg/sec
     public static final double MAX_ARM_ACCEL = 90; // deg/sec^2
+    public static final int harvesterUltraSonicAIO = 1;
   }
 
   public static final class NeoMotorConstants {
