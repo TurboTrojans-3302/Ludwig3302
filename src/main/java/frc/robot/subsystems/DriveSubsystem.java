@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.ADIS16448_IMU.CalibrationTime;
 import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -93,8 +95,16 @@ public class DriveSubsystem extends SubsystemBase {
 
       });
 
+
+  private PIDController headingPidController;
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    headingPidController = new PIDController(Constants.DriveConstants.headingP,
+                                             Constants.DriveConstants.headingI,
+                                             Constants.DriveConstants.headingD);
+    headingPidController.enableContinuousInput(0.0, 360.0);
+    headingPidController.setTolerance(2.0);
   }
 
   @Override
@@ -137,11 +147,21 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
-  public void drive(Translation2d translation){
+  public void driveHeading(Translation2d translation, double targetHeading){
+    double currentHeading = getHeading();
+    double rotation = headingPidController.calculate(currentHeading, targetHeading);
+    drive(translation, rotation);
+  }
+
+  public void drive(Translation2d translation, double rotation){
     double x = translation.getX();
     double y = translation.getY();
 
-    drive(x, y, 0.0, true, true);
+    drive(x, y, rotation, true, true);
+  }
+  
+  public void drive(Translation2d translation){
+    drive(translation, 0.0);
   }
 
 
