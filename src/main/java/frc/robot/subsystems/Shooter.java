@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
+import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.math.MathUtil;
@@ -107,6 +108,13 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    Faults faultsL = new Faults();
+    Faults faultsR = new Faults();
+    m_leftMotor.getFaults(faultsL);
+    m_rightMotor.getFaults(faultsR);
+    if(faultsL.hasAnyFault()) { System.out.println("Shooter Left: " + faultsL.toString()); }
+    if(faultsR.hasAnyFault()) { System.out.println("Shooter Right: " + faultsR.toString());}
 
     mLeftVelocity  = mLeftTachometer.getRevolutionsPerMinute();
     mRightVelocity = mRightTachometer.getRevolutionsPerMinute();

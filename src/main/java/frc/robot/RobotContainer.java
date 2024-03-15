@@ -107,7 +107,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-  } //TODO add brake indicator to dashboard
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
