@@ -147,10 +147,10 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
-  public void driveHeading(Translation2d translation, double targetHeading){
+  public double turnToHeading(double targetHeading){
     double currentHeading = getHeading();
     double rotation = headingPidController.calculate(currentHeading, targetHeading);
-    drive(translation, rotation);
+    return rotation;
   }
 
   public void drive(Translation2d translation, double rotation){
