@@ -6,15 +6,14 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
-import com.ctre.phoenix.motorcontrol.Faults;
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.counter.Tachometer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -23,9 +22,9 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
-  private VictorSPX m_leftMotor, m_rightMotor;
+  private CANSparkMax m_leftMotor, m_rightMotor;
   private PIDController mLeftPidController, mRightPidController;
-  private Tachometer mLeftTachometer, mRightTachometer;
+  private RelativeEncoder mLeftEncoder, mRightEncoder;
   private Double kP, kI, kD, maxRPM;
   private Double mSetpoint, mLeftVelocity, mRightVelocity;
   private AnalogInput mUltrasonicInput;
@@ -39,16 +38,15 @@ public class Shooter extends SubsystemBase {
   
   /** Creates a new Shooter. */
   public Shooter() {
-    m_leftMotor = new VictorSPX(Constants.ShooterConstants.kShooterLeftCanId);
-    m_rightMotor = new VictorSPX(Constants.ShooterConstants.kShooterRightCanId);
+    m_leftMotor = new CANSparkMax(Constants.ShooterConstants.kShooterLeftCanId, MotorType.kBrushless);
+    m_rightMotor = new CANSparkMax(Constants.ShooterConstants.kShooterRightCanId, MotorType.kBrushless);
     m_leftMotor.setInverted(true);
     m_rightMotor.setInverted(true);
 
-    mLeftTachometer  = new Tachometer(new DigitalInput(Constants.ShooterConstants.kLeftTachDIO));
-    mRightTachometer = new Tachometer(new DigitalInput(Constants.ShooterConstants.kRightTachDIO));
-    mLeftTachometer.setEdgesPerRevolution(2048);
-    mRightTachometer.setEdgesPerRevolution(2048);
-    mLeftTachometer.setSamplesToAverage(10);
+    mLeftEncoder  = m_leftMotor.getEncoder();
+    mRightEncoder = m_leftMotor.getEncoder();
+    mLeftEncoder.setVelocityConversionFactor(0.25); 
+    mRightEncoder.setVelocityConversionFactor(0.25);
 
     mUltrasonicInput = new AnalogInput(Constants.ShooterConstants.kShooterUltrasonicAIO);
     mUltrasonicInput.setAverageBits(4);
@@ -90,16 +88,16 @@ public class Shooter extends SubsystemBase {
     mUltrasonicInputEntry = mShuffleboardTab.add("Range", mUltrasonicInput.getAverageValue())
                                             .withWidget(BuiltInWidgets.kTextView)
                                             .getEntry();
-    mLeftVelEntry = mShuffleboardTab.add("Left Velocity", mLeftTachometer.getRevolutionsPerMinute())
+    mLeftVelEntry = mShuffleboardTab.add("Left Velocity", mLeftEncoder.getVelocity())
                                     .withWidget(BuiltInWidgets.kTextView)
                                     .getEntry();
-    mRightVelEntry = mShuffleboardTab.add("Right Velocity", mRightTachometer.getRevolutionsPerMinute())
+    mRightVelEntry = mShuffleboardTab.add("Right Velocity", mRightEncoder.getVelocity())
                                     .withWidget(BuiltInWidgets.kTextView)
                                      .getEntry();
-    mLeftOutputEntry = mShuffleboardTab.add("Left Motor Output", m_leftMotor.getMotorOutputPercent())
+    mLeftOutputEntry = mShuffleboardTab.add("Left Motor Output", m_leftMotor.get())
                                     .withWidget(BuiltInWidgets.kTextView)
                                      .getEntry();
-    mRightOuputEntry = mShuffleboardTab.add("Right Motor Output", m_rightMotor.getMotorOutputPercent())
+    mRightOuputEntry = mShuffleboardTab.add("Right Motor Output", m_rightMotor.get())
                                     .withWidget(BuiltInWidgets.kTextView)
                                      .getEntry();
     // mShuffleboardTab.add("Left PID", mLeftPidController)
@@ -109,15 +107,8 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
 
-    Faults faultsL = new Faults();
-    Faults faultsR = new Faults();
-    m_leftMotor.getFaults(faultsL);
-    m_rightMotor.getFaults(faultsR);
-    if(faultsL.hasAnyFault()) { System.out.println("Shooter Left: " + faultsL.toString()); }
-    if(faultsR.hasAnyFault()) { System.out.println("Shooter Right: " + faultsR.toString());}
-
-    mLeftVelocity  = mLeftTachometer.getRevolutionsPerMinute();
-    mRightVelocity = mRightTachometer.getRevolutionsPerMinute();
+    mLeftVelocity  = mLeftEncoder.getVelocity();
+    mRightVelocity = mRightEncoder.getVelocity();
 
     double rightOutput = mRightPidController.calculate(mRightVelocity, mSetpoint);
     double leftOutput = mLeftPidController.calculate(mLeftVelocity, mSetpoint);
@@ -127,8 +118,8 @@ public class Shooter extends SubsystemBase {
       leftOutput = 0.0;
     }
 
-    m_leftMotor.set(VictorSPXControlMode.PercentOutput, MathUtil.clamp(leftOutput, -1.0, 1.0));
-    m_rightMotor.set(VictorSPXControlMode.PercentOutput, MathUtil.clamp(rightOutput, -1.0, 1.0));
+    m_leftMotor.set(MathUtil.clamp(leftOutput, -1.0, 1.0));
+    m_rightMotor.set(MathUtil.clamp(rightOutput, -1.0, 1.0));
 
     mSetpointEntry.setDouble(mSetpoint);
     mLeftErrEntry.setDouble(errL());
@@ -137,8 +128,8 @@ public class Shooter extends SubsystemBase {
     mUltrasonicInputEntry.setDouble(mUltrasonicInput.getAccumulatorValue());
     mLeftVelEntry.setDouble(mLeftVelocity);
     mRightVelEntry.setDouble(mRightVelocity);
-    mLeftOutputEntry.setDouble(m_leftMotor.getMotorOutputPercent());
-    mRightOuputEntry.setDouble(m_rightMotor.getMotorOutputPercent());
+    mLeftOutputEntry.setDouble(m_leftMotor.get());
+    mRightOuputEntry.setDouble(m_rightMotor.get());
     
   }
   
