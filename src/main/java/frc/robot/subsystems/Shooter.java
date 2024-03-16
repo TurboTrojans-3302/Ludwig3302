@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -106,6 +107,18 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    if(m_leftMotor.getFaults() != 0){
+      for (FaultID f : FaultID.values()) { 
+         if(m_leftMotor.getFault(f)) { System.out.println("Left Shooter Motor Fault: " + f);}
+      }
+    }
+
+    if(m_rightMotor.getFaults() != 0){
+      for (FaultID f : FaultID.values()) { 
+         if(m_rightMotor.getFault(f)) { System.out.println("Right Shooter Motor Fault: " + f);}
+      }
+    }
 
     mLeftVelocity  = mLeftEncoder.getVelocity();
     mRightVelocity = mRightEncoder.getVelocity();
