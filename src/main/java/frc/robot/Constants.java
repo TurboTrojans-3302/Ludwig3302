@@ -155,9 +155,7 @@ public final class Constants {
     public static final int kRightTachDIO = 3;
     public static final double RPM_TOLERANCE = 20;
     public static final int kShooterUltrasonicAIO = 0;
-  }
-
-  public static final class harvesterConstants {
+    public static final double GearReduction = 0;ants {
     public static final int kIntakeCanId = 9;
     public static final int kArmLiftCanId = 10;
     public static final int kArmEncoderDInput = 0;

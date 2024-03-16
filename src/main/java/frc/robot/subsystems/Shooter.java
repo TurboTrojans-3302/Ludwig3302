@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
 
@@ -39,17 +39,17 @@ public class Shooter extends SubsystemBase {
   
   /** Creates a new Shooter. */
   public Shooter() {
-    m_leftMotor = new CANSparkMax(Constants.ShooterConstants.kShooterLeftCanId, MotorType.kBrushless);
-    m_rightMotor = new CANSparkMax(Constants.ShooterConstants.kShooterRightCanId, MotorType.kBrushless);
+    m_leftMotor = new CANSparkMax(ShooterConstants.kShooterLeftCanId, MotorType.kBrushless);
+    m_rightMotor = new CANSparkMax(ShooterConstants.kShooterRightCanId, MotorType.kBrushless);
     m_leftMotor.setInverted(true);
     m_rightMotor.setInverted(true);
 
     mLeftEncoder  = m_leftMotor.getEncoder();
     mRightEncoder = m_leftMotor.getEncoder();
-    mLeftEncoder.setVelocityConversionFactor(0.25); 
-    mRightEncoder.setVelocityConversionFactor(0.25);
+    mLeftEncoder.setVelocityConversionFactor(ShooterConstants.GearReduction); 
+    mRightEncoder.setVelocityConversionFactor(ShooterConstants.GearReduction);
 
-    mUltrasonicInput = new AnalogInput(Constants.ShooterConstants.kShooterUltrasonicAIO);
+    mUltrasonicInput = new AnalogInput(ShooterConstants.kShooterUltrasonicAIO);
     mUltrasonicInput.setAverageBits(4);
 
     // PID coefficients
@@ -60,8 +60,8 @@ public class Shooter extends SubsystemBase {
 
     mLeftPidController = new PIDController(kP, kI, kD);
     mRightPidController =  new PIDController(kP, kI, kD);
-    mLeftPidController.setTolerance(Constants.ShooterConstants.RPM_TOLERANCE);
-    mRightPidController.setTolerance(Constants.ShooterConstants.RPM_TOLERANCE);
+    mLeftPidController.setTolerance(ShooterConstants.RPM_TOLERANCE);
+    mRightPidController.setTolerance(ShooterConstants.RPM_TOLERANCE);
 
     mSetpoint = 0.0;
     mLeftVelocity = 0.0;
@@ -76,14 +76,14 @@ public class Shooter extends SubsystemBase {
     mSetpointEntry = mShuffleboardTab.add("Setpoint", mSetpoint).getEntry();
     mLeftErrEntry = mShuffleboardTab.add("Err L", errL())
              .withWidget(BuiltInWidgets.kDial)
-             .withProperties(Map.of("min", (Constants.ShooterConstants.RPM_TOLERANCE * -5.0),
-                                    "max", (Constants.ShooterConstants.RPM_TOLERANCE * 5.0),
+             .withProperties(Map.of("min", (ShooterConstants.RPM_TOLERANCE * -5.0),
+                                    "max", (ShooterConstants.RPM_TOLERANCE * 5.0),
                                     "Show value", true))
              .getEntry();
     mRightErrEntry = mShuffleboardTab.add("Err R", errR())
              .withWidget(BuiltInWidgets.kDial)
-             .withProperties(Map.of("min", (Constants.ShooterConstants.RPM_TOLERANCE * -5.0),
-                                    "max", (Constants.ShooterConstants.RPM_TOLERANCE * 5.0),
+             .withProperties(Map.of("min", (ShooterConstants.RPM_TOLERANCE * -5.0),
+                                    "max", (ShooterConstants.RPM_TOLERANCE * 5.0),
                                     "Show value", true))
              .getEntry();
     mUltrasonicInputEntry = mShuffleboardTab.add("Range", mUltrasonicInput.getAverageValue())
