@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
 
 
@@ -23,7 +25,8 @@ public class TeleopShooter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.setRPM(0);
+    m_shooter.setLeftSetpoint(0.0);
+    m_shooter.setRightSetpoint(0.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,18 +34,34 @@ public class TeleopShooter extends Command {
   @Override
   public void execute() {
     //should work because execute is called every 20ms.
-    if (m_CopilotController.getYButton()){
-      m_shooter.setRPM(m_shooter.getRPM()+100);
-    } else if (m_CopilotController.getAButton()){
-      m_shooter.setRPM(m_shooter.getRPM()-100);
-      
+
+    double Lrpm = m_shooter.getLeftSetpoint();
+    double Rrpm = m_shooter.getRightSetpoint();
+
+    switch(m_CopilotController.getPOV()){
+      case   0: Lrpm += 100;
+                Rrpm += 100;
+                break;
+      case  90: Lrpm -= 50;
+                Rrpm += 50;
+                break;
+      case 180: Lrpm -= 100;
+                Rrpm -= 100;
+                break;
+      case 270: Lrpm += 50;
+                Rrpm -= 50;
+                break;
     }
+
+    m_shooter.setLeftSetpoint(MathUtil.clamp(Lrpm, 0.0, 5800.0));  
+    m_shooter.setRightSetpoint(MathUtil.clamp(Rrpm, 0.0, 5800.0));  
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.setRPM(0);
+    m_shooter.setLeftSetpoint(0.0);
+    m_shooter.setRightSetpoint(0.0);
   }
 
   // Returns true when the command should end.
