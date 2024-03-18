@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DigitalSource;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -155,25 +154,29 @@ public final class Constants {
     public static final int kLeftTachDIO = 2;
     public static final int kRightTachDIO = 3;
     public static final double RPM_TOLERANCE = 20;
+    public static final int kShooterUltrasonicAIO = 0;
+    public static final double speedMultiplier = 0.1;
   }
 
   public static final class harvesterConstants {
     public static final int kIntakeCanId = 9;
     public static final int kArmLiftCanId = 10;
     public static final int kArmEncoderDInput = 0;
-    public static final double armEncoderOffset = 0.0;
+    public static final double armEncoderOffset = 1.0 - (147.0/360);
 
-    public static final double inSpeed = 1.0;
-    public static final double outSpeed = -1.0;
-    public static final int kBackLimitSwitchInputID = 0;
+    public static final double inSpeed = -1.0;
+    public static final double outSpeed = 1.0;
+    public static final int kBackLimitSwitchInputID = 1;
 
-    public static final double ANGLE_AT_FLOOR = -5.0;
-    public static final double ANGLE_AT_AMP = 45.0;
-    public static final double ANGLE_AT_SPEAKER = 100;
+    public static final double ANGLE_AT_FLOOR = -50.0;
+    public static final double ANGLE_AT_AMP = 66.0;
+    public static final double ANGLE_AT_SPEAKER = 140;
     public static final double ANGLE_AT_DRIVE = 90;
-    public static final double ANGLE_TOLERANCE = 2.0;
-
-    public static final double MAX_ARM_SPEED = 45.0 * Robot.kDefaultPeriod;
+    public static final double ANGLE_TOLERANCE = 3.0;
+    
+    public static final double MAX_ARM_SPEED = 45.0; // deg/sec
+    public static final double MAX_ARM_ACCEL = 90; // deg/sec^2
+    public static final int harvesterUltraSonicAIO = 1;
   }
 
   public static final class NeoMotorConstants {

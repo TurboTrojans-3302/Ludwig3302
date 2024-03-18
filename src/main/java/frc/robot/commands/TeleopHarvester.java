@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -14,6 +13,7 @@ import frc.robot.subsystems.Harvester;
 public class TeleopHarvester extends Command {
   private XboxController m_controller;
   private Harvester m_harvester;
+  private double mSetpoint;
 
   /** Creates a new TeleopHarvester. */
   public TeleopHarvester( Harvester harvester, XboxController controller) {
@@ -21,11 +21,14 @@ public class TeleopHarvester extends Command {
     m_harvester = harvester;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_harvester);
+    mSetpoint = m_harvester.getArmAngle();
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    mSetpoint = m_harvester.getArmAngle();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -44,8 +47,9 @@ public class TeleopHarvester extends Command {
      }
     m_harvester.setIntakeSpeed(harvesterSpeed);
 
-    armSpeed = m_controller.getRightTriggerAxis() - m_controller.getLeftTriggerAxis();
-    m_harvester.setArmSpeed(MathUtil.applyDeadband(armSpeed, 0.1));
+    armSpeed = (m_controller.getRightTriggerAxis() - m_controller.getLeftTriggerAxis());
+    mSetpoint += armSpeed * 2;
+    m_harvester.setArmAngle(mSetpoint);
 
   }
 
