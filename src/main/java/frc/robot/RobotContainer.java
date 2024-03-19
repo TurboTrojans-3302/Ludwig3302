@@ -107,6 +107,15 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+        .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_SPEAKER));
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+        .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_DRIVE));
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+        .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_AMP));
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+        .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR));
   }
 
   /**
