@@ -33,13 +33,13 @@ public class ClimbCommand extends Command {
     double lBumper = 0.0;
     double rBumper = 0.0;
 
-  if (m_controller.getLeftBumperPressed()){
+  if (m_controller.getLeftBumper()){
     lBumper = 0.5;
   }
   else {
     lBumper = 0.0;
   }
-  if (m_controller.getRightBumperPressed()){
+  if (m_controller.getRightBumper()){
     rBumper = 0.5;
   }
   else {
