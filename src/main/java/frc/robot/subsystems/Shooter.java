@@ -42,7 +42,7 @@ public class Shooter extends SubsystemBase {
     m_leftMotor = new CANSparkMax(Constants.ShooterConstants.kShooterLeftCanId, MotorType.kBrushless);
     m_rightMotor = new CANSparkMax(Constants.ShooterConstants.kShooterRightCanId, MotorType.kBrushless);
     m_leftMotor.setInverted(true);
-    m_rightMotor.setInverted(true);
+    m_rightMotor.setInverted(false);
 
     mLeftEncoder  = m_leftMotor.getEncoder();
     mRightEncoder = m_leftMotor.getEncoder();
@@ -53,10 +53,10 @@ public class Shooter extends SubsystemBase {
     mUltrasonicInput.setAverageBits(4);
 
     // PID coefficients
-    kP = 0.002; 
-    kI = 0.0;
+    kP = 0.001; 
+    kI = 0.0002;
     kD = 0.0; 
-    maxRPM = 5700.0;
+    maxRPM = 1500.0;
 
     mLeftPidController = new PIDController(kP, kI, kD);
     mRightPidController =  new PIDController(kP, kI, kD);
