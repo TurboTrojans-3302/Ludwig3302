@@ -31,11 +31,10 @@ public class TeleopShooter extends Command {
   @Override
   public void execute() {
     //should work because execute is called every 20ms.
-    if (m_CopilotController.getYButton()){
-      m_shooter.setRPM(m_shooter.getRPM()+100);
-    } else if (m_CopilotController.getAButton()){
-      m_shooter.setRPM(m_shooter.getRPM()-100);
-      
+    if (m_CopilotController.getPOV() == 0){
+      m_shooter.setRPM(m_shooter.getRPM()+50);
+    } else if (m_CopilotController.getPOV() == 180){
+      m_shooter.setRPM(m_shooter.getRPM()-50);
     }
   }
 
