@@ -14,7 +14,7 @@ import frc.robot.subsystems.Harvester;
 import frc.robot.subsystems.Shooter;
 
 
-public class IntakeReverse extends Command {
+public class Intake extends Command {
 
 
  
@@ -23,11 +23,15 @@ public class IntakeReverse extends Command {
 
  /** Creates a new Climbers. */
  Harvester m_harvester;
+ double intakeSpeed;
+ double intakeTime;
 
 
- public IntakeReverse(Harvester harvester) {
+ public Intake(Harvester harvester, double speed, double time) {
    // Use addRequirements() here to declare subsystem dependencies.
    m_harvester = harvester;
+   intakeSpeed = speed;
+   intakeTime = time;
    addRequirements(m_harvester);
 
 
@@ -37,8 +41,8 @@ public class IntakeReverse extends Command {
  // Called when the command is initially scheduled.
  @Override
  public void initialize() {
-   m_harvester.setIntakeSpeed(-0.75);
-   Commands.waitSeconds(1.0);
+   m_harvester.setIntakeSpeed(speed);
+   Commands.waitSeconds(time);
    m_harvester.setIntakeSpeed(0.0);
    Commands.waitSeconds(0.1);
    commandOver = true;

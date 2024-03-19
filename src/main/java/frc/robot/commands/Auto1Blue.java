@@ -28,11 +28,12 @@ public class Auto1Blue extends SequentialCommandGroup {
     addCommands(
         new StartSpeaker(m_shooter, m_harvester),
         //Cross the line and go to note (8 (2.4384m) feet away exactly in auton)
-        new GoToCommand(m_robotDrive, new Pose2d(2.3, 0, Rotation2d.fromDegrees(0)))
+
+        new GoToAndArmFloor(m_harvester, m_robotDrive, 2.3, 0.0, 0.0),
         //todo make harvester to floor and go to command be a parallel command group
-       
+       new Intake(m_harvester, -1));
 
 
-    );
+    ;
   }
 }
