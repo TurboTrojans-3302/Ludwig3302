@@ -27,7 +27,9 @@ public class Shooter extends SubsystemBase {
   private PIDController mLeftPidController, mRightPidController;
   private RelativeEncoder mLeftEncoder, mRightEncoder;
   private Double kP, kI, kD, maxRPM;
-  private Double mSetpoint, mLeftVelocity, mRightVelocity;
+  public Double mSetpoint;
+private Double mLeftVelocity;
+private Double mRightVelocity;
   private AnalogInput mUltrasonicInput;
 
   

@@ -9,7 +9,11 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants;
+import frc.robot.subsystems.Harvester;
 import frc.robot.subsystems.Shooter;
+
 
 
 public class IntakeAndToShooter extends Command {
@@ -30,9 +34,9 @@ public class IntakeAndToShooter extends Command {
    // Use addRequirements() here to declare subsystem dependencies.
    m_harvester = harvester;
    m_shooter = shooter;
-   armAngle = m_shooter.mArmSetpoint;
+   armAngle = m_harvester.getArmSetpoint();
    
-   angleSpeaker = Constants.ShooterConstants.ANGLE_AT_SPEAKER;
+   angleSpeaker = Constants.harvesterConstants.ANGLE_AT_SPEAKER;
    
    addRequirements(m_harvester, m_shooter);
 
@@ -47,7 +51,7 @@ public class IntakeAndToShooter extends Command {
    m_harvester.setIntakeSpeed(1.0);
    Commands.waitSeconds(0.5);
    m_harvester.setArmAngle(angleSpeaker);
-   Command.waitSeconds(0.5);
+   Commands.waitSeconds(0.5);
    m_harvester.setIntakeSpeed(0.0);
 
    
@@ -61,7 +65,7 @@ public class IntakeAndToShooter extends Command {
  // Called every time the scheduler runs while the command is scheduled.
  @Override
  public void execute() {
-    if (m_harvester.isArmAtAngle() && m_harvester.hasNote() &&){
+    if (m_harvester.isArmAtAngle() && m_harvester.hasNote()){
         commandOver = true;
     }
 
