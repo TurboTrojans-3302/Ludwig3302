@@ -146,6 +146,8 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int rightClimberCanID = 14;
     public static final int leftClimberCanID = 15;
+    public static final int rightLimitDIO = 4;
+    public static final int leftLimitDIO = 5;
   }
 
   public static final class ShooterConstants {

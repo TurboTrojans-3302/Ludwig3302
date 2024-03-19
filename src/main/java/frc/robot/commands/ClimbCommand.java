@@ -4,11 +4,15 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climbers;
 
 public class ClimbCommand extends Command {
+
+  public final double DEADBAND = 0.15;
+
   /** Creates a new Climbers. */
   Climbers m_climbers;
   XboxController m_controller;
@@ -30,32 +34,21 @@ public class ClimbCommand extends Command {
   public void execute() {
     double lspeed = 0.0;
     double rspeed = 0.0;
-    double lBumper = 0.0;
-    double rBumper = 0.0;
+  
+    rspeed = m_controller.getRightY();
+    m_climbers.climberRightMove(MathUtil.applyDeadband(rspeed, DEADBAND));
 
-  if (m_controller.getLeftBumper()){
-    lBumper = 0.5;
-  }
-  else {
-    lBumper = 0.0;
-  }
-  if (m_controller.getRightBumper()){
-    rBumper = 0.5;
-  }
-  else {
-    rBumper = 0.0;
-  }
-    rspeed = m_controller.getRightTriggerAxis() - rBumper;
-    m_climbers.climberRightMove(rspeed);
-
-    lspeed = m_controller.getLeftTriggerAxis() - lBumper;
-    m_climbers.climberLeftMove(lspeed);
+    lspeed = m_controller.getLeftY();
+    m_climbers.climberLeftMove(MathUtil.applyDeadband(lspeed, DEADBAND));
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_climbers.climberLeftMove(0.0);
+    m_climbers.climberRightMove(0.0);
+  }
 
   // Returns true when the command should end.
   @Override
