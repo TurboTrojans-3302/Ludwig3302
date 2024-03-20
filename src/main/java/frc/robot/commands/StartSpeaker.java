@@ -28,9 +28,12 @@ public class StartSpeaker extends Command {
   @Override
   public void initialize() {
     m_shooter.setRPM(1500);
-    Commands.waitSeconds(0.25);
+    Commands.waitSeconds(3.0);
+    //TODO Adjust waittime
     m_harvester.setIntakeSpeed(-1.0);
     Commands.waitSeconds(0.75);
+    m_harvester.setIntakeSpeed(0.0);
+    m_shooter.setRPM(0);
     commandOver = true;
 
   }
