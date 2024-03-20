@@ -20,6 +20,7 @@ import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
 import frc.robot.commands.TeleopShooter;
 import frc.robot.commands.GoToCommand;
+import frc.robot.commands.GoToAndArmFloor;
 import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
@@ -73,6 +74,7 @@ public class RobotContainer {
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("Do Nothing", new DoNothing());
     m_autonomousChooser.addOption("CrossTheLine", GoToCommand.relative(m_robotDrive, 1.0, 0.0, 90.0));
+    m_autonomousChooser.addOption("CrossTheLine", Auto1Blue);
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
