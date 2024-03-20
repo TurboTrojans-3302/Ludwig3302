@@ -41,8 +41,8 @@ public class Intake extends Command {
  // Called when the command is initially scheduled.
  @Override
  public void initialize() {
-   m_harvester.setIntakeSpeed(speed);
-   Commands.waitSeconds(time);
+   m_harvester.setIntakeSpeed(intakeSpeed);
+   Commands.waitSeconds(intakeTime);
    m_harvester.setIntakeSpeed(0.0);
    Commands.waitSeconds(0.1);
    commandOver = true;
