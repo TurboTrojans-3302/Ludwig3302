@@ -28,13 +28,14 @@ public class Auto1Blue extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     ampAngle = Constants.harvesterConstants.ANGLE_AT_AMP;
-    FromCenterStartToAmp = Constants.FieldConstants.FromCentrStartToAmpBlue;
+    FromCenterStartToAmp = Constants.FieldConstants.FromCentrStartToAmpRed;
     FromCenterStartToCenterRing = Constants.FieldConstants.FromCentrStartToCentrRing;
     addCommands(
         StartSpeaker(m_shooter, m_harvester)
         .andThen(Commands.parallel(HarvesterToFloor(m_harvester), GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
         .andThen(FloorPickUp(m_harvester, ampAngle))
         .andThen(GoToCommand(m_robotDrive, FromCenterStartToAmp))
+        //TODO completely the same except that x should be inverted from blue when I figure it out
         //1.872 meters to amp from center speaker
         //find sideways distance (y value)
         //Cross the line and go to note (8 (2.4384m) feet away exactly in auton)

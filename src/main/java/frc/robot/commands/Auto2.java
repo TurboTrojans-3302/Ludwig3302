@@ -14,27 +14,28 @@ import frc.robot.subsystems.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Auto1Blue extends SequentialCommandGroup {
+public class Auto2 extends SequentialCommandGroup {
   /** Creates a new Auto1. */
   Shooter m_shooter;
   Harvester m_harvester;
   DriveSubsystem m_robotDrive;
-  double ampAngle;
   Robot2d FromCenterStartToCenterRing;
-  Robot2d FromCenterStartToAmp;
+  Robot2d SpeakerPos;
+  Double speakerAngle;
 
 
-  public Auto1Blue() {
+  public Auto2() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    ampAngle = Constants.harvesterConstants.ANGLE_AT_AMP;
-    FromCenterStartToAmp = Constants.FieldConstants.FromCentrStartToAmpBlue;
+    speakerAngle = Constants.harvesterConstants.ANGLE_AT_SPEAKER;
+    SpeakerPos = Constants.FieldConstants.CentrBackToSpeaker;
     FromCenterStartToCenterRing = Constants.FieldConstants.FromCentrStartToCentrRing;
     addCommands(
         StartSpeaker(m_shooter, m_harvester)
         .andThen(Commands.parallel(HarvesterToFloor(m_harvester), GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
         .andThen(FloorPickUp(m_harvester, ampAngle))
-        .andThen(GoToCommand(m_robotDrive, FromCenterStartToAmp))
+        .andThen(GoToCommand(m_robotDrive, FromCenterBackToSpeaker))
+        .andThen(StartSpeaker(m_shooter, m_harvester))
         //1.872 meters to amp from center speaker
         //find sideways distance (y value)
         //Cross the line and go to note (8 (2.4384m) feet away exactly in auton)
