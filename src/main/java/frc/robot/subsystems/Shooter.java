@@ -46,8 +46,8 @@ public class Shooter extends SubsystemBase {
 
     mLeftEncoder  = m_leftMotor.getEncoder();
     mRightEncoder = m_leftMotor.getEncoder();
-    mLeftEncoder.setVelocityConversionFactor(0.25); 
-    mRightEncoder.setVelocityConversionFactor(0.25);
+    mLeftEncoder.setVelocityConversionFactor(1.0); 
+    mRightEncoder.setVelocityConversionFactor(1.0);
 
     mUltrasonicInput = new AnalogInput(Constants.ShooterConstants.kShooterUltrasonicAIO);
     mUltrasonicInput.setAverageBits(4);
