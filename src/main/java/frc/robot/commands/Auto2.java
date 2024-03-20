@@ -6,7 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Harvester;
 import frc.robot.subsystems.Shooter;
@@ -19,23 +21,26 @@ public class Auto2 extends SequentialCommandGroup {
   Shooter m_shooter;
   Harvester m_harvester;
   DriveSubsystem m_robotDrive;
-  Robot2d FromCenterStartToCenterRing;
-  Robot2d SpeakerPos;
+  Pose2d FromCenterStartToCenterRing;
+  Pose2d SpeakerPos;
   Double speakerAngle;
 
 
-  public Auto2() {
+  public Auto2(DriveSubsystem drive, Shooter shooter, Harvester harvester) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     speakerAngle = Constants.harvesterConstants.ANGLE_AT_SPEAKER;
     SpeakerPos = Constants.FieldConstants.CentrBackToSpeaker;
     FromCenterStartToCenterRing = Constants.FieldConstants.FromCentrStartToCentrRing;
+    m_harvester = harvester;
+    m_shooter = shooter;
+    m_robotDrive = drive;
     addCommands(
-        StartSpeaker(m_shooter, m_harvester)
-        .andThen(Commands.parallel(HarvesterToFloor(m_harvester), GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
-        .andThen(FloorPickUp(m_harvester, ampAngle))
-        .andThen(GoToCommand(m_robotDrive, FromCenterBackToSpeaker))
-        .andThen(StartSpeaker(m_shooter, m_harvester))
+        new StartSpeaker(m_shooter, m_harvester)
+        .andThen(Commands.parallel(new HarvesterToFloor(m_harvester), new GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
+        .andThen(new FloorPickUp(m_harvester, speakerAngle))
+        .andThen(new GoToCommand(m_robotDrive, SpeakerPos))
+        .andThen(new StartSpeaker(m_shooter, m_harvester))
         //1.872 meters to amp from center speaker
         //find sideways distance (y value)
         //Cross the line and go to note (8 (2.4384m) feet away exactly in auton)
