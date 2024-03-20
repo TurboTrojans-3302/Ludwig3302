@@ -19,21 +19,31 @@ public class Auto1Blue extends SequentialCommandGroup {
   Shooter m_shooter;
   Harvester m_harvester;
   DriveSubsystem m_robotDrive;
+  double ampAngle;
+  Robot2d FromCenterStartToCenterRing;
+  Robot2d FromCenterStartToAmp;
 
 
   public Auto1Blue() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    
+    ampAngle = Constants.harvesterConstants.ANGLE_AT_AMP;
+    FromCenterStartToAmp = Constants.FieldConstants.FromCentrStartToAmp;
+    FromCenterStartToCenterRing = Constants.FieldConstants.FromCentrStartToCentrRing;
     addCommands(
-        new StartSpeaker(m_shooter, m_harvester),
+        StartSpeaker(m_shooter, m_harvester)
+        .andThen(Commands.parallel(HarvesterToFloor(m_harvester), GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
+        .andThen(FloorPickUp(m_harvester, ampAngle))
+        .andThen(GoToCommand(m_robotDrive, FromCenterStartToAmp))
+        //1.872 meters to amp from center speaker
+        //find sideways distance (y value)
         //Cross the line and go to note (8 (2.4384m) feet away exactly in auton)
 
-        new GoToAndArmFloor(m_harvester, m_robotDrive, 2.3, 0.0, 0.0),
+        //GoToAndArmFloor(m_harvester, m_robotDrive, 2.3, 0.0, 0.0),
         //todo make harvester to floor and go to command be a parallel command group
-       new Intake(m_harvester, -1));
+       //new Intake(m_harvester, -1));
 
-
-    ;
+    );
+  
   }
 }

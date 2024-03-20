@@ -34,21 +34,18 @@ public class GoToAndArmFloor extends ParallelCommandGroup {
     commandOver = false;
     addRequirements(m_harvester, m_robotDrive);
     addCommands(HarvesterToFloor, GoToCommand);
-    
     driveAndFloor = Commands.parallel(
-        Commands.HarvesterToFloor(m_harvester),
-        Commands.GoToCommand(drive, new Pose2d(robotX, robotY, Rotation2d.fromDegrees(heading)))
-
-     driveAndFloor;
-    commandOver = true;
-    );
+        Commands.HarvesterToFloor(),
+        Commands.GoToCommand())
+    ;
+    
    
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+  
   
   }
 

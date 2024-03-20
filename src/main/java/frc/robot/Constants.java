@@ -183,6 +183,8 @@ public final class Constants {
     public static final int harvesterUltraSonicAIO = 1;
   }
 
+ 
+
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
@@ -191,6 +193,12 @@ public final class Constants {
     public static final Pose2d StartPositionLeft = new Pose2d(0.35, 0.0, new Rotation2d());
     public static final Pose2d StartPositionCenter = new Pose2d(0.35, 0.0, new Rotation2d());
     public static final Pose2d StartPositionRight = new Pose2d(0.35, 0.0, new Rotation2d());
+    //find y for this
+    //x is 1.872 exact
+    public static final Pose2d FromCentrStartToAmp = new Pose2d(1.872, 0.0, 90.0);
+  // y complete
+  //x is actually 2.4384
+    public static final Pose2d FromCentrStartToCentrRing = new Pose2d(2.3, 0.0, 0.0);
   }
 
 public static final int BLINKIN_LED_PWM_CHANNEL = 0;
