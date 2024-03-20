@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -23,7 +24,6 @@ import frc.robot.commands.GoToCommand;
 import frc.robot.commands.Auto1Blue;
 import frc.robot.commands.Auto1Red;
 import frc.robot.commands.Auto2;
-import frc.robot.commands.GoToAndArmFloor;
 import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
@@ -44,6 +44,10 @@ public class RobotContainer {
   public final Harvester m_harvester = new Harvester();
   public final Shooter m_shooter = new Shooter();
   private final Climbers m_climbers = new Climbers();
+  Command Auto1B = new Auto1Blue(m_robotDrive, m_harvester, m_shooter);
+  Command Auto1R = new Auto1Red(m_robotDrive, m_shooter, m_harvester);
+  Command Speaker2 = new Auto2(m_robotDrive, m_shooter, m_harvester);
+
 
 
   private final ShuffleboardTab m_shuffleboardTab;
@@ -77,9 +81,9 @@ public class RobotContainer {
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("Do Nothing", new DoNothing());
     m_autonomousChooser.addOption("CrossTheLine", GoToCommand.relative(m_robotDrive, 1.0, 0.0, 90.0));
-    m_autonomousChooser.addOption("Speaker and Amp - Center - Blue", Auto1Blue);
-    m_autonomousChooser.addOption("Speaker and Amp - Center - Red", Auto1Red);
-    m_autonomousChooser.addOption("Speaker twice - Center", Auto2);
+    m_autonomousChooser.addOption("Speaker and Amp - Center - Blue", Auto1B);
+    m_autonomousChooser.addOption("Speaker and Amp - Center - Red", Auto1R);
+    m_autonomousChooser.addOption("Speaker twice - Center", Speaker2);
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();

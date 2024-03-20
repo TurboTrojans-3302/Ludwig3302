@@ -5,16 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.Harvester;
 
-public class HarvesterToFloor extends Command {
+public class FloorPickUp extends Command {
   /** Creates a new HarvesterToFloor. */
   Harvester m_harvester;
   Boolean commandOver;
   Double armAngle;
   
-  public HarvesterToFloor(Harvester harvester, double angle) {
+  public FloorPickUp(Harvester harvester, double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_harvester = harvester;
     commandOver = false;

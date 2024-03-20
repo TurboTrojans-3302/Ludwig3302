@@ -6,10 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Harvester;
 import frc.robot.subsystems.Shooter;
+import frc.robot.commands.GoToCommand;
+import frc.robot.commands.FloorPickUp;
+import frc.robot.commands.StartSpeaker;
+import frc.robot.commands.HarvesterToFloor;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,21 +26,24 @@ public class Auto1Blue extends SequentialCommandGroup {
   Harvester m_harvester;
   DriveSubsystem m_robotDrive;
   double ampAngle;
-  Robot2d FromCenterStartToCenterRing;
-  Robot2d FromCenterStartToAmp;
+  Pose2d FromCenterStartToCenterRing;
+  Pose2d FromCenterStartToAmp;
 
 
-  public Auto1Blue() {
+  public Auto1Blue(DriveSubsystem drive, Harvester harvester, Shooter shooter) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    m_robotDrive = drive;
+    m_harvester = harvester;
+    m_shooter = shooter;
     ampAngle = Constants.harvesterConstants.ANGLE_AT_AMP;
     FromCenterStartToAmp = Constants.FieldConstants.FromCentrStartToAmpBlue;
     FromCenterStartToCenterRing = Constants.FieldConstants.FromCentrStartToCentrRing;
     addCommands(
-        StartSpeaker(m_shooter, m_harvester)
-        .andThen(Commands.parallel(HarvesterToFloor(m_harvester), GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
-        .andThen(FloorPickUp(m_harvester, ampAngle))
-        .andThen(GoToCommand(m_robotDrive, FromCenterStartToAmp))
+        new StartSpeaker(m_shooter, m_harvester)
+        .andThen(Commands.parallel(new HarvesterToFloor(m_harvester), new GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
+        .andThen(new FloorPickUp(m_harvester, ampAngle))
+        .andThen(new GoToCommand(m_robotDrive, FromCenterStartToAmp))
         //1.872 meters to amp from center speaker
         //find sideways distance (y value)
         //Cross the line and go to note (8 (2.4384m) feet away exactly in auton)
