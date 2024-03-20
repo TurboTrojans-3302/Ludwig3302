@@ -56,7 +56,7 @@ public class Shooter extends SubsystemBase {
     kP = 0.001; 
     kI = 0.0002;
     kD = 0.0; 
-    maxRPM = 1500.0;
+    maxRPM = 3000.0;
 
     mLeftPidController = new PIDController(kP, kI, kD);
     mRightPidController =  new PIDController(kP, kI, kD);
@@ -108,17 +108,17 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
 
-    if(m_leftMotor.getFaults() != 0){
-      for (FaultID f : FaultID.values()) { 
-         if(m_leftMotor.getFault(f)) { System.out.println("Left Shooter Motor Fault: " + f);}
-      }
-    }
+    // if(m_leftMotor.getFaults() != 0){
+    //   for (FaultID f : FaultID.values()) { 
+    //      if(m_leftMotor.getFault(f)) { System.out.println("Left Shooter Motor Fault: " + f);}
+    //   }
+    // }
 
-    if(m_rightMotor.getFaults() != 0){
-      for (FaultID f : FaultID.values()) { 
-         if(m_rightMotor.getFault(f)) { System.out.println("Right Shooter Motor Fault: " + f);}
-      }
-    }
+    // if(m_rightMotor.getFaults() != 0){
+    //   for (FaultID f : FaultID.values()) { 
+    //      if(m_rightMotor.getFault(f)) { System.out.println("Right Shooter Motor Fault: " + f);}
+    //   }
+    // }
 
     mLeftVelocity  = mLeftEncoder.getVelocity();
     mRightVelocity = mRightEncoder.getVelocity();

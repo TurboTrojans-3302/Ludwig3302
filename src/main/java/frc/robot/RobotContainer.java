@@ -62,7 +62,7 @@ public class RobotContainer {
     // Configure default commands
     m_robotDrive.setDefaultCommand(new TeleopDrive(m_robotDrive, m_driverController, mDriveDashboard));
 
-    m_harvester.setDefaultCommand(new TeleopHarvester(m_harvester, m_driverController)); 
+    m_harvester.setDefaultCommand(new TeleopHarvester(m_harvester, m_copilotController)); 
     
     m_shooter.setDefaultCommand(new TeleopShooter(m_shooter, m_copilotController));
 
@@ -116,6 +116,14 @@ public class RobotContainer {
         .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_AMP));
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
         .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR));
+
+    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+        .whileTrue(new RunCommand(() -> m_harvester.setIntakeSpeed(Constants.harvesterConstants.inSpeed),
+                                 m_harvester));
+    
+    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+        .whileTrue(new RunCommand(() -> m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeed),
+                                 m_harvester));                             
   }
 
   /**
