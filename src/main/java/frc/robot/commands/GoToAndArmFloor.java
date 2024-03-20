@@ -4,37 +4,51 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Harvester;
 
-public class HarvesterToFloor extends ParallelCommand {
+public class GoToAndArmFloor extends ParallelCommandGroup {
   /** Creates a new HarvesterToFloor. */
   Harvester m_harvester;
-  Drivetrain m_robotDrive;
+  DriveSubsystem m_robotDrive;
   Boolean commandOver;
-  Double armAngleFloor;
+  double armAngleFloor;
   Command driveAndFloor;
-  public HarvesterToFloor(Harvester harvester, Drivetrain drive, double x, double y, double degrees) {
+  double robotX;
+  double robotY;
+  double heading;
+  
+  public void HarvesterToFloor(Harvester harvester, DriveSubsystem drive, double x, double y, double degrees) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_harvester = harvester;
     m_robotDrive = drive;
+    robotY=y;
+    robotX=x;
+    heading = degrees;
     commandOver = false;
+    addRequirements(m_harvester, m_robotDrive);
+    addCommands(HarvesterToFloor, GoToCommand);
     
     driveAndFloor = Commands.parallel(
         Commands.HarvesterToFloor(m_harvester),
-        Commands.GoToCommand(m_robotDrive, new Pose2D(x, y, Rotation2D.fromDegrees(degrees)));
+        Commands.GoToCommand(drive, new Pose2d(robotX, robotY, Rotation2d.fromDegrees(heading)))
 
-
-    )
+     driveAndFloor;
+    commandOver = true;
+    );
    
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveAndFloor;
-    commandOver = true;
+    
   
   }
 
