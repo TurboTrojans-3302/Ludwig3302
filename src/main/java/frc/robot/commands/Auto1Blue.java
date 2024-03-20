@@ -15,7 +15,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.commands.GoToCommand;
 import frc.robot.commands.FloorPickUp;
 import frc.robot.commands.StartSpeaker;
-import frc.robot.commands.HarvesterToFloor;
+
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -41,7 +41,8 @@ public class Auto1Blue extends SequentialCommandGroup {
     FromCenterStartToCenterRing = Constants.FieldConstants.FromCentrStartToCentrRing;
     addCommands(
         new StartSpeaker(m_shooter, m_harvester)
-        .andThen(Commands.parallel(new HarvesterToFloor(m_harvester), new GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
+        .andThen(Commands.parallel(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR),
+                                   new GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
         .andThen(new FloorPickUp(m_harvester, ampAngle))
         .andThen(new GoToCommand(m_robotDrive, FromCenterStartToAmp))
         //1.872 meters to amp from center speaker

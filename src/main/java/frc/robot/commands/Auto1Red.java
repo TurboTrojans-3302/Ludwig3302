@@ -37,7 +37,8 @@ public class Auto1Red extends SequentialCommandGroup {
     FromCenterStartToCenterRing = Constants.FieldConstants.FromCentrStartToCentrRing;
     addCommands(
         new StartSpeaker(m_shooter, m_harvester)
-        .andThen(Commands.parallel(new HarvesterToFloor(m_harvester), new GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
+        .andThen(Commands.parallel(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR), 
+                                  new GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
         .andThen(new FloorPickUp(m_harvester, ampAngle))
         .andThen(new GoToCommand(m_robotDrive, FromCenterStartToAmp))
         //TODO completely the same except that x should be inverted from blue when I figure it out
