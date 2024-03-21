@@ -17,8 +17,10 @@ public class Climbers extends SubsystemBase {
 
   private VictorSPX m_climberRight;
   private VictorSPX m_climberLeft;
-  private DigitalInput mRightLimit;
-  private DigitalInput mLeftLimit;
+  private DigitalInput mRightBottomLimit;
+  private DigitalInput mLeftBottomLimit;
+  private DigitalInput mRightTopLimit;
+  private DigitalInput mLeftTopLimit;
 
 
   /** Creates a new Climbers. */
@@ -27,8 +29,11 @@ public class Climbers extends SubsystemBase {
     m_climberLeft = new VictorSPX(Constants.ClimberConstants.leftClimberCanID);
     m_climberRight.setNeutralMode(NeutralMode.Brake);
     m_climberLeft.setNeutralMode(NeutralMode.Brake);
-    mRightLimit = new DigitalInput(Constants.ClimberConstants.rightLimitDIO);
-    mLeftLimit = new DigitalInput(Constants.ClimberConstants.leftLimitDIO);
+    mRightBottomLimit = new DigitalInput(Constants.ClimberConstants.rightBottomLimitDIO);
+    mLeftBottomLimit = new DigitalInput(Constants.ClimberConstants.leftBottomLimitDIO);
+    mRightTopLimit = new DigitalInput(Constants.ClimberConstants.rightTopLimitDIO);
+    mLeftTopLimit = new DigitalInput(Constants.ClimberConstants.leftTopLimitDIO);
+    
   }
 
   @Override
@@ -47,6 +52,6 @@ public class Climbers extends SubsystemBase {
     m_climberLeft.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
-  public boolean leftFullyContracted(){ return !mLeftLimit.get(); }
-  public boolean rightFullyContracted(){ return !mRightLimit.get(); }
+  public boolean leftFullyContracted(){ return !mLeftBottomLimit.get(); }
+  public boolean rightFullyContracted(){ return !mRightBottomLimit.get(); }
 }

@@ -149,8 +149,10 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int rightClimberCanID = 14;
     public static final int leftClimberCanID = 15;
-    public static final int rightLimitDIO = 4;
-    public static final int leftLimitDIO = 5;
+    public static final int rightBottomLimitDIO = 4;
+    public static final int leftBottomLimitDIO = 5;
+    public static final int leftTopLimitDIO = 7;
+    public static final int rightTopLimitDIO = 6;
   }
 
   public static final class ShooterConstants {
@@ -178,8 +180,8 @@ public final class Constants {
     public static final double ANGLE_AT_DRIVE = 90;
     public static final double ANGLE_TOLERANCE = 3.0;
     
-    public static final double MAX_ARM_SPEED = 45.0; // deg/sec
-    public static final double MAX_ARM_ACCEL = 90; // deg/sec^2
+    public static final double MAX_ARM_SPEED = 90.0; // deg/sec
+    public static final double MAX_ARM_ACCEL = 180.0; // deg/sec^2
     public static final int harvesterUltraSonicAIO = 1;
   }
 
