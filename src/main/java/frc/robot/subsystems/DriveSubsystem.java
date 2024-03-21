@@ -315,4 +315,7 @@ public class DriveSubsystem extends SubsystemBase {
     return Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
   }
 
+  public void setP(double val){ headingPidController.setP(val); }
+  public void setI(double val){ headingPidController.setI(val); }
+  public void setD(double val){ headingPidController.setD(val); }
 }

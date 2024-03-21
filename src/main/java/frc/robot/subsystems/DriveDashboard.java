@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveDashboard extends SubsystemBase {
@@ -21,6 +22,7 @@ public class DriveDashboard extends SubsystemBase {
   private GenericEntry m_FLspeedEntry, m_FRspeedEntry, m_BLspeedEntry, m_BRspeedEntry;
   private GenericEntry m_gyroEntry, m_driveDirEntry, m_driveMagEntry;
   private GenericEntry m_fieldOrientedEntry, m_xPosEntry, m_yPosEntry;
+  private GenericEntry mPEntry, mIEntry, mDEntry;
 
   /** Creates a new DriveDashboard. */
   public DriveDashboard(DriveSubsystem drive) {
@@ -101,6 +103,15 @@ public class DriveDashboard extends SubsystemBase {
     m_yPosEntry = m_shuffleboardTab.add("y position", 0.0)
                                     .withWidget(BuiltInWidgets.kTextView)
                                     .getEntry();
+    mPEntry = m_shuffleboardTab.add("P", Constants.DriveConstants.headingP)
+                        .withWidget(BuiltInWidgets.kTextView)
+                        .getEntry();
+    mIEntry = m_shuffleboardTab.add("I", Constants.DriveConstants.headingI)
+                        .withWidget(BuiltInWidgets.kTextView)
+                        .getEntry();
+    mPEntry = m_shuffleboardTab.add("D", Constants.DriveConstants.headingD)
+                        .withWidget(BuiltInWidgets.kTextView)
+                        .getEntry();
   }
 
   @Override
@@ -121,6 +132,10 @@ public class DriveDashboard extends SubsystemBase {
     Pose2d pos = m_drive.getPose();
     m_xPosEntry.setDouble(pos.getX());
     m_yPosEntry.setDouble(pos.getY());
+
+    m_drive.setP(mPEntry.getDouble(Constants.DriveConstants.headingP));
+    m_drive.setI(mIEntry.getDouble(Constants.DriveConstants.headingI));
+    m_drive.setD(mDEntry.getDouble(Constants.DriveConstants.headingD));
   }
 
   public boolean getFieldOriented(){
