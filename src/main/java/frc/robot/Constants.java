@@ -203,6 +203,7 @@ public final class Constants {
   // y complete
   //x is actually 2.4384
     public static final Pose2d FromCentrStartToCentrRing = new Pose2d(2.3, 0.0, new Rotation2d());
+    public static final Pose2d FromStageSideToStageRing = new Pose2d(2.3, 0.3, new Rotation2d());
   }
 
 public static final int BLINKIN_LED_PWM_CHANNEL = 0;
