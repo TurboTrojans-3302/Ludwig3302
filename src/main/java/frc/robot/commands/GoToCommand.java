@@ -27,6 +27,7 @@ public class GoToCommand extends Command {
                                                        Constants.DriveConstants.kMaxSpeedMetersPerSecond / 4.0 )); //todo use full speed;
   private State m_goal = new State(0.0, 0.0);
   private double m_startTimeMillis;
+  private boolean m_relativeFlag;
 
   private GoToCommand(DriveSubsystem drive){
     m_drive = drive;
@@ -36,6 +37,7 @@ public class GoToCommand extends Command {
   public GoToCommand(DriveSubsystem drive, Pose2d dest){
     this(drive);
     m_dest = dest;
+    m_relativeFlag = false;
   }
 
   public static GoToCommand absolute(DriveSubsystem drive, double x, double y, double heading){
@@ -51,13 +53,14 @@ public class GoToCommand extends Command {
   public GoToCommand(DriveSubsystem drive, Transform2d delta){
     this(drive);
     m_delta = delta;
+    m_relativeFlag = true;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_startTimeMillis = System.currentTimeMillis();
-    if(m_dest == null){
+    if(m_relativeFlag){
       m_dest = m_drive.getPose().plus(m_delta);
     }
   }
