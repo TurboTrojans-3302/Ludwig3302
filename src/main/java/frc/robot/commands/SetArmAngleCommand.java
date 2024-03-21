@@ -23,7 +23,9 @@ public class SetArmAngleCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("Move arm to: " + mTargetAngle);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -36,7 +38,9 @@ public class SetArmAngleCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("Finish Arm Move to" + mHarvester.getArmAngle());
+  }
 
   // Returns true when the command should end.
   @Override

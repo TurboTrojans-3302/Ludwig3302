@@ -105,12 +105,15 @@ public class DriveDashboard extends SubsystemBase {
                                     .getEntry();
     mPEntry = m_shuffleboardTab.add("P", Constants.DriveConstants.headingP)
                         .withWidget(BuiltInWidgets.kTextView)
+                        .withPosition(7, 0).withSize(1, 1)
                         .getEntry();
     mIEntry = m_shuffleboardTab.add("I", Constants.DriveConstants.headingI)
                         .withWidget(BuiltInWidgets.kTextView)
+                        .withPosition(7, 1).withSize(1, 1)
                         .getEntry();
-    mPEntry = m_shuffleboardTab.add("D", Constants.DriveConstants.headingD)
+    mDEntry = m_shuffleboardTab.add("D", Constants.DriveConstants.headingD)
                         .withWidget(BuiltInWidgets.kTextView)
+                        .withPosition(7, 2).withSize(1, 1)
                         .getEntry();
   }
 
