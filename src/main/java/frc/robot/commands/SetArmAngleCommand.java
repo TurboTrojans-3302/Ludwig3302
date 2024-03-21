@@ -4,31 +4,43 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.Harvester;
+import frc.utils.SwerveUtils;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class SetArmAngleCommand extends TrapezoidProfileCommand {
-  /** Creates a new SetArmAngleCommand. */
+public class SetArmAngleCommand extends Command {
   Harvester mHarvester;
-  public SetArmAngleCommand(Harvester harvester, Double targetAngle) {
-    super(
-        // The motion profile to be executed
-        new TrapezoidProfile(
-            // The motion profile constraints
-            new TrapezoidProfile.Constraints(Constants.harvesterConstants.MAX_ARM_SPEED,
-                                             Constants.harvesterConstants.MAX_ARM_ACCEL)),
-        state -> {
-          harvester.setArmAngle(state.position);
-        },
-        // Goal state
-        () -> new TrapezoidProfile.State(targetAngle, 0.0),
-        // Current state
-        () -> new TrapezoidProfile.State(harvester.getArmAngle(), harvester.getArmVelocity()),
-        harvester);
+  Double mTargetAngle;
+
+  /** Creates a new SetArmAngleCommand. */
+  public SetArmAngleCommand(Harvester harvester, Double angle) {
+    mHarvester = harvester;
+    mTargetAngle = angle;
+    addRequirements(mHarvester);
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    double setpoint = SwerveUtils.StepTowards(mHarvester.getArmAngle(),
+                                              mTargetAngle,
+                                              Constants.harvesterConstants.MAX_ARM_SPEED * Robot.kDefaultPeriod);
+    mHarvester.setArmAngle(setpoint);
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return mHarvester.isArmAtAngle();
   }
 }
