@@ -14,7 +14,7 @@ import frc.robot.subsystems.Harvester;
 import frc.robot.subsystems.Shooter;
 
 
-public class Intake extends Command {
+public class IntakeTimed extends Command {
 
 
  
@@ -27,7 +27,7 @@ public class Intake extends Command {
  double intakeTime;
 
 
- public Intake(Harvester harvester, double speed, double time) {
+ public IntakeTimed(Harvester harvester, double speed, double time) {
    // Use addRequirements() here to declare subsystem dependencies.
    m_harvester = harvester;
    intakeSpeed = speed;

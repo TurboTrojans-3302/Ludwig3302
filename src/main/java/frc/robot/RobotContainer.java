@@ -23,7 +23,7 @@ import frc.robot.commands.TeleopShooter;
 import frc.robot.commands.GoToCommand;
 import frc.robot.commands.Auto1Blue;
 import frc.robot.commands.Auto1Red;
-import frc.robot.commands.Auto2;
+import frc.robot.commands.SpeakerScoreTwiceCenter;
 import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
@@ -46,7 +46,7 @@ public class RobotContainer {
   private final Climbers m_climbers = new Climbers();
   Command Auto1B = new Auto1Blue(m_robotDrive, m_harvester, m_shooter);
   Command Auto1R = new Auto1Red(m_robotDrive, m_shooter, m_harvester);
-  Command Speaker2 = new Auto2(m_robotDrive, m_shooter, m_harvester);
+  Command Speaker2 = new SpeakerScoreTwiceCenter(m_robotDrive, m_shooter, m_harvester);
 
 
 

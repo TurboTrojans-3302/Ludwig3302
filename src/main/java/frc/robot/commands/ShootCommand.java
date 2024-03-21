@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Harvester;
 import frc.robot.subsystems.Shooter;
 
-public class StartSpeaker extends Command {
+public class ShootCommand extends Command {
   /** Creates a new StartSpeaker. */
   Shooter m_shooter;
   Harvester m_harvester;
   Boolean commandOver;
-  public StartSpeaker(Shooter shooter, Harvester harvester) {
+  public ShootCommand(Shooter shooter, Harvester harvester) {
     // Use addRequirements() here to declare subsystem dependencies.
     commandOver = false;
     m_harvester = harvester;

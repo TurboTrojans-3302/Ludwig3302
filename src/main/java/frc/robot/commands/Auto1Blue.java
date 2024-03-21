@@ -14,7 +14,7 @@ import frc.robot.subsystems.Harvester;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.GoToCommand;
 import frc.robot.commands.FloorPickUp;
-import frc.robot.commands.StartSpeaker;
+import frc.robot.commands.ShootCommand;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -40,7 +40,7 @@ public class Auto1Blue extends SequentialCommandGroup {
     FromCenterStartToAmp = Constants.FieldConstants.FromCentrStartToAmpBlue;
     FromCenterStartToCenterRing = Constants.FieldConstants.FromCentrStartToCentrRing;
     addCommands(
-        new StartSpeaker(m_shooter, m_harvester)
+        new ShootCommand(m_shooter, m_harvester)
         .andThen(Commands.parallel(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR),
                                    new GoToCommand(m_robotDrive, FromCenterStartToCenterRing)))
         .andThen(new FloorPickUp(m_harvester, ampAngle))
