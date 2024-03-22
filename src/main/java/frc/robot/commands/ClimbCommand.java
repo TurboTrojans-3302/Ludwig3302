@@ -36,10 +36,10 @@ public class ClimbCommand extends Command {
     double rspeed = 0.0;
   
     rspeed = m_controller.getRightY();
-    m_climbers.climberRightMove(MathUtil.applyDeadband(rspeed, DEADBAND));
+    m_climbers.climberRightMove(stick2speed(rspeed));
 
     lspeed = m_controller.getLeftY();
-    m_climbers.climberLeftMove(MathUtil.applyDeadband(lspeed, DEADBAND));
+    m_climbers.climberLeftMove(stick2speed(lspeed));
 
   }
 
@@ -54,5 +54,10 @@ public class ClimbCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  // applies deadband and scaling to raw stick value
+  private double stick2speed(double stickValue) {
+    return Math.signum(stickValue) * Math.pow(MathUtil.applyDeadband(stickValue, DEADBAND), 2);
   }
 }

@@ -65,8 +65,8 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
-    public static final double headingP = 0;
-    public static final double headingI = 0;
+    public static final double headingP = 0.02;
+    public static final double headingI = 0.0001;
     public static final double headingD = 0;
   }
 
@@ -180,8 +180,8 @@ public final class Constants {
     public static final double ANGLE_AT_DRIVE = 90;
     public static final double ANGLE_TOLERANCE = 3.0;
     
-    public static final double MAX_ARM_SPEED = 45.0; // deg/sec
-    public static final double MAX_ARM_ACCEL = 90; // deg/sec^2
+    public static final double MAX_ARM_SPEED = 90.0; // deg/sec
+    public static final double MAX_ARM_ACCEL = 180.0; // deg/sec^2
     public static final int harvesterUltraSonicAIO = 1;
   }
 

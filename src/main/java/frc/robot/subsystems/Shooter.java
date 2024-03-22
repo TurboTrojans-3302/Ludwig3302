@@ -56,10 +56,10 @@ private Double mRightVelocity;
     
 
     // PID coefficients
-    kP = 0.001; 
-    kI = 0.0002;
+    kP = 0.0003; 
+    kI = 0.0001;
     kD = 0.0; 
-    maxRPM = 3000.0;
+    maxRPM = 5700.0;
 
     mLeftPidController = new PIDController(kP, kI, kD);
     mRightPidController =  new PIDController(kP, kI, kD);
