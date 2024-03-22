@@ -53,6 +53,7 @@ private Double mRightVelocity;
 
     mUltrasonicInput = new AnalogInput(Constants.ShooterConstants.kShooterUltrasonicAIO);
     mUltrasonicInput.setAverageBits(4);
+    
 
     // PID coefficients
     kP = 0.001; 

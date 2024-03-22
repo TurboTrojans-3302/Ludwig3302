@@ -28,7 +28,7 @@ import frc.robot.Robot;
 public class Harvester extends SubsystemBase {
 
   private VictorSPX m_intakeSpx;
-  private CANSparkMax m_armSpx;
+  private VictorSPX m_armSpx;
   private DutyCycleEncoder m_ArmEncoder;
 
   private DigitalInput mBackLimitSwitch;
@@ -51,8 +51,8 @@ public class Harvester extends SubsystemBase {
 
   /** Creates a new Harvester. */
   public Harvester() {
-    m_armSpx = new CANSparkMax(Constants.harvesterConstants.kArmLiftCanId, MotorType.kBrushless);
-    m_armSpx.setIdleMode(IdleMode.kBrake);
+    m_armSpx = new VictorSPX(Constants.harvesterConstants.kArmLiftCanId);
+    m_armSpx.setNeutralMode(NeutralMode.Brake);
     m_armSpx.setInverted(true);
     m_ArmEncoder = new DutyCycleEncoder(Constants.harvesterConstants.kArmEncoderDInput);
     m_ArmEncoder.setDistancePerRotation(-360.0);
@@ -128,13 +128,13 @@ public class Harvester extends SubsystemBase {
     double limitedSpeed = MathUtil.clamp(speed, (hasNote() ? 0.0 : -1.0), 1.0);
     m_intakeSpx.set(VictorSPXControlMode.PercentOutput, limitedSpeed);
   }
-
+  
 
   public double getIntakeSpeed() {
     return m_intakeSpx.getMotorOutputPercent();
   }
 
-  public double getArmMotorOutput(){ return m_armSpx.get(); }
+  public double getArmMotorOutput(){ return m_armSpx.getMotorOutputPercent(); }
 
   public double getArmAngle() {
     double armangle = m_ArmEncoder.getDistance();
@@ -165,7 +165,7 @@ public class Harvester extends SubsystemBase {
   }
 
   private void setArmMotorPctOutput(double speed){
-    m_armSpx.set(speed);
+    m_armSpx.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
   public boolean isArmAtAngle() {
