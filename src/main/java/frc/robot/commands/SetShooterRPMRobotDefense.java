@@ -10,9 +10,9 @@ import frc.robot.subsystems.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class SetShooterRPMSpeaker extends InstantCommand {
+public class SetShooterRPMRobotDefense extends InstantCommand {
   Shooter m_shooter;
-  public SetShooterRPMSpeaker(Shooter shooter) {
+  public SetShooterRPMRobotDefense(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     addRequirements(m_shooter);
@@ -21,6 +21,6 @@ public class SetShooterRPMSpeaker extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.setRPM(3302.0);
+    m_shooter.setRPM(2550.0);
   }
 }

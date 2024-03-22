@@ -38,8 +38,12 @@ public class TeleopShooter extends Command {
       m_shooter.setRPM(m_shooter.getRPM()-50);
     }
 
-    if (m_CopilotController.getAButton()){
+    if (m_CopilotController.getYButton()){
       new SetShooterRPMSpeaker(m_shooter);
+     
+    }
+    if (m_CopilotController.getAButton()){
+      new SetShooterRPMRobotDefense(m_shooter);
      
     }
   }
