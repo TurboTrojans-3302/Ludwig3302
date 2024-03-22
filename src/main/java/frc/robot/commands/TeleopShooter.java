@@ -37,6 +37,9 @@ public class TeleopShooter extends Command {
     } else if (m_CopilotController.getPOV() == 180){
       m_shooter.setRPM(m_shooter.getRPM()-50);
     }
+     if (m_CopilotController.getYButton()){
+      new SetShooterRPMSpeaker(m_shooter);
+    }
      if (m_CopilotController.getAButton()){
       new SetShooterRPMSpeaker(m_shooter);
     }
