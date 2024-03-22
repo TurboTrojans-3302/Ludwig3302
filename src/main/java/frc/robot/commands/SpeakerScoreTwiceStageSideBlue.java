@@ -40,14 +40,14 @@ public class SpeakerScoreTwiceStageSideBlue extends SequentialCommandGroup {
         new StartPositionCommand(m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(45))),
         new ShootCommand(m_shooter, m_harvester),
         new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR), 
-        new SetIntakeSpeed(m_harvester, 1.0);
+        new SetIntakeSpeed(m_harvester, 1.0),
         new GoToCommand(m_robotDrive, new Pose2d(0.0, 0.3, Rotation2d.fromDegrees(0))),
         new GoToCommand(m_robotDrive, new Pose2d(2.438, 0.3, Rotation2d.fromDegrees(0))),
-        Commands.WaitCommand(0.5),
+        new WaitCommand(0.5),
         new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_DRIVE),
       
         new GoToCommand(m_robotDrive, new Pose2d(0.0, 0.3, Rotation2d.fromDegrees(0))),
-        new setIntakeSpeed(m_harvester, 0.0);
+        new SetIntakeSpeed(m_harvester, 0.0),
         new GoToCommand(m_robotDrive, new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(45))),
         new ShootCommand(m_shooter, m_harvester)
 
