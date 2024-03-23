@@ -9,7 +9,9 @@ import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -21,6 +23,11 @@ public class Climbers extends SubsystemBase {
   private DigitalInput mLeftBottomLimit;
   private DigitalInput mRightTopLimit;
   private DigitalInput mLeftTopLimit;
+
+  private ShuffleboardTab mShuffleboardTab;
+  private GenericEntry mRightTopLimitEntry, mLeftTopLimitEntry,
+                       mRightBottomLimitEntry, mLeftBottomLimitEntry;
+
 
 
   /** Creates a new Climbers. */
