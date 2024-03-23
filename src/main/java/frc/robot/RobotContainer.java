@@ -75,7 +75,7 @@ public class RobotContainer {
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("Do Nothing", new DoNothing());
     m_autonomousChooser.addOption("StartSpeaker", new StartSpeaker(m_shooter, m_harvester));
-    m_autonomousChooser.addOption("Fwd2Meters", GoToCommand.relative(m_robotDrive, 2.0, 0.0, 0.0));
+    m_autonomousChooser.addOption("Fwd2Meters", GoToCommand.relative(m_robotDrive, -1.0, 0.0, 0.0));
     m_autonomousChooser.addOption("Shoot and Cross", new ShootAndCross(m_robotDrive, m_shooter, m_harvester));
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
