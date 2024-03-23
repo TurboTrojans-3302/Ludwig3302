@@ -127,8 +127,13 @@ public class RobotContainer {
                                  m_harvester));
     
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-        .whileTrue(new RunCommand(() -> m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeed),
-                                 m_harvester));                             
+        .whileTrue(new RunCommand(() -> {
+                                          if(m_harvester.getArmAngle() > 90){
+                                              m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeed);
+                                          }else{
+                                              m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeedSlow);
+                                          }
+                                        }, m_harvester));                             
   }
 
   /**
