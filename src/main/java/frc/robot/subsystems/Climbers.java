@@ -42,16 +42,16 @@ public class Climbers extends SubsystemBase {
   }
 
   public void climberRightMove(double speed) {
-    if(rightFullyContracted()){ speed = Math.max(speed, 0.0); }
+    //if(rightFullyContracted()){ speed = Math.max(speed, 0.0); }
   m_climberRight.set(VictorSPXControlMode.PercentOutput, speed);
 
   }
 
   public void climberLeftMove(double speed) {
-    if(leftFullyContracted()){ speed = Math.max(speed, 0.0); }
+    //if(leftFullyContracted()){ speed = Math.max(speed, 0.0); }
     m_climberLeft.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
-  public boolean leftFullyContracted(){ return !mLeftBottomLimit.get(); }
-  public boolean rightFullyContracted(){ return !mRightBottomLimit.get(); }
+  public boolean leftFullyContracted(){ return mLeftBottomLimit.get(); }
+  public boolean rightFullyContracted(){ return mRightBottomLimit.get(); }
 }

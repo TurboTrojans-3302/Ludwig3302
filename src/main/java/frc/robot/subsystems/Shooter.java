@@ -28,8 +28,8 @@ public class Shooter extends SubsystemBase {
   private RelativeEncoder mLeftEncoder, mRightEncoder;
   private Double kP, kI, kD, maxRPM;
   public Double mSetpoint;
-private Double mLeftVelocity;
-private Double mRightVelocity;
+  public Double mLeftVelocity;
+  private Double mRightVelocity;
   private AnalogInput mUltrasonicInput;
 
   
@@ -56,9 +56,9 @@ private Double mRightVelocity;
     
 
     // PID coefficients
-    kP = 0.0003; 
+    kP = 0.0006; 
     kI = 0.0001;
-    kD = 0.0; 
+    kD = 0.00002; 
     maxRPM = 5700.0;
 
     mLeftPidController = new PIDController(kP, kI, kD);
@@ -153,12 +153,12 @@ private Double mRightVelocity;
     mSetpoint = MathUtil.clamp(speed, 0.0, maxRPM);
   }
 
-  public double getRPM(){
+  public double getRPMsetpoint(){
     return mSetpoint;
   }
   
-  private Double errL() { return mLeftVelocity - mSetpoint; };
-  private Double errR() { return mRightVelocity - mSetpoint; };
+  public Double errL() { return mLeftVelocity - mSetpoint; };
+  public Double errR() { return mRightVelocity - mSetpoint; };
 
   public boolean speedIsReady(){
     return mRightPidController.atSetpoint() && mLeftPidController.atSetpoint();

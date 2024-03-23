@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    m_robotContainer.setLED(REVBlinkinLED.Pattern.BREATH_GRAY);
+    m_robotContainer.setLED(REVBlinkinLED.Pattern.SOLID_VIOLET);
   }
 
   @Override
@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     setLED(LEDmode.Auton);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    System.out.println("Auton: " + m_autonomousCommand.getName());
     m_robotContainer.setStartPosition();
 
     // schedule the autonomous command (example)

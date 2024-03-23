@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Shooter;
 
 
@@ -33,9 +32,9 @@ public class TeleopShooter extends Command {
   public void execute() {
     //should work because execute is called every 20ms.
     if (m_CopilotController.getPOV() == 0){
-      m_shooter.setRPM(m_shooter.getRPM()+50);
+      m_shooter.setRPM(m_shooter.getRPMsetpoint()+50);
     } else if (m_CopilotController.getPOV() == 180){
-      m_shooter.setRPM(m_shooter.getRPM()-50);
+      m_shooter.setRPM(m_shooter.getRPMsetpoint()-50);
     }
 
     if (m_CopilotController.getYButton()){
@@ -51,7 +50,7 @@ public class TeleopShooter extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.setRPM(0);
+    m_shooter.setRPM(0.0);
   }
 
   // Returns true when the command should end.

@@ -45,7 +45,7 @@ public class TeleopDrive extends Command {
       m_robotDrive.drive(
                     stick2speed(-0.25 * m_driverController.getLeftY()),
                     stick2speed(-0.25 * m_driverController.getLeftX()),
-                    stick2speed(-0.25 * m_driverController.getRightX()),
+                    stick2speed(-0.5 * m_driverController.getRightX()),
                     m_DriveDashboard.getFieldOriented(),
                     true);}
   }

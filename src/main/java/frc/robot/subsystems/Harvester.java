@@ -9,9 +9,6 @@ import java.util.Map;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
@@ -63,7 +60,7 @@ public class Harvester extends SubsystemBase {
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
     mBackLimitSwitch = new DigitalInput(Constants.harvesterConstants.kBackLimitSwitchInputID);
 
-    mPid = new PIDController(0.005, 0.0, 0.0);
+    mPid = new PIDController(0.004, 0.0002, 0.0);
     mPid.setTolerance(Constants.harvesterConstants.ANGLE_TOLERANCE);
 
     mArmSetpoint = getArmAngle();

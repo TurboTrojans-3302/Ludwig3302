@@ -160,7 +160,7 @@ public final class Constants {
     public static final int kShooterRightCanId = 13;
     public static final int kLeftTachDIO = 2;
     public static final int kRightTachDIO = 3;
-    public static final double RPM_TOLERANCE = 20;
+    public static final double RPM_TOLERANCE = 30;
     public static final int kShooterUltrasonicAIO = 0;
   }
 
@@ -190,6 +190,7 @@ public final class Constants {
   }
 
   public static final class FieldConstants {
+    public static final Pose2d StartPoseZeroZero = new Pose2d(0.0, 0.0, new Rotation2d());
     public static final Pose2d StartPositionLeft = new Pose2d(0.35, 0.0, new Rotation2d());
     public static final Pose2d StartPositionCenter = new Pose2d(0.35, 0.0, new Rotation2d());
     public static final Pose2d StartPositionRight = new Pose2d(0.35, 0.0, new Rotation2d());

@@ -16,6 +16,8 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.SetArmAngleCommand;
+import frc.robot.commands.ShootAndCross;
+import frc.robot.commands.StartSpeaker;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
 import frc.robot.commands.TeleopShooter;
@@ -72,11 +74,14 @@ public class RobotContainer {
     
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("Do Nothing", new DoNothing());
-    m_autonomousChooser.addOption("CrossTheLine", GoToCommand.relative(m_robotDrive, 1.0, 0.0, 90.0));
+    m_autonomousChooser.addOption("StartSpeaker", new StartSpeaker(m_shooter, m_harvester));
+    m_autonomousChooser.addOption("Fwd2Meters", GoToCommand.relative(m_robotDrive, 2.0, 0.0, 0.0));
+    m_autonomousChooser.addOption("Shoot and Cross", new ShootAndCross(m_robotDrive, m_shooter, m_harvester));
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
-    m_startPosChooser.setDefaultOption("Left", Constants.FieldConstants.StartPositionLeft);
+    m_startPosChooser.setDefaultOption("ZeroZero", Constants.FieldConstants.StartPoseZeroZero);
+    m_startPosChooser.addOption("Left", Constants.FieldConstants.StartPositionLeft);
     m_startPosChooser.addOption("Center", Constants.FieldConstants.StartPositionCenter);
     m_startPosChooser.addOption("Right", Constants.FieldConstants.StartPositionRight);
     m_shuffleboardTab.add("Start Position", m_startPosChooser);
