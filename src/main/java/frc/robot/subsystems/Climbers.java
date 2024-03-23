@@ -26,6 +26,25 @@ public class Climbers extends SubsystemBase {
   private DigitalInput mRightTopLimit;
   private DigitalInput mLeftTopLimit;
 
+  private boolean leftTopLimitOverride = false;
+  private boolean rightTopLimitOverride = false;
+
+  public boolean isRightTopLimitOverride() {
+    return rightTopLimitOverride;
+  }
+
+  public void setRightTopLimitOverride(boolean rightTopLimitOverride) {
+    this.rightTopLimitOverride = rightTopLimitOverride;
+  }
+
+  public boolean isLeftTopLimitOverride() {
+    return leftTopLimitOverride;
+  }
+
+  public void setLeftTopLimitOverride(boolean topLimitOverride) {
+    this.leftTopLimitOverride = topLimitOverride;
+  }
+
   private ShuffleboardTab mShuffleboardTab;
   private GenericEntry mRightTopLimitEntry, mLeftTopLimitEntry,
                        mRightBottomLimitEntry, mLeftBottomLimitEntry;
@@ -69,13 +88,17 @@ public class Climbers extends SubsystemBase {
   }
 
   public void climberRightMove(double speed) {
-    if(rightFullyContracted()){ speed = Math.max(speed, 0.0); }
-  m_climberRight.set(VictorSPXControlMode.PercentOutput, speed);
 
+    if(rightFullyContracted() || (rightAlmostContracted() && !rightTopLimitOverride)){
+       speed = Math.max(speed, 0.0);
+    }
+    m_climberRight.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
   public void climberLeftMove(double speed) {
-    if(leftFullyContracted()){ speed = Math.max(speed, 0.0); }
+    if(leftFullyContracted() || (leftAlmostConracted() && !leftTopLimitOverride)){ 
+      speed = Math.max(speed, 0.0); 
+    }
     m_climberLeft.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
