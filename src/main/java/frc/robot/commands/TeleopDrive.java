@@ -39,7 +39,7 @@ public class TeleopDrive extends Command {
                     stick2speed(-m_driverController.getLeftX()),
                     stick2speed(-m_driverController.getRightX()),
                     m_DriveDashboard.getFieldOriented(),
-                    true);
+                    false);
     } 
     else if (m_driverController.getRightTriggerAxis() > 0.5) {
       m_robotDrive.drive(
@@ -47,7 +47,7 @@ public class TeleopDrive extends Command {
                     stick2speed(-0.25 * m_driverController.getLeftX()),
                     stick2speed(-0.5 * m_driverController.getRightX()),
                     m_DriveDashboard.getFieldOriented(),
-                    true);}
+                    false);}
   }
 
   // applies deadband and scaling to raw stick value

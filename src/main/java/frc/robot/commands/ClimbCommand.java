@@ -35,7 +35,7 @@ public class ClimbCommand extends Command {
     double lspeed = 0.0;
     double rspeed = 0.0;
   
-    rspeed = m_controller.getRightY();
+    rspeed = -m_controller.getRightY();
     m_climbers.climberRightMove(stick2speed(rspeed));
 
     lspeed = m_controller.getLeftY();
