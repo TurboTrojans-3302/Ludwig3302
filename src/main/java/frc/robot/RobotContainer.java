@@ -82,7 +82,7 @@ public class RobotContainer {
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
-    m_startPosChooser.setDefaultOption("ZeroZero", Constants.FieldConstants.ZeroZero);
+    m_startPosChooser.setDefaultOption("ZeroZero", Constants.FieldConstants.StartPoseZeroZero);
     m_startPosChooser.addOption("Left +30", new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(30.0)));
     m_startPosChooser.addOption("Right -30", new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(-30.0)));
     m_shuffleboardTab.add("Start Position", m_startPosChooser);
@@ -128,8 +128,13 @@ public class RobotContainer {
                                  m_harvester));
     
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-        .whileTrue(new RunCommand(() -> m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeed),
-                                 m_harvester));                             
+        .whileTrue(new RunCommand(() -> {
+                                          if(m_harvester.getArmAngle() > 90){
+                                              m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeed);
+                                          }else{
+                                              m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeedSlow);
+                                          }
+                                        }, m_harvester));                             
   }
 
   /**

@@ -21,16 +21,25 @@ public class StartSpeaker extends Command {
     commandOver = false;
     m_harvester = harvester;
     m_shooter = shooter;
-   addRequirements(m_harvester);
+   addRequirements(m_shooter, m_harvester);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.setRPM(1500);
-    Commands.waitSeconds(0.25);
+    m_shooter.setRPM(3302.0);
+    System.out.println("setpoint is: " + m_shooter.getRPMsetpoint());
+    System.out.println("velocity L" + m_shooter.mLeftVelocity);
+    Commands.waitSeconds(10.0);
+    System.out.println("waiting for rpm");
+    System.out.println("setpoint is: " + m_shooter.getRPMsetpoint());
+    System.out.println("velocity L" + m_shooter.mLeftVelocity);
+    Commands.waitUntil(()->{ return m_shooter.speedIsReady();});
+    System.out.println("ready!");
     m_harvester.setIntakeSpeed(-1.0);
-    Commands.waitSeconds(0.75);
+    Commands.waitSeconds(1.0);
+    m_shooter.setRPM(0.0);
+    m_harvester.setIntakeSpeed(0.0);
     commandOver = true;
 
   }

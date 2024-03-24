@@ -160,7 +160,7 @@ public final class Constants {
     public static final int kShooterRightCanId = 13;
     public static final int kLeftTachDIO = 2;
     public static final int kRightTachDIO = 3;
-    public static final double RPM_TOLERANCE = 20;
+    public static final double RPM_TOLERANCE = 30;
     public static final int kShooterUltrasonicAIO = 0;
   }
 
@@ -183,6 +183,7 @@ public final class Constants {
     public static final double MAX_ARM_SPEED = 90.0; // deg/sec
     public static final double MAX_ARM_ACCEL = 180.0; // deg/sec^2
     public static final int harvesterUltraSonicAIO = 1;
+    public static final double outSpeedSlow = 0.5;
   }
 
   public static final class NeoMotorConstants {
@@ -190,7 +191,10 @@ public final class Constants {
   }
 
   public static final class FieldConstants {
-    public static final Pose2d ZeroZero = new Pose2d(0.0, 0.0, new Rotation2d());
+    public static final Pose2d StartPoseZeroZero = new Pose2d(0.0, 0.0, new Rotation2d());
+    public static final Pose2d StartPositionLeft = new Pose2d(0.35, 0.0, new Rotation2d());
+    public static final Pose2d StartPositionCenter = new Pose2d(0.35, 0.0, new Rotation2d());
+    public static final Pose2d StartPositionRight = new Pose2d(0.35, 0.0, new Rotation2d());
   }
 
 public static final int BLINKIN_LED_PWM_CHANNEL = 0;

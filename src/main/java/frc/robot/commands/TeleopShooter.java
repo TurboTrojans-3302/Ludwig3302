@@ -32,16 +32,25 @@ public class TeleopShooter extends Command {
   public void execute() {
     //should work because execute is called every 20ms.
     if (m_CopilotController.getPOV() == 0){
-      m_shooter.setRPM(m_shooter.getRPM()+50);
+      m_shooter.setRPM(m_shooter.getRPMsetpoint()+50);
     } else if (m_CopilotController.getPOV() == 180){
-      m_shooter.setRPM(m_shooter.getRPM()-50);
+      m_shooter.setRPM(m_shooter.getRPMsetpoint()-50);
+    }
+
+    if (m_CopilotController.getYButton()){
+      new SetShooterRPMSpeaker(m_shooter);
+     
+    }
+    if (m_CopilotController.getAButton()){
+      new SetShooterRPMRobotDefense(m_shooter);
+     
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.setRPM(0);
+    m_shooter.setRPM(0.0);
   }
 
   // Returns true when the command should end.
