@@ -16,12 +16,11 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.SetArmAngleCommand;
-import frc.robot.commands.ShootAndCross;
-import frc.robot.commands.StartSpeaker;
+import frc.robot.commands.SetIntakeCommand;
+import frc.robot.commands.SpinUpShooter;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
 import frc.robot.commands.TeleopShooter;
-import frc.robot.commands.GoToCommand;
 import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
@@ -74,9 +73,10 @@ public class RobotContainer {
     
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("Do Nothing", new DoNothing());
-    m_autonomousChooser.addOption("StartSpeaker", new StartSpeaker(m_shooter, m_harvester));
-    m_autonomousChooser.addOption("Fwd2Meters", GoToCommand.relative(m_robotDrive, -1.0, 0.0, 0.0));
-    m_autonomousChooser.addOption("Shoot and Cross", new ShootAndCross(m_robotDrive, m_shooter, m_harvester));
+    m_autonomousChooser.addOption("Just Shoot", new SpinUpShooter(m_shooter, 3302)
+                                            .andThen(new SetIntakeCommand(m_harvester,
+                                                                Constants.harvesterConstants.outSpeed,
+                                                           0.75)));
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();

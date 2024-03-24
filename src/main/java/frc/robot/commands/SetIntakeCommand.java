@@ -4,27 +4,30 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.Harvester;
-import frc.robot.subsystems.Shooter;
 
-public class SpinUpShooter extends Command {
-  Shooter mShooter;
-  Harvester mHarvester;
-  double targetRPM;
-  /** Creates a new SpinUpShooter. */
-  public SpinUpShooter(Shooter shooter, double rpm) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    mShooter = shooter;
-    targetRPM = rpm;
-    addRequirements(shooter);
+public class SetIntakeCommand extends Command {
+  private Harvester harvester;
+  private double speed;
+  private double time;
+  private Timer timer;
+
+  /** Creates a new SetIntakeCommand. */
+  public SetIntakeCommand(Harvester harvester, double speed, double time) {
+    this.harvester = harvester;
+    this.speed = speed;
+    this.time = time;
+    addRequirements(harvester);
+    timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mShooter.setRPM(targetRPM);
+    harvester.setIntakeSpeed(speed);
+    timer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,11 +36,13 @@ public class SpinUpShooter extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    harvester.setIntakeSpeed(0.0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return mShooter.speedIsReady();
+    return timer.hasElapsed(time);
   }
 }
