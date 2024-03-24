@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -80,9 +81,9 @@ public class RobotContainer {
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
-    m_startPosChooser.setDefaultOption("Left", Constants.FieldConstants.StartPositionLeft);
-    m_startPosChooser.addOption("Center", Constants.FieldConstants.StartPositionCenter);
-    m_startPosChooser.addOption("Right", Constants.FieldConstants.StartPositionRight);
+    m_startPosChooser.setDefaultOption("ZeroZero", Constants.FieldConstants.ZeroZero);
+    m_startPosChooser.addOption("Left +30", new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(30.0)));
+    m_startPosChooser.addOption("Right -30", new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(-30.0)));
     m_shuffleboardTab.add("Start Position", m_startPosChooser);
 
     m_shuffleboardTab.add("Floor", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR));

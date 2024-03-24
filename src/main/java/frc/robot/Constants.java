@@ -190,9 +190,7 @@ public final class Constants {
   }
 
   public static final class FieldConstants {
-    public static final Pose2d StartPositionLeft = new Pose2d(0.35, 0.0, new Rotation2d());
-    public static final Pose2d StartPositionCenter = new Pose2d(0.35, 0.0, new Rotation2d());
-    public static final Pose2d StartPositionRight = new Pose2d(0.35, 0.0, new Rotation2d());
+    public static final Pose2d ZeroZero = new Pose2d(0.0, 0.0, new Rotation2d());
   }
 
 public static final int BLINKIN_LED_PWM_CHANNEL = 0;
