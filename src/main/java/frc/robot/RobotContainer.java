@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -17,12 +18,11 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.SetArmAngleCommand;
-import frc.robot.commands.ShooterCycle;
-import frc.robot.commands.JustShoot;
+import frc.robot.commands.SetIntakeCommand;
+import frc.robot.commands.SpinUpShooter;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
 import frc.robot.commands.TeleopShooter;
-import frc.robot.commands.GoToCommand;
 import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
@@ -75,14 +75,16 @@ public class RobotContainer {
     
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("Do Nothing", new DoNothing());
-    m_autonomousChooser.addOption("Just Shoot", new JustShoot(m_shooter, m_harvester, 3302)
-                                    .andThen(Commands.waitSeconds(0.5)));
+    m_autonomousChooser.addOption("Just Shoot", new SpinUpShooter(m_shooter, 3302)
+                                            .andThen(new SetIntakeCommand(m_harvester,
+                                                                Constants.harvesterConstants.outSpeed,
+                                                           0.75)));
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
-    m_startPosChooser.setDefaultOption("Left", Constants.FieldConstants.StartPositionLeft);
-    m_startPosChooser.addOption("Center", Constants.FieldConstants.StartPositionCenter);
-    m_startPosChooser.addOption("Right", Constants.FieldConstants.StartPositionRight);
+    m_startPosChooser.setDefaultOption("ZeroZero", Constants.FieldConstants.ZeroZero);
+    m_startPosChooser.addOption("Left +30", new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(30.0)));
+    m_startPosChooser.addOption("Right -30", new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(-30.0)));
     m_shuffleboardTab.add("Start Position", m_startPosChooser);
 
     m_shuffleboardTab.add("Floor", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR));
