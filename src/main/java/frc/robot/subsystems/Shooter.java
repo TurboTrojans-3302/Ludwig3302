@@ -15,6 +15,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -26,13 +27,18 @@ public class Shooter extends SubsystemBase {
   private CANSparkMax m_leftMotor, m_rightMotor;
   private PIDController mLeftPidController, mRightPidController;
   private RelativeEncoder mLeftEncoder, mRightEncoder;
-  private Double kP, kI, kD, maxRPM;
+  private Double kP, kI, kD, maxRPM, kDwellTime;
   public Double mSetpoint;
   public Double mLeftVelocity;
   private Double mRightVelocity;
   private AnalogInput mUltrasonicInput;
-
+  private boolean fullPower = false;
+  private Timer timer = new Timer();
   
+  public void setFullPower(boolean fullPower) {
+    this.fullPower = fullPower;
+  }
+
   private ShuffleboardTab mShuffleboardTab;
   private GenericEntry mSetpointEntry, mLeftErrEntry, mRightErrEntry,
                        mSpeedReadyEntry, mUltrasonicInputEntry,
@@ -53,13 +59,16 @@ public class Shooter extends SubsystemBase {
 
     mUltrasonicInput = new AnalogInput(Constants.ShooterConstants.kShooterUltrasonicAIO);
     mUltrasonicInput.setAverageBits(4);
-    
+
+    timer.restart();
 
     // PID coefficients
     kP = 0.0006; 
     kI = 0.0001;
-    kD = 0.00002; 
+    kD = 0.00005; 
     maxRPM = 5700.0;
+    kDwellTime = 0.10;
+
 
     mLeftPidController = new PIDController(kP, kI, kD);
     mRightPidController =  new PIDController(kP, kI, kD);
@@ -134,22 +143,30 @@ public class Shooter extends SubsystemBase {
       leftOutput = 0.0;
     }
 
-    m_leftMotor.set(MathUtil.clamp(leftOutput, -1.0, 1.0));
-    m_rightMotor.set(MathUtil.clamp(rightOutput, -1.0, 1.0));
+    if(fullPower){
+      m_leftMotor.set(1.0);
+      m_rightMotor.set(1.0);
+    }else{
+      m_leftMotor.set(MathUtil.clamp(leftOutput, -1.0, 1.0));
+      m_rightMotor.set(MathUtil.clamp(rightOutput, -1.0, 1.0));
+    }
 
+    if(!atSetpoint()){ timer.restart(); }
+    
     mSetpointEntry.setDouble(mSetpoint);
     mLeftErrEntry.setDouble(errL());
     mRightErrEntry.setDouble(errR());
     mSpeedReadyEntry.setBoolean(speedIsReady());
     mUltrasonicInputEntry.setDouble(mUltrasonicInput.getAccumulatorValue());
-    mLeftVelEntry.setDouble(mLeftVelocity);
-    mRightVelEntry.setDouble(mRightVelocity);
+    mLeftVelEntry.setInteger(mLeftVelocity.intValue());
+    mRightVelEntry.setInteger(mRightVelocity.intValue());
     mLeftOutputEntry.setDouble(m_leftMotor.get());
     mRightOuputEntry.setDouble(m_rightMotor.get());
     
   }
   
   public void setRPM(double speed) {
+    fullPower = false;
     mSetpoint = MathUtil.clamp(speed, 0.0, maxRPM);
   }
 
@@ -160,8 +177,12 @@ public class Shooter extends SubsystemBase {
   public Double errL() { return mLeftVelocity - mSetpoint; };
   public Double errR() { return mRightVelocity - mSetpoint; };
 
-  public boolean speedIsReady(){
+  public boolean atSetpoint(){
     return mRightPidController.atSetpoint() && mLeftPidController.atSetpoint();
+  }
+
+  public boolean speedIsReady(){
+    return atSetpoint() && timer.hasElapsed(kDwellTime);
   }
 
   public double sensorDistance(){

@@ -19,6 +19,7 @@ import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.SetArmAngleCommand;
 import frc.robot.commands.SetIntakeCommand;
+import frc.robot.commands.ShooterFullPower;
 import frc.robot.commands.SpinUpShooter;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
