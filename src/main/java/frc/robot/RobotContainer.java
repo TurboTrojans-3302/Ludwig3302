@@ -10,12 +10,15 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.SetArmAngleCommand;
+import frc.robot.commands.ShooterCycle;
+import frc.robot.commands.JustShoot;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
 import frc.robot.commands.TeleopShooter;
@@ -72,7 +75,8 @@ public class RobotContainer {
     
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("Do Nothing", new DoNothing());
-    m_autonomousChooser.addOption("CrossTheLine", GoToCommand.relative(m_robotDrive, 1.0, 0.0, 90.0));
+    m_autonomousChooser.addOption("Just Shoot", new JustShoot(m_shooter, m_harvester, 3302)
+                                    .andThen(Commands.waitSeconds(0.5)));
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();

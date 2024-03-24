@@ -9,12 +9,14 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Harvester;
 import frc.robot.subsystems.Shooter;
 
-public class SpinUpShooter extends Command {
+public class JustShoot extends Command {
   Shooter mShooter;
   Harvester mHarvester;
   double targetRPM;
+  int step = 0;
+  
   /** Creates a new SpinUpShooter. */
-  public SpinUpShooter(Shooter shooter, Harvester harvester, double rpm) {
+  public JustShoot(Shooter shooter, Harvester harvester, double rpm) {
     // Use addRequirements() here to declare subsystem dependencies.
     mShooter = shooter;
     mHarvester = harvester;
