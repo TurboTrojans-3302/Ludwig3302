@@ -43,8 +43,8 @@ public class TeleopDrive extends Command {
     } 
     else if (m_driverController.getRightTriggerAxis() > 0.5) {
       m_robotDrive.drive(
-                    stick2speed(-0.25 * m_driverController.getLeftY()),
-                    stick2speed(-0.25 * m_driverController.getLeftX()),
+                    stick2speed(-0.5 * m_driverController.getLeftY()),
+                    stick2speed(-0.5 * m_driverController.getLeftX()),
                     stick2speed(-0.5 * m_driverController.getRightX()),
                     true,
                     false);}

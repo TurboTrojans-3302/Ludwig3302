@@ -126,6 +126,7 @@ public class Harvester extends SubsystemBase {
     m_intakeSpx.set(VictorSPXControlMode.PercentOutput, limitedSpeed);
   }
   
+  
 
   public double getIntakeSpeed() {
     return m_intakeSpx.getMotorOutputPercent();
