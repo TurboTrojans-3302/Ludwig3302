@@ -23,8 +23,8 @@ public class GoToCommand extends Command {
   private Pose2d m_dest;
   private Transform2d m_delta;
   private DriveSubsystem m_drive;
-  private TrapezoidProfile m_trapezoid = new TrapezoidProfile(new Constraints(Constants.DriveConstants.kMaxSpeedMetersPerSecond  / 8.0,
-                                                       Constants.DriveConstants.kMaxSpeedMetersPerSecond / 16.0 )); //todo use full speed;
+  private TrapezoidProfile m_trapezoid = new TrapezoidProfile(new Constraints(Constants.DriveConstants.kMaxSpeedMetersPerSecond  / 2.0,
+                                                       Constants.DriveConstants.kMaxSpeedMetersPerSecond / 4.0 )); //todo use full speed;
   private State m_goal = new State(0.0, 0.0);
   private double m_startTimeMillis;
   private boolean m_relativeFlag;
