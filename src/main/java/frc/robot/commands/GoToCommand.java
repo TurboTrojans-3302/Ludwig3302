@@ -23,8 +23,8 @@ public class GoToCommand extends Command {
   private Pose2d m_dest;
   private Transform2d m_delta;
   private DriveSubsystem m_drive;
-  private TrapezoidProfile m_trapezoid = new TrapezoidProfile(new Constraints(Constants.DriveConstants.kMaxSpeedMetersPerSecond  / 2.0,
-                                                       Constants.DriveConstants.kMaxSpeedMetersPerSecond / 4.0 )); //todo use full speed;
+  private TrapezoidProfile m_trapezoid = new TrapezoidProfile(new Constraints(Constants.DriveConstants.kMaxSpeedMetersPerSecond  / 8.0,
+                                                       Constants.DriveConstants.kMaxSpeedMetersPerSecond / 16.0 )); //todo use full speed;
   private State m_goal = new State(0.0, 0.0);
   private double m_startTimeMillis;
   private boolean m_relativeFlag;
@@ -63,6 +63,7 @@ public class GoToCommand extends Command {
     if(m_relativeFlag){
       m_dest = m_drive.getPose().plus(m_delta);
     }
+    System.out.println("Starting go to: " + m_dest);
   }
 
   private Translation2d translation2dest(){
@@ -79,7 +80,7 @@ public class GoToCommand extends Command {
 
   private double calculateSpeed(){
     State currentState = new State(distance(), m_drive.getSpeed());
-    return m_trapezoid.calculate(t(), currentState, m_goal).velocity;
+    return -m_trapezoid.calculate(t(), currentState, m_goal).velocity;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -88,6 +89,8 @@ public class GoToCommand extends Command {
     double speed = calculateSpeed();
     Translation2d unitTranslation = translation2dest().div(translation2dest().getNorm());
     double turn = m_drive.turnToHeading(m_dest.getRotation().getDegrees());
+
+
     m_drive.drive(unitTranslation.times(speed), turn);
   }
 
@@ -95,6 +98,7 @@ public class GoToCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_drive.setAll(0.0, 0.0);
+    System.out.println("End go to: " + m_drive.getPose());
   }
 
   // Returns true when the command should end.

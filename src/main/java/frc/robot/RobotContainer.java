@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DoNothing;
+import frc.robot.commands.GoToCommand;
 import frc.robot.commands.SetArmAngleCommand;
 import frc.robot.commands.SetIntakeCommand;
 import frc.robot.commands.ShooterFullPower;
@@ -76,9 +77,13 @@ public class RobotContainer {
     m_shuffleboardTab = Shuffleboard.getTab("Game");
     
     m_autonomousChooser = new SendableChooser<Command>();
-    m_autonomousChooser.setDefaultOption("Do Nothing", new DoNothing());
-    m_autonomousChooser.addOption("Just Shoot", new JustShoot(m_shooter, m_harvester, 3302)
-                                    .andThen(Commands.waitSeconds(0.5)));
+    m_autonomousChooser.setDefaultOption("forward then left", GoToCommand.absolute(m_robotDrive, 1.5, 0.0, 0.0)
+                                                                  .andThen(GoToCommand.absolute(m_robotDrive, 1.5, 3.0, 90)));
+    
+    m_autonomousChooser.addOption("Just Shoot", new SpinUpShooter(m_shooter, 3302)
+                                            .andThen(new SetIntakeCommand(m_harvester,
+                                                                Constants.harvesterConstants.outSpeed,
+                                                           0.75)));
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
