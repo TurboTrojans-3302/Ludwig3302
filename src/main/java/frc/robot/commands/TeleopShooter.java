@@ -31,18 +31,19 @@ public class TeleopShooter extends Command {
   @Override
   public void execute() {
     //should work because execute is called every 20ms.
-    if (m_CopilotController.getPOV() == 0){
+    if (m_CopilotController.getPOV() >= 315 && m_CopilotController.getPOV() <= 45){
       m_shooter.setRPM(m_shooter.getRPMsetpoint()+50);
-    } else if (m_CopilotController.getPOV() == 180){
+    } else if (m_CopilotController.getPOV() >= 135 && m_CopilotController.getPOV() <= 225){
       m_shooter.setRPM(m_shooter.getRPMsetpoint()-50);
     }
-
+    //shooting touching speaker
     if (m_CopilotController.getYButton()){
-      new SetShooterRPMSpeaker(m_shooter);
-     
+      m_shooter.setRPM(3302.0);
+   
     }
+    //shooting with a robot in front/from a few feet
     if (m_CopilotController.getAButton()){
-      new SetShooterRPMRobotDefense(m_shooter);
+      m_shooter.setRPM(2650.0);
      
     }
   }
