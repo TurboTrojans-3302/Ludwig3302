@@ -173,4 +173,14 @@ public class Harvester extends SubsystemBase {
   public double getRange(){
     return mUltrasonicInput.getValue();
   }
+
+  public void armToFloor(double speed, double armAngle){
+   
+      mArmSetpoint = Constants.harvesterConstants.ANGLE_AT_FLOOR;
+      setArmMotorPctOutput(speed);
+      reducedSpeed = speed/1.5;
+      if (armAngle < -30){
+        setArmMotorPctOutput(reducedSpeed);
+    }
+  }
  }

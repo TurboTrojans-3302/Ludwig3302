@@ -41,6 +41,7 @@ public class TeleopHarvester extends Command {
      }
      else if (m_controller.getLeftBumper()) {
       double angle = m_harvester.getArmAngle();
+
       if( angle > 10 && angle < 100 ){
         harvesterSpeed = 0.75;
       }else{
@@ -52,10 +53,13 @@ public class TeleopHarvester extends Command {
      }
     m_harvester.setIntakeSpeed(harvesterSpeed);
 
+    if (m_controller.getAButton()){
+        m_harvester.armToFloor(0.90, m_harvester.getArmAngle());
+      } else {
+
     armSpeed = (m_controller.getRightTriggerAxis() - m_controller.getLeftTriggerAxis());
     mSetpoint += armSpeed * 2.0;
-    m_harvester.setArmAngle(mSetpoint);
-
+    m_harvester.setArmAngle(mSetpoint);}
   }
 
   // Called once the command ends or is interrupted.
