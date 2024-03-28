@@ -37,12 +37,12 @@ public class TeleopShooter extends Command {
       m_shooter.setRPM(m_shooter.getRPMsetpoint()-50);
     }
     //shooting touching speaker
-    if (m_CopilotController.getYButton()){
+    if (m_CopilotController.getPOV() == 270){
       m_shooter.setRPM(3302.0);
    
     }
     //shooting with a robot in front/from a few feet
-    if (m_CopilotController.getAButton()){
+    if (m_CopilotController.getPOV() == 90){
       m_shooter.setRPM(2650.0);
      
     }

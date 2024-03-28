@@ -174,13 +174,20 @@ public class Harvester extends SubsystemBase {
     return mUltrasonicInput.getValue();
   }
 
-  public void armToFloor(double speed, double armAngle){
+  public void armToAngleFast(double speed, double armSetpoint){
    
-      mArmSetpoint = Constants.harvesterConstants.ANGLE_AT_FLOOR;
+      mArmSetpoint = armSetpoint;
       setArmMotorPctOutput(speed);
-      reducedSpeed = speed/1.5;
-      if (armAngle < -30){
-        setArmMotorPctOutput(reducedSpeed);
+      double normalSpeed = 0.75;
+    if (armSetpoint == Constants.harvesterConstants.ANGLE_AT_FLOOR){
+      if (getArmAngle() < -30.0){
+        setArmMotorPctOutput(normalSpeed);
+    }
+  } else if (armSetpoint == Constants.harvesterConstants.ANGLE_AT_SPEAKER){
+    if (getArmAngle() > 120.0){
+      setArmMotorPctOutput(normalSpeed);
     }
   }
+  
+
  }

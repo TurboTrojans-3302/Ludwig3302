@@ -54,7 +54,9 @@ public class TeleopHarvester extends Command {
     m_harvester.setIntakeSpeed(harvesterSpeed);
 
     if (m_controller.getAButton()){
-        m_harvester.armToFloor(0.90, m_harvester.getArmAngle());
+        m_harvester.armToAngleFast(0.90, Constants.harvesterConstants.ANGLE_AT_FLOOR);
+      } else if (m_controller.getYButton()){
+        m_harvester.armToAngleFast(-0.90, Constants.harvesterConstants.ANGLE_AT_SPEAKER);
       } else {
 
     armSpeed = (m_controller.getRightTriggerAxis() - m_controller.getLeftTriggerAxis());

@@ -160,7 +160,7 @@ public final class Constants {
     public static final int kShooterRightCanId = 13;
     public static final int kLeftTachDIO = 2;
     public static final int kRightTachDIO = 3;
-    public static final double RPM_TOLERANCE = 30;
+    public static final double RPM_TOLERANCE = 30.0;
     public static final int kShooterUltrasonicAIO = 0;
   }
 
@@ -176,8 +176,8 @@ public final class Constants {
 
     public static final double ANGLE_AT_FLOOR = -50.0;
     public static final double ANGLE_AT_AMP = 66.0;
-    public static final double ANGLE_AT_SPEAKER = 140;
-    public static final double ANGLE_AT_DRIVE = 90;
+    public static final double ANGLE_AT_SPEAKER = 140.0;
+    public static final double ANGLE_AT_DRIVE = 90.0;
     public static final double ANGLE_TOLERANCE = 3.0;
     
     public static final double MAX_ARM_SPEED = 90.0; // deg/sec
