@@ -24,7 +24,7 @@ public class GoToCommand extends Command {
   private Transform2d m_delta;
   private DriveSubsystem m_drive;
   private TrapezoidProfile m_trapezoid = new TrapezoidProfile(new Constraints(Constants.DriveConstants.kMaxSpeedMetersPerSecond  / 2.0,
-                                                       Constants.DriveConstants.kMaxSpeedMetersPerSecond / 4.0 )); //todo use full speed;
+                                                       Constants.DriveConstants.kMaxSpeedMetersPerSecond )); //todo use full speed;
   private State m_goal = new State(0.0, 0.0);
   private double m_startTimeMillis;
   private boolean m_relativeFlag;
@@ -61,7 +61,9 @@ public class GoToCommand extends Command {
   public void initialize() {
     m_startTimeMillis = System.currentTimeMillis();
     if(m_relativeFlag){
-      m_dest = m_drive.getPose().plus(m_delta);
+      Translation2d dest_translation = m_delta.getTranslation();
+      Rotation2d dest_rotation = m_drive.getPose().getRotation().plus(m_delta.getRotation());
+      m_dest = new Pose2d(dest_translation, dest_rotation);
     }
     System.out.println("Starting go to: " + m_dest);
   }
