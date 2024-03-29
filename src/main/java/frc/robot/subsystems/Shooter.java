@@ -14,12 +14,18 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+import static edu.wpi.first.units.Units.Volts;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
@@ -32,13 +38,8 @@ public class Shooter extends SubsystemBase {
   public Double mLeftVelocity;
   private Double mRightVelocity;
   private AnalogInput mUltrasonicInput;
-  private boolean fullPower = false;
   private Timer timer = new Timer();
   
-  public void setFullPower(boolean fullPower) {
-    this.fullPower = fullPower;
-  }
-
   private ShuffleboardTab mShuffleboardTab;
   private GenericEntry mSetpointEntry, mLeftErrEntry, mRightErrEntry,
                        mSpeedReadyEntry, mUltrasonicInputEntry,
@@ -79,6 +80,15 @@ public class Shooter extends SubsystemBase {
     mLeftVelocity = 0.0;
     mRightVelocity = 0.0;
 
+    final SysIdRoutine mIdRoutine = new SysIdRoutine(new Config(),
+                                                     new Mechanism(
+                                                        (Measure<Voltage> volts) -> {
+                                                          m_leftMotor.setVoltage(volts.in(Volts));
+                                                          m_rightMotor.setVoltage(volts.in(Volts));
+                                                        },
+                                                        log -> {},
+                                                        this
+                                                     ));
 
     // display PID coefficients on SmartDashboard
     mShuffleboardTab = Shuffleboard.getTab("Shooter");
@@ -143,13 +153,8 @@ public class Shooter extends SubsystemBase {
       leftOutput = 0.0;
     }
 
-    if(fullPower){
-      m_leftMotor.set(1.0);
-      m_rightMotor.set(1.0);
-    }else{
-      m_leftMotor.set(MathUtil.clamp(leftOutput, -1.0, 1.0));
-      m_rightMotor.set(MathUtil.clamp(rightOutput, -1.0, 1.0));
-    }
+    m_leftMotor.set(MathUtil.clamp(leftOutput, -1.0, 1.0));
+    m_rightMotor.set(MathUtil.clamp(rightOutput, -1.0, 1.0));
 
     if(!atSetpoint()){ timer.restart(); }
     
@@ -166,7 +171,6 @@ public class Shooter extends SubsystemBase {
   }
   
   public void setRPM(double speed) {
-    fullPower = false;
     mSetpoint = MathUtil.clamp(speed, 0.0, maxRPM);
   }
 
