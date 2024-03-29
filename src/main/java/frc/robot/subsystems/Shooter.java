@@ -5,10 +5,10 @@
 package frc.robot.subsystems;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -17,14 +17,18 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 import frc.robot.Constants;
 
@@ -81,14 +85,8 @@ public class Shooter extends SubsystemBase {
     mRightVelocity = 0.0;
 
     final SysIdRoutine mIdRoutine = new SysIdRoutine(new Config(),
-                                                     new Mechanism(
-                                                        (Measure<Voltage> volts) -> {
-                                                          m_leftMotor.setVoltage(volts.in(Volts));
-                                                          m_rightMotor.setVoltage(volts.in(Volts));
-                                                        },
-                                                        log -> {},
-                                                        this
-                                                     ));
+                                                     new Mechanism( this::sysIdVoltageDrive, this::sysIdLog, this));
+
 
     // display PID coefficients on SmartDashboard
     mShuffleboardTab = Shuffleboard.getTab("Shooter");
@@ -192,6 +190,21 @@ public class Shooter extends SubsystemBase {
   public double sensorDistance(){
     return mUltrasonicInput.getAverageValue();
   }
+
+  public void sysIdLog(SysIdRoutineLog log){
+     // Record a frame for the shooter motor.
+     log.motor("shooter-left")
+        .voltage( Volts.of(m_leftMotor.getAppliedOutput() * m_leftMotor.getBusVoltage()))
+        .angularVelocity(RPM.of(mLeftEncoder.getVelocity()));
+     log.motor("shooter-right")
+        .voltage( Volts.of(m_rightMotor.getAppliedOutput() * m_rightMotor.getBusVoltage()))
+        .angularVelocity(RPM.of(mRightEncoder.getVelocity()));
+  }
+
+  public void sysIdVoltageDrive(Measure<Voltage> volts){
+    m_leftMotor.setVoltage(volts.in(Volts));
+    m_rightMotor.setVoltage(volts.in(Volts));
+  }                                                  
 }
 
 
