@@ -8,11 +8,11 @@ import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Timer;
@@ -26,18 +26,15 @@ public class Shooter extends SubsystemBase {
 
   private CANSparkMax m_leftMotor, m_rightMotor;
   private PIDController mLeftPidController, mRightPidController;
+  private SimpleMotorFeedforward mSimpleMotorFeedforward;
   private RelativeEncoder mLeftEncoder, mRightEncoder;
   private Double kP, kI, kD, maxRPM, kDwellTime;
+  private Double kV;
   public Double mSetpoint;
   public Double mLeftVelocity;
   private Double mRightVelocity;
   private AnalogInput mUltrasonicInput;
-  private boolean fullPower = false;
   private Timer timer = new Timer();
-  
-  public void setFullPower(boolean fullPower) {
-    this.fullPower = fullPower;
-  }
 
   private ShuffleboardTab mShuffleboardTab;
   private GenericEntry mSetpointEntry, mLeftErrEntry, mRightErrEntry,
@@ -63,17 +60,23 @@ public class Shooter extends SubsystemBase {
     timer.restart();
 
     // PID coefficients
-    kP = 0.0005; 
-    kI = 0.0001;
-    kD = 0.0; 
+    kP = 0.0003; 
+    kI = 0.000001;
+    kD = 0.00001; 
     maxRPM = 5700.0;
     kDwellTime = 0.020;
+
+    //FF constants
+    kV = 0.6/3302.0;
+    
 
 
     mLeftPidController = new PIDController(kP, kI, kD);
     mRightPidController =  new PIDController(kP, kI, kD);
     mLeftPidController.setTolerance(Constants.ShooterConstants.RPM_TOLERANCE);
     mRightPidController.setTolerance(Constants.ShooterConstants.RPM_TOLERANCE);
+
+    mSimpleMotorFeedforward = new SimpleMotorFeedforward(0.0, kV, 0.0);
 
     mSetpoint = 0.0;
     mLeftVelocity = 0.0;
@@ -135,21 +138,18 @@ public class Shooter extends SubsystemBase {
     mLeftVelocity  = mLeftEncoder.getVelocity();
     mRightVelocity = mRightEncoder.getVelocity();
 
-    double rightOutput = mRightPidController.calculate(mRightVelocity, mSetpoint);
-    double leftOutput = mLeftPidController.calculate(mLeftVelocity, mSetpoint);
+    double ff = mSimpleMotorFeedforward.calculate(mSetpoint);
+
+    double rightOutput = ff + mRightPidController.calculate(mRightVelocity, mSetpoint);
+    double leftOutput = ff + mLeftPidController.calculate(mLeftVelocity, mSetpoint);
 
     if(mSetpoint <= 0){
       rightOutput = 0.0;
       leftOutput = 0.0;
     }
 
-    if(fullPower){
-      m_leftMotor.set(1.0);
-      m_rightMotor.set(1.0);
-    }else{
-      m_leftMotor.set(MathUtil.clamp(leftOutput, -1.0, 1.0));
-      m_rightMotor.set(MathUtil.clamp(rightOutput, -1.0, 1.0));
-    }
+    m_leftMotor.set(MathUtil.clamp(leftOutput, -1.0, 1.0));
+    m_rightMotor.set(MathUtil.clamp(rightOutput, -1.0, 1.0));
 
     if(!atSetpoint()){ timer.restart(); }
     
@@ -166,7 +166,6 @@ public class Shooter extends SubsystemBase {
   }
   
   public void setRPM(double speed) {
-    fullPower = false;
     mSetpoint = MathUtil.clamp(speed, 0.0, maxRPM);
   }
 
