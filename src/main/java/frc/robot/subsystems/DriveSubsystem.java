@@ -157,7 +157,7 @@ public class DriveSubsystem extends SubsystemBase {
     double x = translation.getX();
     double y = translation.getY();
 
-    drive(x, y, rotation, true, true);
+    drive(x, y, rotation, true, false);
   }
   
   public void drive(Translation2d translation){

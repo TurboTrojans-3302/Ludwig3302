@@ -109,7 +109,7 @@ public class RobotContainer {
                                                                 .andThen(GoToCommand.relative(m_robotDrive, 0.0, 1.21, 0))
                                                                 .andThen(new WaitCommand(5.0))
                                                                 .andThen(GoToCommand.relative(m_robotDrive, 1.5, 0.0, 0)));
-    
+                                                              //went right instead of going forward (like it did absolute instead of relative) does y have to be negative
         m_autonomousChooser.addOption("Center Shoot, Cross, Ring pick up center",
                                                                 new SpinUpShooter(m_shooter, 3302.0)   
                                                                 .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
@@ -134,7 +134,7 @@ public class RobotContainer {
                                                                 .andThen(new SpinUpShooter(m_shooter, 3302.0))
                                                                 .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0)));
-
+    m_autonomousChooser.addOption("Fwd 1m Left 1m", GoToCommand.relative(m_robotDrive, 1.0, 1.0, 0));
                                             m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
