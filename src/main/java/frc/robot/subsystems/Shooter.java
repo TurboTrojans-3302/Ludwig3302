@@ -60,9 +60,9 @@ public class Shooter extends SubsystemBase {
     timer.restart();
 
     // PID coefficients
-    kP = 0.0005; 
-    kI = 0.0001;
-    kD = 0.00005; 
+    kP = 0.0003; 
+    kI = 0.000001;
+    kD = 0.00001; 
     maxRPM = 5700.0;
     kDwellTime = 0.020;
 
