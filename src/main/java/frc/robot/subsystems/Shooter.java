@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -43,6 +44,8 @@ public class Shooter extends SubsystemBase {
   private Double mRightVelocity;
   private AnalogInput mUltrasonicInput;
   private Timer timer = new Timer();
+  private boolean mPidEnabled = true;
+  private SysIdRoutine mIdRoutine;
   
   private ShuffleboardTab mShuffleboardTab;
   private GenericEntry mSetpointEntry, mLeftErrEntry, mRightErrEntry,
@@ -84,8 +87,8 @@ public class Shooter extends SubsystemBase {
     mLeftVelocity = 0.0;
     mRightVelocity = 0.0;
 
-    final SysIdRoutine mIdRoutine = new SysIdRoutine(new Config(),
-                                                     new Mechanism( this::sysIdVoltageDrive, this::sysIdLog, this));
+    mIdRoutine = new SysIdRoutine(new Config(),
+                                  new Mechanism( this::sysIdVoltageDrive, this::sysIdLog, this));
 
 
     // display PID coefficients on SmartDashboard
@@ -143,16 +146,18 @@ public class Shooter extends SubsystemBase {
     mLeftVelocity  = mLeftEncoder.getVelocity();
     mRightVelocity = mRightEncoder.getVelocity();
 
-    double rightOutput = mRightPidController.calculate(mRightVelocity, mSetpoint);
-    double leftOutput = mLeftPidController.calculate(mLeftVelocity, mSetpoint);
+    if(mPidEnabled){
+      double rightOutput = mRightPidController.calculate(mRightVelocity, mSetpoint);
+      double leftOutput = mLeftPidController.calculate(mLeftVelocity, mSetpoint);
 
-    if(mSetpoint <= 0){
-      rightOutput = 0.0;
-      leftOutput = 0.0;
+      if(mSetpoint <= 0){
+        rightOutput = 0.0;
+        leftOutput = 0.0;
+      }
+
+      m_leftMotor.set(MathUtil.clamp(leftOutput, -1.0, 1.0));
+      m_rightMotor.set(MathUtil.clamp(rightOutput, -1.0, 1.0));
     }
-
-    m_leftMotor.set(MathUtil.clamp(leftOutput, -1.0, 1.0));
-    m_rightMotor.set(MathUtil.clamp(rightOutput, -1.0, 1.0));
 
     if(!atSetpoint()){ timer.restart(); }
     
@@ -202,9 +207,32 @@ public class Shooter extends SubsystemBase {
   }
 
   public void sysIdVoltageDrive(Measure<Voltage> volts){
+    mPidEnabled = false;
     m_leftMotor.setVoltage(volts.in(Volts));
     m_rightMotor.setVoltage(volts.in(Volts));
   }                                                  
+
+  public void setPidEnabled(boolean pidEnabled) {
+    this.mPidEnabled = pidEnabled;
+  }
+
+  /**
+   * Returns a command that will execute a quasistatic test in the given direction.
+   *
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return mIdRoutine.quasistatic(direction);
+  }
+
+  /**
+   * Returns a command that will execute a dynamic test in the given direction.
+   *
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return mIdRoutine.dynamic(direction);
+  }
 }
 
 

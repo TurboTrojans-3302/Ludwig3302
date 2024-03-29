@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.GoToCommand;
@@ -80,6 +81,10 @@ public class RobotContainer {
                                             .andThen(new SetIntakeCommand(m_harvester,
                                                                 Constants.harvesterConstants.outSpeed,
                                                            0.75)));
+    m_autonomousChooser.addOption("Shooter Quasistatic FWD", m_shooter.sysIdQuasistatic(Direction.kForward));
+    m_autonomousChooser.addOption("Shooter Quasistatic REV", m_shooter.sysIdQuasistatic(Direction.kReverse));
+    m_autonomousChooser.addOption("Shooter Quasistatic FWD", m_shooter.sysIdQuasistatic(Direction.kForward));
+
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
