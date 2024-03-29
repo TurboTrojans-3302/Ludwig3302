@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -122,6 +123,15 @@ public class Robot extends TimedRobot {
     } else {
       setLED(LEDmode.Teleop);
     }    
+
+    if(30.0 > DriverStation.getMatchTime() && DriverStation.getMatchTime() > 29.0){
+      m_robotContainer.m_driverController.setRumble(RumbleType.kBothRumble, 1.0);
+      m_robotContainer.m_copilotController.setRumble(RumbleType.kBothRumble, 1.0);
+    }else{
+      m_robotContainer.m_driverController.setRumble(RumbleType.kBothRumble, 0.0);
+      m_robotContainer.m_copilotController.setRumble(RumbleType.kBothRumble, 0.0);
+    }
+
   }
 
   @Override
