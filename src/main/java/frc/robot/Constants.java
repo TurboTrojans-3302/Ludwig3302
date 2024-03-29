@@ -175,7 +175,7 @@ public final class Constants {
     public static final int kBackLimitSwitchInputID = 1;
 
     public static final double ANGLE_AT_FLOOR = -50.0;
-    public static final double ANGLE_AT_AMP = 66.0;
+    public static final double ANGLE_AT_AMP = 45.0;
     public static final double ANGLE_AT_SPEAKER = 140;
     public static final double ANGLE_AT_DRIVE = 90;
     public static final double ANGLE_TOLERANCE = 3.0;

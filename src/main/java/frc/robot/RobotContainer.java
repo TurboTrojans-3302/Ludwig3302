@@ -91,11 +91,6 @@ public class RobotContainer {
     m_startPosChooser.addOption("Right -30", new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(-30.0)));
     m_shuffleboardTab.add("Start Position", m_startPosChooser);
 
-    m_shuffleboardTab.add("Floor", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR));
-    m_shuffleboardTab.add("Amp", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_AMP));
-    m_shuffleboardTab.add("30", new SetArmAngleCommand(m_harvester, 30.0));
-    m_shuffleboardTab.add("Drive", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_DRIVE));
-    m_shuffleboardTab.add("Speaker", new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_SPEAKER));
     m_BlinkinLED = new REVBlinkinLED(Constants.BLINKIN_LED_PWM_CHANNEL);
   }
 
@@ -118,13 +113,13 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    new JoystickButton(m_copilotController, XboxController.Button.kX.value)
         .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_SPEAKER));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+    new JoystickButton(m_copilotController, XboxController.Button.kY.value)
         .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_DRIVE));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    new JoystickButton(m_copilotController, XboxController.Button.kB.value)
         .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_AMP));
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    new JoystickButton(m_copilotController, XboxController.Button.kA.value)
         .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR));
 
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)

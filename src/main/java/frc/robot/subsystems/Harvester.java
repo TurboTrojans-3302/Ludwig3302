@@ -60,7 +60,7 @@ public class Harvester extends SubsystemBase {
     m_intakeSpx.setNeutralMode(NeutralMode.Brake);
     mBackLimitSwitch = new DigitalInput(Constants.harvesterConstants.kBackLimitSwitchInputID);
 
-    mPid = new PIDController(0.004, 0.0002, 0.0);
+    mPid = new PIDController(0.008, 0.0002, 0.0002);
     mPid.setTolerance(Constants.harvesterConstants.ANGLE_TOLERANCE);
 
     mArmSetpoint = getArmAngle();

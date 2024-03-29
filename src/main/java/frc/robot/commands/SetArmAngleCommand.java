@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -25,15 +26,13 @@ public class SetArmAngleCommand extends Command {
   @Override
   public void initialize() {
     System.out.println("Move arm to: " + mTargetAngle);
+    mHarvester.setArmAngle(mTargetAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double setpoint = SwerveUtils.StepTowards(mHarvester.getArmAngle(),
-                                              mTargetAngle,
-                                              Constants.harvesterConstants.MAX_ARM_SPEED * Robot.kDefaultPeriod);
-    mHarvester.setArmAngle(setpoint);
+    //System.out.println("arm setpoint: " + setpoint);
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +44,6 @@ public class SetArmAngleCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return mHarvester.isArmAtAngle();
+    return MathUtil.isNear(mTargetAngle, mHarvester.getArmAngle(), 3.0);
   }
 }
