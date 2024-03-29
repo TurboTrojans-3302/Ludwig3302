@@ -90,7 +90,7 @@ public class RobotContainer {
                                                            0.75))
                                             .andThen(GoToCommand.relative(m_robotDrive, 1, 0, 0)));
      m_autonomousChooser.addOption("shoot, right, cross",
-                                                                new SpinUpShooter(m_shooter, 3302.0)   
+                                                                new SpinUpShooter(m_shooter, 3500.0)   
                                                                 .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
                                                                 .andThen(GoToCommand.relative(m_robotDrive, 0.0, -1.0, 0))
@@ -103,7 +103,7 @@ public class RobotContainer {
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
                                                                 .andThen(GoToCommand.relative(m_robotDrive, 0.3, 0.0, 0)));
     m_autonomousChooser.addOption("shoot, left, cross",
-                                                                new SpinUpShooter(m_shooter, 3302.0)   
+                                                                new SpinUpShooter(m_shooter, 3500.0)   
                                                                 .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
                                                                 .andThen(GoToCommand.relative(m_robotDrive, 0.0, 1.21, 0))
