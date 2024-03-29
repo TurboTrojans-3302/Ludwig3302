@@ -97,7 +97,8 @@ public class RobotContainer {
                                                                 .andThen(new WaitCommand(5.0))
                                                                 .andThen(GoToCommand.relative(m_robotDrive, 1.5, 0.0, 0.0)));    
     m_autonomousChooser.addOption("Center shoot and cross",
-                                                                new SpinUpShooter(m_shooter, 3302.0)   
+                                                                new SpinUpShooter(m_shooter, 3302.0)
+                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.150, 0, 0))   
                                                                 .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
                                                                 .andThen(GoToCommand.relative(m_robotDrive, 0.3, 0.0, 0)));
