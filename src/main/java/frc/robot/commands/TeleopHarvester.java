@@ -42,7 +42,7 @@ public class TeleopHarvester extends Command {
      else if (m_controller.getLeftBumper()) {
       double angle = m_harvester.getArmAngle();
       if( angle > 10 && angle < 100 ){
-        harvesterSpeed = 0.75;
+        harvesterSpeed = Constants.harvesterConstants.outSpeedSlow;
       }else{
         harvesterSpeed = Constants.harvesterConstants.outSpeed;
       }

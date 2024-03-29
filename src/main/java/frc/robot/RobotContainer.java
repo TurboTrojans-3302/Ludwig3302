@@ -83,6 +83,11 @@ public class RobotContainer {
                                             .andThen(new SetIntakeCommand(m_harvester,
                                                                 Constants.harvesterConstants.outSpeed,
                                                            0.75)));
+    m_autonomousChooser.addOption("Shoot then fwd", new SpinUpShooter(m_shooter, 3302)
+                                            .andThen(new SetIntakeCommand(m_harvester,
+                                                                Constants.harvesterConstants.outSpeed,
+                                                           0.75))
+                                            .andThen(GoToCommand.relative(m_robotDrive, 1, 0, 0)));
     m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
@@ -126,14 +131,14 @@ public class RobotContainer {
         .whileTrue(new RunCommand(() -> m_harvester.setIntakeSpeed(Constants.harvesterConstants.inSpeed),
                                  m_harvester));
     
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-        .whileTrue(new RunCommand(() -> {
-                                          if(m_harvester.getArmAngle() > 90){
-                                              m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeed);
-                                          }else{
-                                              m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeedSlow);
-                                          }
-                                        }, m_harvester));                             
+    // new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+    //     .whileTrue(new RunCommand(() -> {
+    //                                       if(m_harvester.getArmAngle() > 90){
+    //                                           m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeed);
+    //                                       }else{
+    //                                           m_harvester.setIntakeSpeed(Constants.harvesterConstants.outSpeedSlow);
+    //                                       }
+    //                                     }, m_harvester));                             
   }
 
   /**
