@@ -66,6 +66,8 @@ public class GoToCommand extends Command {
       m_dest = new Pose2d(dest_translation, dest_rotation);
     }
     System.out.println("Starting go to: " + m_dest);
+    System.out.println("From: " + m_drive.getPose());
+    System.out.println("Delta: " + m_delta);
   }
 
   private Translation2d translation2dest(){

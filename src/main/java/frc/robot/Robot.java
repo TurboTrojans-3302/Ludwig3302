@@ -124,7 +124,8 @@ public class Robot extends TimedRobot {
       setLED(LEDmode.Teleop);
     }    
 
-    if(30.0 > DriverStation.getMatchTime() && DriverStation.getMatchTime() > 29.0){
+    double matchTime = DriverStation.getMatchTime();
+    if(30.0 > matchTime && matchTime > 29.0){
       m_robotContainer.m_driverController.setRumble(RumbleType.kBothRumble, 1.0);
       m_robotContainer.m_copilotController.setRumble(RumbleType.kBothRumble, 1.0);
     }else{

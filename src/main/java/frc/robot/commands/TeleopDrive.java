@@ -33,7 +33,8 @@ public class TeleopDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_driverController.getRightTriggerAxis() < 0.5){
+    double rightTriggerAxis = m_driverController.getRightTriggerAxis();
+    if (rightTriggerAxis < 0.5){
     m_robotDrive.drive(
                     stick2speed(-m_driverController.getLeftY()),
                     stick2speed(-m_driverController.getLeftX()),
@@ -41,7 +42,7 @@ public class TeleopDrive extends Command {
                     true,
                     false);
     } 
-    else if (m_driverController.getRightTriggerAxis() > 0.5) {
+    else if (rightTriggerAxis > 0.5) {
       m_robotDrive.drive(
                     stick2speed(-0.5 * m_driverController.getLeftY()),
                     stick2speed(-0.5 * m_driverController.getLeftX()),

@@ -98,17 +98,17 @@ public class RobotContainer {
                                                                 .andThen(GoToCommand.relative(m_robotDrive, 1.5, 0.0, 0.0)));    
     m_autonomousChooser.addOption("Center shoot and cross",
                                                                 new SpinUpShooter(m_shooter, 3302.0)
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.150, 0, 0))   
+                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.150, 0, 0).withTimeout(1.0))   
                                                                 .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.3, 0.0, 0)));
+                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.3, 0.0, 0).withTimeout(1.0)));
     m_autonomousChooser.addOption("shoot, left, cross",
                                                                 new SpinUpShooter(m_shooter, 3500.0)   
                                                                 .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.0, 1.21, 0))
+                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.0, 1.21, 0).withTimeout(3.5))
                                                                 .andThen(new WaitCommand(5.0))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.5, 0.0, 0)));
+                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.5, 0.0, 0).withTimeout(4.0)));
                                                               //went right instead of going forward (like it did absolute instead of relative) does y have to be negative
         m_autonomousChooser.addOption("Center Shoot, Cross, Ring pick up center",
                                                                 new SpinUpShooter(m_shooter, 3302.0)   
@@ -116,7 +116,7 @@ public class RobotContainer {
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
                                                                 .andThen(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, Constants.harvesterConstants.inSpeed))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.95, 0, 0))
+                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.95, 0, 0).withTimeout(4.0))
                                                                 .andThen(new WaitCommand(1.0))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0)));
     m_autonomousChooser.addOption("Center Shoot twice and cross",
@@ -125,16 +125,16 @@ public class RobotContainer {
                                                                 .andThen(new SetIntakeCommand(m_harvester, 0.0, 0.0))
                                                                 .andThen(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, Constants.harvesterConstants.inSpeed))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.95, 0.0, 0.0))
+                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.95, 0.0, 0.0).withTimeout(3.0))
                                                                 .andThen(new WaitCommand(1.0))
                                                                 .andThen(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_DRIVE))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
                                                                 .andThen(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_SPEAKER))
-                                                                .andThen(GoToCommand.absolute(m_robotDrive, 0.0, 0.0, 0.0))
+                                                                .andThen(GoToCommand.absolute(m_robotDrive, 0.0, 0.0, 0.0).withTimeout(3.0))
                                                                 .andThen(new SpinUpShooter(m_shooter, 3302.0))
                                                                 .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
                                                                 .andThen(new IntakeSpeedInstant(m_harvester, 0.0)));
-    m_autonomousChooser.addOption("Fwd 1m Left 1m", GoToCommand.relative(m_robotDrive, 1.0, 1.0, 0));
+    m_autonomousChooser.addOption("Fwd 1m Left 1m", GoToCommand.relative(m_robotDrive, 1.0, 1.0, 0).withTimeout(3.0));
                                             m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
