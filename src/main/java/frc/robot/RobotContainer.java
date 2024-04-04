@@ -25,6 +25,7 @@ import frc.robot.commands.SpinUpShooter;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.TeleopHarvester;
 import frc.robot.commands.TeleopShooter;
+import frc.robot.commands.Tones;
 import frc.robot.commands.WaitCommand;
 import frc.robot.commands.GoToCommand;
 import frc.robot.subsystems.Climbers;
@@ -177,7 +178,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
         .whileTrue(new RunCommand(() -> m_harvester.setIntakeSpeed(Constants.harvesterConstants.inSpeed),
                                  m_harvester));
-    
+     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+        .onTrue(new Tones(m_harvester, m_climbers));
+   
     // new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
     //     .whileTrue(new RunCommand(() -> {
     //                                       if(m_harvester.getArmAngle() > 90){
