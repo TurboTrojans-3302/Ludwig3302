@@ -5,9 +5,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -15,9 +16,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.utils.TonePlayer;
 
-public class Climbers extends TonePlayer{
+public class Climbers extends SubsystemBase {
 
   private VictorSPX m_climberRight;
   private VictorSPX m_climberLeft;
@@ -92,24 +92,14 @@ public class Climbers extends TonePlayer{
     if(rightFullyContracted() || (rightAlmostContracted() && !rightTopLimitOverride)){
        speed = Math.max(speed, 0.0);
     }
-    m_climberRight.set(ControlMode.PercentOutput, speed);
+    m_climberRight.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
   public void climberLeftMove(double speed) {
     if(leftFullyContracted() || (leftAlmostConracted() && !leftTopLimitOverride)){ 
       speed = Math.max(speed, 0.0); 
     }
-    m_climberLeft.set(ControlMode.PercentOutput, speed);
-  }
-
-  public void setTones(double ... tones){
-    m_climberLeft.set(ControlMode.MusicTone, tones[0]);
-    m_climberRight.set(ControlMode.MusicTone, tones[1]);
-  }
-
-  public void stop(){
-    m_climberLeft.set(ControlMode.PercentOutput, 0.0);
-    m_climberRight.set(ControlMode.PercentOutput, 0.0);
+    m_climberLeft.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
   public boolean leftFullyContracted(){ return !mLeftBottomLimit.get(); }

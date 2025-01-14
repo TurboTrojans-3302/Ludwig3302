@@ -5,8 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OIConstants;
@@ -35,8 +33,7 @@ public class TeleopDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rightTriggerAxis = m_driverController.getRightTriggerAxis();
-    if (rightTriggerAxis < 0.5){
+    if (m_driverController.getRightTriggerAxis() < 0.5){
     m_robotDrive.drive(
                     stick2speed(-m_driverController.getLeftY()),
                     stick2speed(-m_driverController.getLeftX()),
@@ -44,38 +41,13 @@ public class TeleopDrive extends Command {
                     true,
                     false);
     } 
-    else if (rightTriggerAxis > 0.5) {
+    else if (m_driverController.getRightTriggerAxis() > 0.5) {
       m_robotDrive.drive(
                     stick2speed(-0.5 * m_driverController.getLeftY()),
                     stick2speed(-0.5 * m_driverController.getLeftX()),
                     stick2speed(-0.5 * m_driverController.getRightX()),
                     true,
                     false);}
-
-    
-    int pov = m_driverController.getPOV();
-
-    switch (pov) {
-      case 0:
-        m_robotDrive.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
-        break;
-    
-      case 90:
-        m_robotDrive.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(270)));
-        break;
-    
-      case 180:
-        m_robotDrive.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(180)));
-        break;
-    
-      case 270:
-        m_robotDrive.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(90)));
-        break;
-    
-      default:
-        break;
-    }
-                
   }
 
   // applies deadband and scaling to raw stick value

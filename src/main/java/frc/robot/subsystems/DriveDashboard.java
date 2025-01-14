@@ -29,54 +29,54 @@ public class DriveDashboard extends SubsystemBase {
     m_drive = drive;
 
     m_shuffleboardTab = Shuffleboard.getTab("Drive");
-    // m_FLangleEntry = m_shuffleboardTab.add("FLa", 0.0)
-    //     .withWidget(BuiltInWidgets.kGyro)
-    //     .withProperties(Map.of("Counter clockwise", true))
-    //     .withPosition(0, 0).withSize(3, 3)
-    //     .getEntry();
-    // m_FRangleEntry = m_shuffleboardTab.add("FRa", 0.0)
-    //     .withWidget(BuiltInWidgets.kGyro)
-    //     .withProperties(Map.of("Counter clockwise", true))
-    //     .withPosition(4, 0).withSize(3, 3)
-    //     .getEntry();
-    // m_BLangleEntry = m_shuffleboardTab.add("BLa", 0.0)
-    //     .withWidget(BuiltInWidgets.kGyro)
-    //     .withProperties(Map.of("Counter clockwise", true))
-    //     .withPosition(0, 3).withSize(3, 3)
-    //     .getEntry();
-    // m_BRangleEntry = m_shuffleboardTab.add("BRa", 0.0)
-    //     .withWidget(BuiltInWidgets.kGyro)
-    //     .withProperties(Map.of("Counter clockwise", true))
-    //     .withPosition(4, 3).withSize(3, 3)
-    //     .getEntry();
-    // m_FLspeedEntry = m_shuffleboardTab.add("FLs", 0.0)
-    //     .withWidget(BuiltInWidgets.kNumberBar)
-    //     .withProperties(Map.of("orientation", "vertical",
-    //         "min", -DriveConstants.kMaxSpeedMetersPerSecond,
-    //         "max", DriveConstants.kMaxSpeedMetersPerSecond))
-    //     .withPosition(3, 0).withSize(1, 3)
-    //     .getEntry();
-    // m_FRspeedEntry = m_shuffleboardTab.add("FRs", 0.0)
-    //     .withWidget(BuiltInWidgets.kNumberBar)
-    //     .withProperties(Map.of("orientation", "vertical",
-    //         "min", -DriveConstants.kMaxSpeedMetersPerSecond,
-    //         "max", DriveConstants.kMaxSpeedMetersPerSecond))
-    //     .withPosition(7, 0).withSize(1, 3)
-    //     .getEntry();
-    // m_BLspeedEntry = m_shuffleboardTab.add("BLs", 0.0)
-    //     .withWidget(BuiltInWidgets.kNumberBar)
-    //     .withProperties(Map.of("orientation", "vertical",
-    //         "min", -DriveConstants.kMaxSpeedMetersPerSecond,
-    //         "max", DriveConstants.kMaxSpeedMetersPerSecond))
-    //     .withPosition(3, 3).withSize(1, 3)
-    //     .getEntry();
-    // m_BRspeedEntry = m_shuffleboardTab.add("BRs", 0.0)
-    //     .withWidget(BuiltInWidgets.kNumberBar)
-    //     .withProperties(Map.of("orientation", "vertical",
-    //         "min", -DriveConstants.kMaxSpeedMetersPerSecond,
-    //         "max", DriveConstants.kMaxSpeedMetersPerSecond))
-    //     .withPosition(7, 3).withSize(1, 3)
-    //     .getEntry();
+    m_FLangleEntry = m_shuffleboardTab.add("FLa", 0.0)
+        .withWidget(BuiltInWidgets.kGyro)
+        .withProperties(Map.of("Counter clockwise", true))
+        .withPosition(0, 0).withSize(3, 3)
+        .getEntry();
+    m_FRangleEntry = m_shuffleboardTab.add("FRa", 0.0)
+        .withWidget(BuiltInWidgets.kGyro)
+        .withProperties(Map.of("Counter clockwise", true))
+        .withPosition(4, 0).withSize(3, 3)
+        .getEntry();
+    m_BLangleEntry = m_shuffleboardTab.add("BLa", 0.0)
+        .withWidget(BuiltInWidgets.kGyro)
+        .withProperties(Map.of("Counter clockwise", true))
+        .withPosition(0, 3).withSize(3, 3)
+        .getEntry();
+    m_BRangleEntry = m_shuffleboardTab.add("BRa", 0.0)
+        .withWidget(BuiltInWidgets.kGyro)
+        .withProperties(Map.of("Counter clockwise", true))
+        .withPosition(4, 3).withSize(3, 3)
+        .getEntry();
+    m_FLspeedEntry = m_shuffleboardTab.add("FLs", 0.0)
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(Map.of("orientation", "vertical",
+            "min", -DriveConstants.kMaxSpeedMetersPerSecond,
+            "max", DriveConstants.kMaxSpeedMetersPerSecond))
+        .withPosition(3, 0).withSize(1, 3)
+        .getEntry();
+    m_FRspeedEntry = m_shuffleboardTab.add("FRs", 0.0)
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(Map.of("orientation", "vertical",
+            "min", -DriveConstants.kMaxSpeedMetersPerSecond,
+            "max", DriveConstants.kMaxSpeedMetersPerSecond))
+        .withPosition(7, 0).withSize(1, 3)
+        .getEntry();
+    m_BLspeedEntry = m_shuffleboardTab.add("BLs", 0.0)
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(Map.of("orientation", "vertical",
+            "min", -DriveConstants.kMaxSpeedMetersPerSecond,
+            "max", DriveConstants.kMaxSpeedMetersPerSecond))
+        .withPosition(3, 3).withSize(1, 3)
+        .getEntry();
+    m_BRspeedEntry = m_shuffleboardTab.add("BRs", 0.0)
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(Map.of("orientation", "vertical",
+            "min", -DriveConstants.kMaxSpeedMetersPerSecond,
+            "max", DriveConstants.kMaxSpeedMetersPerSecond))
+        .withPosition(7, 3).withSize(1, 3)
+        .getEntry();
     m_gyroEntry = m_shuffleboardTab.add("Gyro", 0.0)
         .withWidget(BuiltInWidgets.kGyro)
         .withProperties(Map.of("Counter clockwise", true))
@@ -119,14 +119,14 @@ public class DriveDashboard extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // m_FLangleEntry.setDouble(m_drive.getM_frontLeft().getPosition().angle.getDegrees());
-    // m_FRangleEntry.setDouble(m_drive.getM_frontRight().getPosition().angle.getDegrees());
-    // m_BRangleEntry.setDouble(m_drive.getM_rearRight().getPosition().angle.getDegrees());
-    // m_BLangleEntry.setDouble(m_drive.getM_rearLeft().getPosition().angle.getDegrees());
-    // m_FLspeedEntry.setDouble(m_drive.getM_frontLeft().getState().speedMetersPerSecond);
-    // m_FRspeedEntry.setDouble(m_drive.getM_frontRight().getState().speedMetersPerSecond);
-    // m_BRspeedEntry.setDouble(m_drive.getM_rearRight().getState().speedMetersPerSecond);
-    // m_BLspeedEntry.setDouble(m_drive.getM_rearLeft().getState().speedMetersPerSecond);
+    m_FLangleEntry.setDouble(m_drive.getM_frontLeft().getPosition().angle.getDegrees());
+    m_FRangleEntry.setDouble(m_drive.getM_frontRight().getPosition().angle.getDegrees());
+    m_BRangleEntry.setDouble(m_drive.getM_rearRight().getPosition().angle.getDegrees());
+    m_BLangleEntry.setDouble(m_drive.getM_rearLeft().getPosition().angle.getDegrees());
+    m_FLspeedEntry.setDouble(m_drive.getM_frontLeft().getState().speedMetersPerSecond);
+    m_FRspeedEntry.setDouble(m_drive.getM_frontRight().getState().speedMetersPerSecond);
+    m_BRspeedEntry.setDouble(m_drive.getM_rearRight().getState().speedMetersPerSecond);
+    m_BLspeedEntry.setDouble(m_drive.getM_rearLeft().getState().speedMetersPerSecond);
 
     m_driveDirEntry.setDouble(m_drive.getM_currentTranslationDir());
     m_driveMagEntry.setDouble(m_drive.getM_currentTranslationMag());
@@ -136,9 +136,9 @@ public class DriveDashboard extends SubsystemBase {
     m_xPosEntry.setDouble(pos.getX());
     m_yPosEntry.setDouble(pos.getY());
 
-    // m_drive.setP(mPEntry.getDouble(Constants.DriveConstants.headingP));
-    // m_drive.setI(mIEntry.getDouble(Constants.DriveConstants.headingI));
-    // m_drive.setD(mDEntry.getDouble(Constants.DriveConstants.headingD));
+    m_drive.setP(mPEntry.getDouble(Constants.DriveConstants.headingP));
+    m_drive.setI(mIEntry.getDouble(Constants.DriveConstants.headingI));
+    m_drive.setD(mDEntry.getDouble(Constants.DriveConstants.headingD));
   }
 
   public boolean getFieldOriented(){

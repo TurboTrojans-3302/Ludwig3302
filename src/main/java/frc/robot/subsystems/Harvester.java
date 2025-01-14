@@ -6,8 +6,8 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -21,9 +21,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.utils.TonePlayer;
 
-public class Harvester extends TonePlayer {
+public class Harvester extends SubsystemBase {
 
   private VictorSPX m_intakeSpx;
   private VictorSPX m_armSpx;
@@ -53,7 +52,8 @@ public class Harvester extends TonePlayer {
     m_armSpx.setNeutralMode(NeutralMode.Brake);
     m_armSpx.setInverted(true);
     m_ArmEncoder = new DutyCycleEncoder(Constants.harvesterConstants.kArmEncoderDInput);
-    m_ArmEncoder.setDistancePerRotation(-360.0);
+    m_ArmEncoder.setDutyCycleRange(0, 0); //TODO fix these values
+    //m_ArmEncoder.setDistancePerRotation(-360.0);
     m_ArmEncoder.setPositionOffset(Constants.harvesterConstants.armEncoderOffset);
     
     m_intakeSpx = new VictorSPX(Constants.harvesterConstants.kIntakeCanId);
@@ -124,7 +124,7 @@ public class Harvester extends TonePlayer {
 
   public void setIntakeSpeed(double speed) {
     double limitedSpeed = MathUtil.clamp(speed, (hasNote() ? 0.0 : -1.0), 1.0);
-    m_intakeSpx.set(ControlMode.PercentOutput, limitedSpeed);
+    m_intakeSpx.set(VictorSPXControlMode.PercentOutput, limitedSpeed);
   }
   
   
@@ -164,7 +164,7 @@ public class Harvester extends TonePlayer {
   }
 
   private void setArmMotorPctOutput(double speed){
-    m_armSpx.set(ControlMode.PercentOutput, speed);
+    m_armSpx.set(VictorSPXControlMode.PercentOutput, speed);
   }
 
   public boolean isArmAtAngle() {
@@ -173,15 +173,5 @@ public class Harvester extends TonePlayer {
 
   public double getRange(){
     return mUltrasonicInput.getValue();
-  }
-
-  public void setTones(double ... tones){
-    m_armSpx.set(ControlMode.MusicTone, tones[0]);
-    m_intakeSpx.set(ControlMode.MusicTone, tones[1]);
-  }
-
-  public void stop(){
-    m_armSpx.set(ControlMode.PercentOutput, 0.0);
-    m_intakeSpx.set(ControlMode.PercentOutput, 0.0);
   }
  }
