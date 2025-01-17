@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer;
 
+
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to
@@ -27,8 +29,9 @@ import edu.wpi.first.cameraserver.CameraServer;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
+  
   private RobotContainer m_robotContainer;
+
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -114,15 +117,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if(m_robotContainer.m_harvester.hasNote()){
-      if(m_robotContainer.m_shooter.speedIsReady()){
-        setLED(LEDmode.Ready2Shoot);
-      } else {
-        setLED(LEDmode.HaveNote);
-      }
-    } else {
-      setLED(LEDmode.Teleop);
-    }    
+   
 
     if(30.0 > DriverStation.getMatchTime() && DriverStation.getMatchTime() > 29.0){
       m_robotContainer.m_driverController.setRumble(RumbleType.kBothRumble, 1.0);

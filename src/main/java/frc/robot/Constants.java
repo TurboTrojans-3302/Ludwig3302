@@ -146,46 +146,6 @@ public final class Constants {
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
-  public static final class ClimberConstants {
-    public static final int rightClimberCanID = 14;
-    public static final int leftClimberCanID = 15;
-    public static final int rightBottomLimitDIO = 4;
-    public static final int leftBottomLimitDIO = 5;
-    public static final int leftTopLimitDIO = 7;
-    public static final int rightTopLimitDIO = 6;
-  }
-
-  public static final class ShooterConstants {
-    public static final int kShooterLeftCanId = 12;
-    public static final int kShooterRightCanId = 13;
-    public static final int kLeftTachDIO = 2;
-    public static final int kRightTachDIO = 3;
-    public static final double RPM_TOLERANCE = 30;
-    public static final int kShooterUltrasonicAIO = 0;
-  }
-
-  public static final class harvesterConstants {
-    public static final int kIntakeCanId = 9;
-    public static final int kArmLiftCanId = 10;
-    public static final int kArmEncoderDInput = 0;
-    public static final double armEncoderOffset = 1.0 - (147.0/360);
-
-    public static final double inSpeed = -1.0;
-    public static final double outSpeed = 1.0;
-    public static final int kBackLimitSwitchInputID = 1;
-
-    public static final double ANGLE_AT_FLOOR = -50.0;
-    public static final double ANGLE_AT_AMP = 45.0;
-    public static final double ANGLE_AT_SPEAKER = 140;
-    public static final double ANGLE_AT_DRIVE = 90;
-    public static final double ANGLE_TOLERANCE = 3.0;
-    
-    public static final double MAX_ARM_SPEED = 90.0; // deg/sec
-    public static final double MAX_ARM_ACCEL = 180.0; // deg/sec^2
-    public static final int harvesterUltraSonicAIO = 1;
-    public static final double outSpeedSlow = 0.75;
-  }
-
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }

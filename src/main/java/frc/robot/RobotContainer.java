@@ -15,23 +15,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.GoToCommand;
-import frc.robot.commands.IntakeSpeedInstant;
-import frc.robot.commands.SetArmAngleCommand;
-import frc.robot.commands.SetIntakeCommand;
-import frc.robot.commands.SpinUpShooter;
 import frc.robot.commands.TeleopDrive;
-import frc.robot.commands.TeleopHarvester;
-import frc.robot.commands.TeleopShooter;
 import frc.robot.commands.WaitCommand;
 import frc.robot.commands.GoToCommand;
-import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.DriveDashboard;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Harvester;
-import frc.robot.subsystems.Shooter;
  
 
 /*
@@ -44,10 +34,6 @@ public class RobotContainer {
   // The robot's subsystems
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final DriveDashboard mDriveDashboard = new DriveDashboard(m_robotDrive);  
-  public final Harvester m_harvester = new Harvester();
-  public final Shooter m_shooter = new Shooter();
-  private final Climbers m_climbers = new Climbers();
-
 
   private final ShuffleboardTab m_shuffleboardTab;
   private final SendableChooser<Command> m_autonomousChooser;
@@ -69,73 +55,13 @@ public class RobotContainer {
     // Configure default commands
     m_robotDrive.setDefaultCommand(new TeleopDrive(m_robotDrive, m_driverController, mDriveDashboard));
 
-    m_harvester.setDefaultCommand(new TeleopHarvester(m_harvester, m_copilotController)); 
     
-    m_shooter.setDefaultCommand(new TeleopShooter(m_shooter, m_copilotController));
-
-    m_climbers.setDefaultCommand(new ClimbCommand(m_climbers, m_copilotController));
-
     m_shuffleboardTab = Shuffleboard.getTab("Game");
     
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("do nothing", new DoNothing());
     
-    m_autonomousChooser.addOption("Just Shoot", new SpinUpShooter(m_shooter, 3302)
-                                            .andThen(new SetIntakeCommand(m_harvester,
-                                                                Constants.harvesterConstants.outSpeed,
-                                                           0.75)));
-    m_autonomousChooser.addOption("Shoot then fwd", new SpinUpShooter(m_shooter, 3302)
-                                            .andThen(new SetIntakeCommand(m_harvester,
-                                                                Constants.harvesterConstants.outSpeed,
-                                                           0.75))
-                                            .andThen(GoToCommand.relative(m_robotDrive, 1, 0, 0)));
-     m_autonomousChooser.addOption("shoot, right, cross",
-                                                                new SpinUpShooter(m_shooter, 3500.0)   
-                                                                .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
-                                                                .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.0, -1.0, 0))
-                                                                .andThen(new WaitCommand(5.0))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.5, 0.0, 0.0)));    
-    m_autonomousChooser.addOption("Center shoot and cross",
-                                                                new SpinUpShooter(m_shooter, 3302.0)
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.150, 0, 0))   
-                                                                .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
-                                                                .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.3, 0.0, 0)));
-    m_autonomousChooser.addOption("shoot, left, cross",
-                                                                new SpinUpShooter(m_shooter, 3500.0)   
-                                                                .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
-                                                                .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 0.0, 1.21, 0))
-                                                                .andThen(new WaitCommand(5.0))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.5, 0.0, 0)));
-    
-        m_autonomousChooser.addOption("Center Shoot, Cross, Ring pick up center",
-                                                                new SpinUpShooter(m_shooter, 3302.0)   
-                                                                .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
-                                                                .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
-                                                                .andThen(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR))
-                                                                .andThen(new IntakeSpeedInstant(m_harvester, Constants.harvesterConstants.inSpeed))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.95, 0, 0))
-                                                                .andThen(new WaitCommand(1.0))
-                                                                .andThen(new IntakeSpeedInstant(m_harvester, 0.0)));
-    m_autonomousChooser.addOption("Center Shoot twice and cross",
-                                                                new SpinUpShooter(m_shooter, 3302.0)   
-                                                                .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
-                                                                .andThen(new SetIntakeCommand(m_harvester, 0.0, 0.0))
-                                                                .andThen(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR))
-                                                                .andThen(new IntakeSpeedInstant(m_harvester, Constants.harvesterConstants.inSpeed))
-                                                                .andThen(GoToCommand.relative(m_robotDrive, 1.95, 0.0, 0.0))
-                                                                .andThen(new WaitCommand(1.0))
-                                                                .andThen(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_DRIVE))
-                                                                .andThen(new IntakeSpeedInstant(m_harvester, 0.0))
-                                                                .andThen(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_SPEAKER))
-                                                                .andThen(GoToCommand.absolute(m_robotDrive, 0.0, 0.0, 0.0))
-                                                                .andThen(new SpinUpShooter(m_shooter, 3302.0))
-                                                                .andThen(new SetIntakeCommand(m_harvester, Constants.harvesterConstants.outSpeed, 0.75))
-                                                                .andThen(new IntakeSpeedInstant(m_harvester, 0.0)));
-
-                                            m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
+    m_shuffleboardTab.add("Auton Command", m_autonomousChooser);
 
     m_startPosChooser = new SendableChooser<Pose2d>();
     m_startPosChooser.setDefaultOption("ZeroZero", Constants.FieldConstants.ZeroZero);
@@ -165,18 +91,7 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    new JoystickButton(m_copilotController, XboxController.Button.kX.value)
-        .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_SPEAKER));
-    new JoystickButton(m_copilotController, XboxController.Button.kY.value)
-        .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_DRIVE));
-    new JoystickButton(m_copilotController, XboxController.Button.kB.value)
-        .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_AMP));
-    new JoystickButton(m_copilotController, XboxController.Button.kA.value)
-        .onTrue(new SetArmAngleCommand(m_harvester, Constants.harvesterConstants.ANGLE_AT_FLOOR));
-
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
-        .whileTrue(new RunCommand(() -> m_harvester.setIntakeSpeed(Constants.harvesterConstants.inSpeed),
-                                 m_harvester));
+    
     
     // new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
     //     .whileTrue(new RunCommand(() -> {
