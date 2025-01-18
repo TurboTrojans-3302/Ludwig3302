@@ -16,6 +16,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
+import frc.robot.Constants;
 
 //missing file
 import frc.robot.Configs;
@@ -113,6 +114,13 @@ public class MAXSwerveModule {
     m_drivingEncoder.setPosition(0);
   }
 
+  //replacement for the original get instance function???
+public static MAXSwerveModule getInstance(int drivingID, int turningID, double chassisAngularOffset){
 
+  MAXSwerveModule m_swerveModule = new MAXSwerveModule(drivingID, turningID, chassisAngularOffset);
+
+  return m_swerveModule;
+
+}
   
 }
